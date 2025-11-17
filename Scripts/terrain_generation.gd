@@ -25,18 +25,18 @@ var player_z = 0;
 
 
 func _ready():
-	player = get_node("../Player")
+	player = get_tree().get_nodes_in_group("Player")[0]
 	load_forest_models()
 	load_chunk_if_needed()
 	
-func _process(delta:float) -> void:
+func _process(_delta:float) -> void:
 	load_chunk_if_needed()
 	
 func load_chunk_if_needed():
 	if(!player):
 		return
-	var player_x =  player.global_position.x
-	var player_z =  player.global_position.z
+	player_x =  player.global_position.x
+	player_z =  player.global_position.z
 	var chunk_x:int = abs(player_x)/(size_width-distance_before_chunk_loads)
 	var chunk_z:int = abs(player_z)/(size_depth-distance_before_chunk_loads)
 	var chunk_vector = Vector2(chunk_x,chunk_z)

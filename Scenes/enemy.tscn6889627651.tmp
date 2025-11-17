@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://be8tose8pwvug"]
 
-[ext_resource type="Script" uid="uid://c48k7o5xfy1nd" path="res://Scripts/enemy.gd" id="1_rsyu2"]
-[ext_resource type="PackedScene" uid="uid://dqeba56sys60m" path="res://Scenes/enemy_ui.tscn" id="2_614tr"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_rsyu2"]
+[ext_resource type="PackedScene" uid="uid://dqeba56sys60m" path="res://scenes/enemy_ui.tscn" id="2_614tr"]
 [ext_resource type="AudioStream" uid="uid://cmk501igpjn0l" path="res://Assets/Sound/Skeleton Bone Hit.mp3" id="4_1ic66"]
 [ext_resource type="AudioStream" uid="uid://d13x5hu2ao4e6" path="res://Assets/Sound/Skeleton Sword Hit Bones.mp3" id="5_q36x5"]
 [ext_resource type="AudioStream" uid="uid://dkwnsfscx2rmb" path="res://Assets/Sound/Skeleton Death.mp3" id="6_nynkr"]

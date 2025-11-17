@@ -11,13 +11,17 @@ config_version=5
 [application]
 
 config/name="Moteur3D-Projet-Template"
-run/main_scene="uid://c3c0tqfdeyylc"
+run/main_scene="uid://ccrdrd2vnrwcf"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [dotnet]
 
 project/assembly_name="Moteur3D-Projet-Template"
+
+[global_group]
+
+Player=""
 
 [input]
 
