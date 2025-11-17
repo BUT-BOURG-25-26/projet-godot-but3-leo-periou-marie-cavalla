@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://c3c0tqfdeyylc"]
 
-[ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://terrain_generation.gd" id="1_j4ig8"]
+[ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://Scripts/terrain_generation.gd" id="1_j4ig8"]
 
 [sub_resource type="Shader" id="Shader_j4ig8"]
 code = "
