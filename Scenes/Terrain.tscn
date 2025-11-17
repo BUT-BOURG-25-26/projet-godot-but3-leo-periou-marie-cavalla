@@ -102,6 +102,7 @@ sky_material = SubResource("ShaderMaterial_icyg6")
 [sub_resource type="Environment" id="Environment_icyg6"]
 background_mode = 2
 sky = SubResource("Sky_c45jm")
+fog_enabled = true
 fog_light_color = Color(0.539, 0.600717, 0.7, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_j4ig8"]
