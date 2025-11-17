@@ -15,14 +15,10 @@ var terrain_texture: Texture2D
 var medium_mesh_count = 500
 var small_mesh_count = 400
 
-var distance_before_chunk_loads = 50
+var distance_before_chunk_loads = 10
 var map_loaded_chunks : Array[Vector2]
 
 var highest_point = 50
-
-var player_x = 0;
-var player_z = 0;
-
 
 func _ready():
 	player = get_tree().get_nodes_in_group("Player")[0]
@@ -35,12 +31,12 @@ func _process(_delta:float) -> void:
 func load_chunk_if_needed():
 	if(!player):
 		return
-	player_x =  player.global_position.x
-	player_z =  player.global_position.z
-	var chunk_x:int = abs(player_x)/(size_width-distance_before_chunk_loads)
-	var chunk_z:int = abs(player_z)/(size_depth-distance_before_chunk_loads)
+	var player_x =  player.global_position.x
+	var player_z =  player.global_position.z
+	var chunk_x:int = (player_x)/(size_width/2-distance_before_chunk_loads)
+	var chunk_z:int = (player_z)/(size_depth/2-distance_before_chunk_loads)
+	
 	var chunk_vector = Vector2(chunk_x,chunk_z)
-	print(chunk_x,chunk_z)
 	if(!map_loaded_chunks.has(chunk_vector)):
 		map_loaded_chunks.push_back(chunk_vector)
 		generate(chunk_x,chunk_z)
@@ -66,7 +62,7 @@ func generate(chunk_x:float, chunk_z:float):
 	#2 - On vient traiter chaque vertex du terrain plat
 	for i in range(data.get_vertex_count()):
 		var vertex = data.get_vertex(i)
-		var y = get_noise_y(vertex.x,vertex.z)
+		var y = get_noise_y(vertex.x + chunk_x * size_width,vertex.z + chunk_z * size_depth)
 		vertex.y = y
 		data.set_vertex(i,vertex)
 		
@@ -89,20 +85,25 @@ func generate(chunk_x:float, chunk_z:float):
 	add_child(mesh)
 	
 	#5 - On ajoute les structures sur le terrain
-	generate_structures()
+	generate_structures(chunk_x,chunk_z)
 	
 
-func generate_structures():
-	generate_from_array(small_mesh_count,small_models)
-	generate_from_array(medium_mesh_count,medium_models)
+func generate_structures(chunk_x:float, chunk_z:float):
+	generate_from_array(small_mesh_count,small_models, chunk_x, chunk_z)
+	generate_from_array(medium_mesh_count,medium_models, chunk_x, chunk_z)
 
-func generate_from_array(modelsCount:int, modelsArray:Array[PackedScene]) -> void:
+func generate_from_array(models_count:int, models_array:Array[PackedScene], chunk_x:float, chunk_z:float) -> void:
 	randomize()
-	for i in range(modelsCount):
-		var x = randf_range(-size_width/2, size_width/2)
-		var z = randf_range(-size_depth/2, size_depth/2)
+	for i in range(models_count):
+		var min_x = chunk_x * size_width - size_width / 2
+		var max_x = chunk_x * size_width + size_width / 2
+		var min_z = chunk_z * size_depth - size_depth / 2
+		var max_z = chunk_z * size_depth + size_depth / 2
+		var x = randf_range(min_x, max_x)
+		var z = randf_range(min_z, max_z)
+		
 		var y = get_noise_y(x, z)
-		var model_to_instance = modelsArray.pick_random()
+		var model_to_instance = models_array.pick_random()
 		var instance = model_to_instance.instantiate()
 		instance.position = Vector3(x,y,z)
 		instance.rotation.y = randf() * (PI*2)
