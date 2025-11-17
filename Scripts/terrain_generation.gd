@@ -12,15 +12,18 @@ var mesh_resolution : int = 2 #Une valeur haute coûtera plus de temps à géné
 var medium_models : Array[PackedScene]
 var small_models : Array[PackedScene]
 var terrain_texture: Texture2D
-var medium_mesh_count = 500
-var small_mesh_count = 400
+var medium_mesh_count = 250
+var small_mesh_count = 350
 
 var distance_before_chunk_loads = 10
 var map_loaded_chunks : Array[Vector2]
+var map_x_offset = -568
+var map_y_offset = 657
 
 var highest_point = 50
 
 func _ready():
+	noise.offset = Vector3(map_x_offset,map_y_offset,0)
 	player = get_tree().get_nodes_in_group("Player")[0]
 	load_forest_models()
 	load_chunk_if_needed()
@@ -89,10 +92,10 @@ func generate(chunk_x:float, chunk_z:float):
 	
 
 func generate_structures(chunk_x:float, chunk_z:float):
-	generate_from_array(small_mesh_count,small_models, chunk_x, chunk_z)
-	generate_from_array(medium_mesh_count,medium_models, chunk_x, chunk_z)
+	generate_from_array("small",small_mesh_count,small_models, chunk_x, chunk_z)
+	generate_from_array("medium",medium_mesh_count,medium_models, chunk_x, chunk_z)
 
-func generate_from_array(models_count:int, models_array:Array[PackedScene], chunk_x:float, chunk_z:float) -> void:
+func generate_from_array(type:String, models_count:int, models_array:Array[PackedScene], chunk_x:float, chunk_z:float) -> void:
 	randomize()
 	for i in range(models_count):
 		var min_x = chunk_x * size_width - size_width / 2
@@ -107,11 +110,15 @@ func generate_from_array(models_count:int, models_array:Array[PackedScene], chun
 		var instance = model_to_instance.instantiate()
 		instance.position = Vector3(x,y,z)
 		instance.rotation.y = randf() * (PI*2)
-		instance.scale = Vector3.ONE * randf_range(0.8, 1.2)
+		if(type == "medium"):
+			instance.scale = Vector3.ONE * randf_range(0.8, 1.2)
+			instance.scale.y = instance.scale.y * 2.5
+			instance.scale.y = instance.scale.x * 1.5
 		add_child(instance)
 		var mesh_instance = instance.get_child(0)
 		mesh_instance.add_to_group("Structure")
-		mesh_instance.create_trimesh_collision()
+		if(type != "small"):
+			mesh_instance.create_trimesh_collision()
 
 
 func load_forest_models():
@@ -127,5 +134,5 @@ func load_forest_models():
 
 
 func get_noise_y(x,z) -> float:
-	var value = noise.get_noise_2d(x,z)
+	var value = noise.get_noise_2d(x+map_x_offset,z+map_x_offset)
 	return value * highest_point

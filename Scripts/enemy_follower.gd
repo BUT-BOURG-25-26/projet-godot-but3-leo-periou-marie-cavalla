@@ -37,6 +37,6 @@ func follow_player() -> void:
 
 		for i in range(enemy_body.get_slide_collision_count()):
 			var collision = enemy_body.get_slide_collision(i)
-			if(collision.get_collider().name == "Player"):
+			if(collision.get_collider().name == get_tree().get_nodes_in_group("Player")[0].name):
 				player.take_damage((-1)*damage)
 				queue_free()

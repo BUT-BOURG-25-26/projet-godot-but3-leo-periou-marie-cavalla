@@ -7,7 +7,7 @@ extends CharacterBody3D
 @export var player_in_range: bool = false
 @export var player_detected: bool = false
 
-@onready var player: Node3D = get_tree().get_root().get_node("FirstStage/Player")
+@onready var player: Node3D = get_tree().get_nodes_in_group("Player")[0]
 @onready var model = $Model
 @onready var collision = $CollisionShape3D
 @onready var attack_range = $AttackRange

@@ -108,7 +108,7 @@ fog_light_color = Color(0.539, 0.600717, 0.7, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_j4ig8"]
 noise_type = 0
-frequency = 0.004
+frequency = 0.001
 
 [node name="Terrain" type="Node3D"]
 
