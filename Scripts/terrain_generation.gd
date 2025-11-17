@@ -1,0 +1,134 @@
+class_name TerrainGeneration
+extends Node
+
+@export var player: CharacterBody3D
+@export var noise : FastNoiseLite
+
+var mesh: MeshInstance3D
+var size_depth : int = 100
+var size_width : int = 100
+var mesh_resolution : int = 2 #Une valeur haute coûtera plus de temps à générer
+
+var medium_models : Array[PackedScene]
+var small_models : Array[PackedScene]
+var terrain_texture: Texture2D
+var medium_mesh_count = 500
+var small_mesh_count = 400
+
+var distance_before_chunk_loads = 10
+var map_loaded_chunks : Array[Vector2]
+
+var highest_point = 50
+
+var player_x = 0;
+var player_z = 0;
+
+
+func _ready():
+	player = get_node("../Player")
+	load_forest_models()
+	load_chunk_if_needed()
+	
+func _process(delta:float) -> void:
+	load_chunk_if_needed()
+	
+func load_chunk_if_needed():
+	if(!player):
+		return
+	var player_x =  player.global_position.x
+	var player_z =  player.global_position.z
+	var chunk_x:int = (player_x)/(size_width/2-distance_before_chunk_loads)
+	var chunk_z:int = (player_z)/(size_depth/2-distance_before_chunk_loads)
+	var chunk_vector = Vector2(chunk_x,chunk_z)
+	if(!map_loaded_chunks.has(chunk_vector)):
+		map_loaded_chunks.push_back(chunk_vector)
+		generate(chunk_x,chunk_z)
+
+func generate(chunk_x:float, chunk_z:float):
+	#1 - On crée un terain plat que l'on divise plein de fois
+	var plane_mesh = PlaneMesh.new()
+	plane_mesh.size = Vector2(size_width,size_depth)
+	plane_mesh.subdivide_depth = size_depth * mesh_resolution
+	plane_mesh.subdivide_width = size_width * mesh_resolution
+	var texture: Texture2D = terrain_texture
+	var material := StandardMaterial3D.new()
+	material.albedo_texture = texture
+	plane_mesh.material = material
+	
+	var surface = SurfaceTool.new() #L'outil permettant de créer une mesh à partir de nos objets
+	var data = MeshDataTool.new() #L'outil permettant d'accéder aux vertices
+	surface.create_from(plane_mesh,0)
+	
+	var array_plane = surface.commit()
+	data.create_from_surface(array_plane,0)
+	
+	#2 - On vient traiter chaque vertex du terrain plat
+	for i in range(data.get_vertex_count()):
+		var vertex = data.get_vertex(i)
+		var y = get_noise_y(vertex.x + chunk_x * size_width,vertex.z + chunk_z * size_depth)
+		vertex.y = y
+		data.set_vertex(i,vertex)
+		
+	
+	#3 - On applique des directions et des normes sur nos vertices
+	array_plane.clear_surfaces()
+	data.commit_to_surface(array_plane)
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.create_from(array_plane,0)
+	surface.generate_normals()
+	
+	#4 - On vient créer la mesh à partir de toutes nos données
+	mesh = MeshInstance3D.new()
+	mesh.mesh = surface.commit()
+	mesh.position.x = chunk_x*size_width
+	mesh.position.z = chunk_z*size_depth
+	mesh.create_trimesh_collision() #La collision de notre terrain
+	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	mesh.add_to_group("NavSource")
+	add_child(mesh)
+	
+	#5 - On ajoute les structures sur le terrain
+	generate_structures(chunk_x,chunk_z)
+	
+
+func generate_structures(chunk_x:float, chunk_z:float):
+	generate_from_array(small_mesh_count,small_models, chunk_x, chunk_z)
+	generate_from_array(medium_mesh_count,medium_models, chunk_x, chunk_z)
+
+func generate_from_array(models_count:int, models_array:Array[PackedScene], chunk_x:float, chunk_z:float) -> void:
+	randomize()
+	for i in range(models_count):
+		var min_x = chunk_x * size_width - size_width / 2
+		var max_x = chunk_x * size_width + size_width / 2
+		var min_z = chunk_z * size_depth - size_depth / 2
+		var max_z = chunk_z * size_depth + size_depth / 2
+		var x = randf_range(min_x, max_x)
+		var z = randf_range(min_z, max_z)
+		
+		var y = get_noise_y(x, z)
+		var model_to_instance = models_array.pick_random()
+		var instance = model_to_instance.instantiate()
+		instance.position = Vector3(x,y,z)
+		instance.rotation.y = randf() * (PI*2)
+		instance.scale = Vector3.ONE * randf_range(0.8, 1.2)
+		add_child(instance)
+		var mesh_instance = instance.get_child(0)
+		mesh_instance.add_to_group("structure")
+		mesh_instance.create_trimesh_collision()
+
+
+func load_forest_models():
+	terrain_texture = preload("res://Assets/Textures/Green.png")
+	var bushes_count = 22
+	var trees_count = 20
+	
+	for i in range(1,bushes_count+1):
+		small_models.push_back(load("res://Assets/Forest/Bush" + str(i) + ".gltf"))
+	
+	for i in range(1,trees_count+1):
+		medium_models.push_back(load("res://Assets/Forest/Tree" + str(i) + ".gltf"))
+
+
+func get_noise_y(x,z) -> float:
+	var value = noise.get_noise_2d(x,z)
+	return value * highest_point

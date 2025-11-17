@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://du6jaqarchti6"
+path="res://.godot/imported/Skeleton Sword Hit Bones 2.mp3-2ea00ea9038a38058c07f4d0ce44a7a0.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sound/Skeleton Sword Hit Bones 2.mp3"
+dest_files=["res://.godot/imported/Skeleton Sword Hit Bones 2.mp3-2ea00ea9038a38058c07f4d0ce44a7a0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
