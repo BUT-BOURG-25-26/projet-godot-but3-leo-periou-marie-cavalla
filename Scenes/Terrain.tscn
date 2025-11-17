@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3c0tqfdeyylc"]
+[gd_scene load_steps=8 format=3 uid="uid://c3c0tqfdeyylc"]
 
 [ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://Scripts/terrain_generation.gd" id="1_j4ig8"]
+[ext_resource type="PackedScene" path="res://Scenes/player.tscn" id="2_icyg6"]
 
 [sub_resource type="Shader" id="Shader_j4ig8"]
 code = "
@@ -118,5 +119,5 @@ transform = Transform3D(1, 0, 0, 0, 0.0301024, 0.999547, 0, -0.999547, 0.0301024
 script = ExtResource("1_j4ig8")
 noise = SubResource("FastNoiseLite_j4ig8")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.368482, 0.929635, 0, -0.929635, 0.368482, 0, 13.3166, 0)
+[node name="Player" parent="." instance=ExtResource("2_icyg6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4373, 0)
