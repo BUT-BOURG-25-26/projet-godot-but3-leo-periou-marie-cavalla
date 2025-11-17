@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dr2s7xb1nylqy"
+path="res://.godot/imported/shield_round_color.obj-fe13d515cc8e7077639da6bec0d33495.mesh"
+
+[deps]
+
+files=["res://.godot/imported/shield_round_color.obj-fe13d515cc8e7077639da6bec0d33495.mesh"]
+
+source_file="res://Assets/Adventurers/Assets/obj/shield_round_color.obj"
+dest_files=["res://.godot/imported/shield_round_color.obj-fe13d515cc8e7077639da6bec0d33495.mesh", "res://.godot/imported/shield_round_color.obj-fe13d515cc8e7077639da6bec0d33495.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
