@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b7bubnwpl10xq"]
+[gd_scene load_steps=9 format=3 uid="uid://eycwk1wjydb2"]
 
 [ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://Scripts/terrain_generation.gd" id="1_62tj5"]
 [ext_resource type="PackedScene" uid="uid://dgc2qgimnhad7" path="res://Scenes/Player/knight.tscn" id="2_62tj5"]
