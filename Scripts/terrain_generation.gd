@@ -15,7 +15,7 @@ var terrain_texture: Texture2D
 var medium_mesh_count = 500
 var small_mesh_count = 400
 
-var distance_before_chunk_loads = 50
+var distance_before_chunk_loads = 10
 var map_loaded_chunks : Array[Vector2]
 
 var highest_point = 50
@@ -37,8 +37,8 @@ func load_chunk_if_needed():
 		return
 	var player_x =  player.global_position.x
 	var player_z =  player.global_position.z
-	var chunk_x:int = (player_x)/(size_width-distance_before_chunk_loads)
-	var chunk_z:int = (player_z)/(size_depth-distance_before_chunk_loads)
+	var chunk_x:int = (player_x)/(size_width/2-distance_before_chunk_loads)
+	var chunk_z:int = (player_z)/(size_depth/2-distance_before_chunk_loads)
 	var chunk_vector = Vector2(chunk_x,chunk_z)
 	if(!map_loaded_chunks.has(chunk_vector)):
 		map_loaded_chunks.push_back(chunk_vector)
