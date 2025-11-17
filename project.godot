@@ -15,6 +15,10 @@ run/main_scene="uid://c3c0tqfdeyylc"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+game_manager="*res://Scripts/game_manager.gd"
+
 [dotnet]
 
 project/assembly_name="Moteur3D-Projet-Template"

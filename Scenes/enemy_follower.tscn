@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bkfe488ahtlhn"]
+
+[ext_resource type="Script" uid="uid://cvckbouho6xud" path="res://Scripts/enemy_follower.gd" id="1_vb8ss"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dyubj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jiqwy"]
+
+[node name="Enemy" type="Node3D"]
+script = ExtResource("1_vb8ss")
+
+[node name="EnemyBody" type="CharacterBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyBody"]
+transform = Transform3D(1.76862, 0, 0, 0, 1.55258, 0, 0, 0, 2.15811, 0, 0, 0)
+mesh = SubResource("CylinderMesh_dyubj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyBody"]
+shape = SubResource("BoxShape3D_jiqwy")

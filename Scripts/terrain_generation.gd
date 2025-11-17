@@ -113,7 +113,7 @@ func generate_from_array(models_count:int, models_array:Array[PackedScene], chun
 		instance.scale = Vector3.ONE * randf_range(0.8, 1.2)
 		add_child(instance)
 		var mesh_instance = instance.get_child(0)
-		mesh_instance.add_to_group("structure")
+		mesh_instance.add_to_group("Structure")
 		mesh_instance.create_trimesh_collision()
 
 
