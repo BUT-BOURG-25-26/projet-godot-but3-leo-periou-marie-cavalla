@@ -1,6 +1,6 @@
 extends Node3D 
 
-@export var game_over_scene: PackedScene = preload("res://Scenes/death_screen.tscn")
+@export var game_over_scene: PackedScene = preload("res://Scenes/UI/death_screen.tscn")
 @export var main_scene: PackedScene = preload("res://Scenes/terrain.tscn")
 
 var enemy_kill_count: int = 0

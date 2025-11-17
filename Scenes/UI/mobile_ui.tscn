@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bleyv8y4o831"]
+[gd_scene load_steps=6 format=3 uid="uid://boerdh1qrcjcy"]
 
-[ext_resource type="Script" uid="uid://d3j2cc3tvc3qv" path="res://scripts/virtual_joystick.gd" id="1_0rmtg"]
-[ext_resource type="Texture2D" uid="uid://epjay8t6bc0e" path="res://assets/menu/Attack_button.png" id="2_k5yl4"]
-[ext_resource type="Texture2D" uid="uid://cw13jiitwfhw8" path="res://assets/menu/joystick_base.png" id="2_ll7hi"]
-[ext_resource type="Texture2D" uid="uid://c3g0uhogdudu3" path="res://assets/menu/Block_button.png" id="3_ll7hi"]
-[ext_resource type="Texture2D" uid="uid://bsunsvxbllamg" path="res://assets/menu/Jump_button.png" id="4_uqj2s"]
+[ext_resource type="Script" uid="uid://d3j2cc3tvc3qv" path="res://scripts/UI/virtual_joystick.gd" id="1_0rmtg"]
+[ext_resource type="Texture2D" uid="uid://epjay8t6bc0e" path="res://Assets/Menu/Attack_button.png" id="2_k5yl4"]
+[ext_resource type="Texture2D" uid="uid://cw13jiitwfhw8" path="res://Assets/Menu/joystick_base.png" id="2_ll7hi"]
+[ext_resource type="Texture2D" uid="uid://c3g0uhogdudu3" path="res://Assets/Menu/Block_button.png" id="3_ll7hi"]
+[ext_resource type="Texture2D" uid="uid://bsunsvxbllamg" path="res://Assets/Menu/Jump_button.png" id="4_uqj2s"]
 
 [node name="MobileUi" type="Control"]
 layout_mode = 3

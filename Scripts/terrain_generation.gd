@@ -21,11 +21,11 @@ var map_loaded_chunks : Array[Vector2]
 var highest_point = 50
 
 func _ready():
-	player = get_node("../Player")
+	player = get_tree().get_nodes_in_group("Player")[0]
 	load_forest_models()
 	load_chunk_if_needed()
 	
-func _process(delta:float) -> void:
+func _process(_delta:float) -> void:
 	load_chunk_if_needed()
 	
 func load_chunk_if_needed():
@@ -35,6 +35,7 @@ func load_chunk_if_needed():
 	var player_z =  player.global_position.z
 	var chunk_x:int = (player_x)/(size_width/2-distance_before_chunk_loads)
 	var chunk_z:int = (player_z)/(size_depth/2-distance_before_chunk_loads)
+	
 	var chunk_vector = Vector2(chunk_x,chunk_z)
 	if(!map_loaded_chunks.has(chunk_vector)):
 		map_loaded_chunks.push_back(chunk_vector)
