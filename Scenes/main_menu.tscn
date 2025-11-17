@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvgofggsq4ubw"]
+[gd_scene load_steps=4 format=3 uid="uid://cqk34laniqf7f"]
 
-[ext_resource type="Script" uid="uid://cxuttim1r58nd" path="res://scripts/main_menu.gd" id="1_l6cm7"]
-[ext_resource type="Texture2D" uid="uid://c0mc1eh3trp5j" path="res://assets/menu/background_menu.jpg" id="2_ekxnf"]
-[ext_resource type="FontFile" uid="uid://cw5nt2fri6pui" path="res://assets/fonts/PressStart2P-Regular.ttf" id="3_bqqt6"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://c0mc1eh3trp5j" path="res://Assets/Menu/background_menu.jpg" id="2_ekxnf"]
+[ext_resource type="FontFile" uid="uid://cw5nt2fri6pui" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="3_bqqt6"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3

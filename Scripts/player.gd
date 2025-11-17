@@ -10,13 +10,16 @@ extends CharacterBody3D
 @export var kill: int = 0
 
 @onready var player_ui = $PlayerUi
-# @onready var model = $Model
+@onready var model = $Model
 @onready var attack_range = $AttackRange
 @onready var death_screen = $DeathScreen
 @onready var attack_cooldown = $AttackCooldown
 @onready var attack_delay = $AttackDelay
 @onready var attack_sound = $AttackSound
 @onready var joystick = $MobileUi/VirtualJoystick
+
+@onready var anim_tree = $Model/AnimationTree
+@onready var anim_state = anim_tree.get("parameters/playback")
 
 var attack_range_list = []
 
@@ -36,27 +39,25 @@ func _physics_process(delta: float) -> void:
 		velocity.z = direction.z * speed
 		
 		if Input.is_action_just_pressed("attack"):
-			#anim_state.travel("1H_Melee_Attack_Slice_Horizontal") # Attack animation
+			anim_state.travel("Attack") # Attack animation
 			attack_input()
 		
 		elif Input.is_action_pressed("block"):
-			#anim_state.travel("Blocking")
+			anim_state.travel("Block")
 			blocking_input()
 		
 		elif Input.is_action_just_released("block"):
 			unblocking_input()
 		
 		elif Input.is_action_just_pressed("jump"):
-			#anim_state.travel("Jump_Idle") # Jump animation
+			anim_state.travel("Jump") # Jump animation
 			velocity.y = jump_force
 		
 		elif velocity.x != 0 or velocity.z != 0:
-			#anim_state.travel("Running_A") # Walk animation
-			pass
+			anim_state.travel("Running") # Walk animation
 		
 		else:
-			#anim_state.travel("Idle") # Idle animation
-			pass
+			anim_state.travel("Idle") # Idle animation
 	
 	elif is_on_floor() and not can_action:
 		# Bouge pas pendant une action
@@ -76,7 +77,7 @@ func _physics_process(delta: float) -> void:
 	# Tourner le modèle
 	if direction.length() > 0.01:
 		var target_rotation = atan2(direction.x, direction.z)
-		# model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
+		model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
 		attack_range.rotation.y = lerp_angle(attack_range.rotation.y, target_rotation, delta * 10.0)
 
 func read_move_input() -> Vector3:
@@ -132,7 +133,7 @@ func take_damage(damage: float):
 func die():
 	set_process(false)
 	set_physics_process(false)
-	#anim_state.travel("Death_B")
+	anim_state.travel("Death")
 	death_screen.call("show_death_screen")
 	
 

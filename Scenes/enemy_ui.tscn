@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://gqcs03kvmtw"]
+[gd_scene load_steps=7 format=3 uid="uid://dqeba56sys60m"]
 
-[ext_resource type="Script" uid="uid://cj1pdjp8ywqap" path="res://scripts/ennemy_ui.gd" id="1_k0frx"]
-[ext_resource type="FontFile" uid="uid://cw5nt2fri6pui" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_txhmy"]
+[ext_resource type="Script" path="res://scripts/ennemy_ui.gd" id="1_k0frx"]
+[ext_resource type="FontFile" uid="uid://cw5nt2fri6pui" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_txhmy"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tuyoq"]
 viewport_path = NodePath("SubViewport")
