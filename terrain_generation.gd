@@ -12,7 +12,14 @@ var terrain_texture: Texture2D
 var medium_mesh_count = 500
 var small_mesh_count = 400
 
+var distance_before_chunk_loads = 50
+var map_x_loaded : Array
+var map_y_loaded : Array
+
 var highest_point = 50
+
+var player_x = 0;
+var player_z = 0;
 
 @export var noise : FastNoiseLite
 
