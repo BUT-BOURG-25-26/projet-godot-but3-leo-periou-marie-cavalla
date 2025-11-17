@@ -20,10 +20,6 @@ var map_loaded_chunks : Array[Vector2]
 
 var highest_point = 50
 
-var player_x = 0;
-var player_z = 0;
-
-
 func _ready():
 	player = get_node("../Player")
 	load_forest_models()
