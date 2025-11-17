@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://cygjqnnlqbe23"]
+
+[ext_resource type="FontFile" uid="uid://cw5nt2fri6pui" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="1_uwb1u"]
+[ext_resource type="Script" path="res://scripts/pause_ui.gd" id="1_ypbrs"]
+
+[node name="PauseUi" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ypbrs")
+
+[node name="Continue" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -20.0
+offset_right = 128.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_uwb1u")
+theme_override_font_sizes/font_size = 24
+text = "Continue"
+
+[node name="Exit" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = 68.0
+offset_right = 128.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_uwb1u")
+theme_override_font_sizes/font_size = 24
+text = "Exit"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 456.0
+offset_top = 208.0
+offset_right = 712.0
+offset_bottom = 258.0
+theme_override_colors/font_color = Color(0.894832, 0.941046, 0.987322, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 13
+theme_override_fonts/font = ExtResource("1_uwb1u")
+theme_override_font_sizes/font_size = 50
+text = "PAUSE"
+
+[connection signal="pressed" from="Continue" to="." method="_on_continue"]
+[connection signal="pressed" from="Exit" to="." method="_on_exit"]

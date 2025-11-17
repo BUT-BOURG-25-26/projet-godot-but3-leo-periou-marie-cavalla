@@ -1,0 +1,98 @@
+[gd_scene load_steps=3 format=3 uid="uid://rdapyw8xtdh0"]
+
+[ext_resource type="Script" path="res://scripts/death_screen.gd" id="1_uyutr"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_itto5"]
+font_size = 64
+font_color = Color(0.697536, 0.109814, 5.77569e-07, 1)
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="DeathScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uyutr")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.196078)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -45.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -259.0
+offset_top = -41.0
+offset_right = 253.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "YOU DIED"
+label_settings = SubResource("LabelSettings_itto5")
+horizontal_alignment = 1
+
+[node name="ExitBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.472
+anchor_top = 0.5
+anchor_right = 0.528
+anchor_bottom = 0.5
+offset_left = -95.744
+offset_top = 164.0
+offset_right = 95.744
+offset_bottom = 228.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Exit"
+
+[node name="RestartBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.472
+anchor_top = 0.5
+anchor_right = 0.528
+anchor_bottom = 0.5
+offset_left = -95.744
+offset_top = 76.0
+offset_right = 95.744
+offset_bottom = 142.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Restart"
+
+[node name="RestartCooldown" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="DeadSound" type="AudioStreamPlayer" parent="."]
+volume_db = -8.0
+
+[connection signal="pressed" from="ExitBtn" to="." method="_exit_btn_pressed"]
+[connection signal="pressed" from="RestartBtn" to="." method="_restart_btn_pressed"]
+[connection signal="timeout" from="RestartCooldown" to="." method="_restart_cooldown"]
