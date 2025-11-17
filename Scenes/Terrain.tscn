@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://c3c0tqfdeyylc"]
 
-[ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://Scripts/terrain_generation.gd" id="1_j4ig8"]
-[ext_resource type="PackedScene" path="res://Scenes/player.tscn" id="2_icyg6"]
+[ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://Scripts/terrain_generation.gd" id="1_62tj5"]
+[ext_resource type="PackedScene" uid="uid://dgc2qgimnhad7" path="res://Scenes/player.tscn" id="2_pmkc2"]
 
 [sub_resource type="Shader" id="Shader_j4ig8"]
 code = "
@@ -102,6 +102,7 @@ sky_material = SubResource("ShaderMaterial_icyg6")
 [sub_resource type="Environment" id="Environment_icyg6"]
 background_mode = 2
 sky = SubResource("Sky_c45jm")
+fog_light_color = Color(0.539, 0.600717, 0.7, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_j4ig8"]
 noise_type = 0
@@ -116,8 +117,8 @@ environment = SubResource("Environment_icyg6")
 transform = Transform3D(1, 0, 0, 0, 0.0301024, 0.999547, 0, -0.999547, 0.0301024, 0, 10.4373, 0)
 
 [node name="TerrainGeneration" type="Node3D" parent="."]
-script = ExtResource("1_j4ig8")
+script = ExtResource("1_62tj5")
 noise = SubResource("FastNoiseLite_j4ig8")
 
-[node name="Player" parent="." instance=ExtResource("2_icyg6")]
+[node name="Player" parent="." instance=ExtResource("2_pmkc2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4373, 0)

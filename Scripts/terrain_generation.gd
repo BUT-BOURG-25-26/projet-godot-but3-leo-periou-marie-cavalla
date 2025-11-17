@@ -1,6 +1,9 @@
 class_name TerrainGeneration
 extends Node
 
+@export var player: CharacterBody3D
+@export var noise : FastNoiseLite
+
 var mesh: MeshInstance3D
 var size_depth : int = 100
 var size_width : int = 100
@@ -13,21 +16,36 @@ var medium_mesh_count = 500
 var small_mesh_count = 400
 
 var distance_before_chunk_loads = 50
-var map_x_loaded : Array
-var map_y_loaded : Array
+var map_loaded_chunks : Array[Vector2]
 
 var highest_point = 50
 
 var player_x = 0;
 var player_z = 0;
 
-@export var noise : FastNoiseLite
 
 func _ready():
+	player = get_node("../Player")
 	load_forest_models()
-	generate()
+	load_chunk_if_needed()
 	
-func generate():
+func _process(delta:float) -> void:
+	load_chunk_if_needed()
+	
+func load_chunk_if_needed():
+	if(!player):
+		return
+	var player_x =  player.global_position.x
+	var player_z =  player.global_position.z
+	var chunk_x:int = abs(player_x)/(size_width-distance_before_chunk_loads)
+	var chunk_z:int = abs(player_z)/(size_depth-distance_before_chunk_loads)
+	var chunk_vector = Vector2(chunk_x,chunk_z)
+	print(chunk_x,chunk_z)
+	if(!map_loaded_chunks.has(chunk_vector)):
+		map_loaded_chunks.push_back(chunk_vector)
+		generate(chunk_x,chunk_z)
+
+func generate(chunk_x:float, chunk_z:float):
 	#1 - On crée un terain plat que l'on divise plein de fois
 	var plane_mesh = PlaneMesh.new()
 	plane_mesh.size = Vector2(size_width,size_depth)
@@ -51,7 +69,6 @@ func generate():
 		var y = get_noise_y(vertex.x,vertex.z)
 		vertex.y = y
 		data.set_vertex(i,vertex)
-		data.set
 		
 	
 	#3 - On applique des directions et des normes sur nos vertices
@@ -64,6 +81,8 @@ func generate():
 	#4 - On vient créer la mesh à partir de toutes nos données
 	mesh = MeshInstance3D.new()
 	mesh.mesh = surface.commit()
+	mesh.position.x = chunk_x*size_width
+	mesh.position.z = chunk_z*size_depth
 	mesh.create_trimesh_collision() #La collision de notre terrain
 	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	mesh.add_to_group("NavSource")
