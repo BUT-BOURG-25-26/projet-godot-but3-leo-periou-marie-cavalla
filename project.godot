@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Moteur3D-Projet-Template"
-run/main_scene="uid://eycwk1wjydb2"
+run/main_scene="uid://b63vcvhw8llgh"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -26,6 +26,7 @@ project/assembly_name="Moteur3D-Projet-Template"
 [global_group]
 
 Player=""
+Enemy=""
 
 [input]
 

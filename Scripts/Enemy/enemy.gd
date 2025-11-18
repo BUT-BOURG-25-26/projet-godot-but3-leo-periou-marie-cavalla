@@ -1,13 +1,7 @@
 extends CharacterBody3D
 
-@export var health: float = 100
-@export var speed: float = 1
-@export var attack_damage: float = 10.0
-@export var can_action: bool = true
-@export var player_in_range: bool = false
-@export var player_detected: bool = false
-
-@onready var player: Node3D = get_tree().get_root().get_node("FirstStage/Player")
+# Object
+@onready var player: Node3D = get_tree().get_nodes_in_group("Player")[0]
 @onready var model = $Model
 @onready var collision = $CollisionShape3D
 @onready var attack_range = $AttackRange
@@ -20,7 +14,6 @@ extends CharacterBody3D
 @onready var detector = $Detector
 @onready var eyes_light = $Model/SpotLight3D
 @onready var death_particle = $DeathParticle
-
 # Son
 @onready var attack_sound = $AttackSound
 @onready var hit_sound_1 = $HitSound1
@@ -31,15 +24,27 @@ extends CharacterBody3D
 @onready var anim_tree = $Model/AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
 
+# Export variables
+@export var health: float = 100
+@export var speed: float = 1
+@export var attack_damage: float = 10.0
+var can_action: bool = true
+var player_in_range: bool = false
+var player_detected: bool = false
+
+
 func _ready() -> void:
-	enemy_ui.call("set_health_bar", health)
+	enemy_ui.call("set_health_bar", health) # Setup UI health
 
 func _physics_process(delta: float) -> void:
 	if not player:
 		return
-		
+	
+	# Joueur hors range
 	if not player_detected:
-		anim_state.travel("Idle_Combat") # Default animation
+		anim_state.travel("Idle") # Default animation
+		velocity.y += get_gravity().y * delta
+		move_and_slide()
 		return
 	
 	# Direction vers le joueur
@@ -53,18 +58,19 @@ func _physics_process(delta: float) -> void:
 	# Comportement
 	if is_on_floor() and can_action:
 		if player_in_range:
-			anim_state.travel("1H_Melee_Attack_Slice_Horizontal") # Attack animation
+			anim_state.travel("Attack") # Attack animation
 			attack()
 		
 		elif velocity.x != 0 or velocity.z != 0:
-			anim_state.travel("Walking_D_Skeletons") # Walk animation
+			anim_state.travel("Walking") # Walk animation
 		
 		else:
-			anim_state.travel("Idle_Combat") # Idle animation
+			anim_state.travel("Idle") # Idle animation
 	
 	else:
 		velocity.y += get_gravity().y * delta
 	
+	# Déplacement
 	move_and_slide()
 	
 	# Rotation du modèle
@@ -73,12 +79,13 @@ func _physics_process(delta: float) -> void:
 		model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
 		attack_range.rotation.y = lerp_angle(attack_range.rotation.y, target_rotation, delta * 10.0)
 		
-		
+
+# -- Attack/Damage --
 func take_damage(damage: float):
 	health -= damage
 	enemy_ui.take_damage(damage)
 	hit_sound[randi_range(0,1)].play()
-	anim_state.travel("Hit_B")
+	anim_state.travel("Hit")
 	can_action = false
 	speed = 0.0
 	hit_cooldown.start()
@@ -90,16 +97,7 @@ func attack():
 	speed = 0.0
 	attack_delay.start()
 
-func _attack_delay() -> void:
-	attack_sound.play()
-	if(player_in_range):
-		player.call("take_damage", attack_damage)
-	attack_cooldown.start()
-
-func _attack_cooldown_timeout() -> void:
-	speed = 1.0
-	can_action = true;
-
+# -- Range --
 func _in_attack_range(body: Node3D) -> void:
 	if body == player:
 		player_in_range = true
@@ -112,10 +110,6 @@ func _detector_body(body: Node3D) -> void:
 	if body == player:
 		player_detected = true
 
-func _hit_cooldown() -> void:
-	speed = 1.0
-	can_action = true;
-
 func die():
 	set_process(false)
 	set_physics_process(false)
@@ -123,16 +117,30 @@ func die():
 	death_particle.emitting = true
 	collision.queue_free()
 	eyes_light.queue_free()
-	anim_state.travel("Death_B")
+	anim_state.travel("Death")
 	death_sound.play()
 	dead_cooldown.start()
+
+# -- Cooldown/Delay --
+func _attack_delay() -> void:
+	attack_sound.play()
+	if(player_in_range):
+		player.call("take_damage", attack_damage)
+	attack_cooldown.start()
+
+func _attack_cooldown_timeout() -> void:
+	speed = 1.0
+	can_action = true;
+
+func _hit_cooldown() -> void:
+	speed = 1.0
+	can_action = true;
 
 func _dead_cooldown() -> void:
 	model.hide()
 	enemy_ui.hide()
 	death_particle.emitting = false
 	destroy_cooldown.start()
-
 
 func _destroy_cooldown() -> void:
 	queue_free()

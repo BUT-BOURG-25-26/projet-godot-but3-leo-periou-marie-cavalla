@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dqeba56sys60m"]
 
-[ext_resource type="Script" uid="uid://c48k7o5xfy1nd" path="res://Scripts/Enemy/minion.gd" id="1_k0frx"]
+[ext_resource type="Script" uid="uid://cj1pdjp8ywqap" path="res://Scripts/UI/ennemy_ui.gd" id="1_y3cq0"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_txhmy"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tuyoq"]
@@ -30,7 +30,7 @@ corner_radius_bottom_left = 3
 [node name="EnemyUi" type="Sprite3D" node_paths=PackedStringArray("health_bar")]
 billboard = 1
 texture = SubResource("ViewportTexture_tuyoq")
-script = ExtResource("1_k0frx")
+script = ExtResource("1_y3cq0")
 health_bar = NodePath("SubViewport/Panel/ProgressBar")
 
 [node name="SubViewport" type="SubViewport" parent="."]

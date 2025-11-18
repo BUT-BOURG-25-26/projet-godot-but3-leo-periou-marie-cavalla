@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://b63vcvhw8llgh"]
+
+[ext_resource type="PackedScene" uid="uid://eycwk1wjydb2" path="res://Scenes/Map/terrain.tscn" id="1_ebmjs"]
+[ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="2_wrm1d"]
+[ext_resource type="PackedScene" uid="uid://dw6klygwdqi7x" path="res://Scenes/Enemy/enemy_spawner.tscn" id="3_3dryh"]
+
+[node name="Game" type="Node3D"]
+
+[node name="Terrain" parent="." instance=ExtResource("1_ebmjs")]
+
+[node name="Barbarian" parent="." instance=ExtResource("2_wrm1d")]
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_3dryh")]

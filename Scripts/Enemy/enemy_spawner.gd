@@ -1,9 +1,23 @@
 extends Node3D
 
-@export var enemy_scene: PackedScene = preload("res://Scenes/enemy_follower.tscn")
-@export var min_distance_from_player = 5
-@export var max_distance_to_add = 5
+# -- Enemy import  --
+var skeleton_minion: PackedScene = preload("res://Scenes/Enemy/skeleton_minion.tscn")
+var skeleton_mage: PackedScene = preload("res://Scenes/Enemy/skeleton_mage.tscn")
+var skeleton_rogue: PackedScene = preload("res://Scenes/Enemy/skeleton_rogue.tscn")
+var skeleton_warrior: PackedScene = preload("res://Scenes/Enemy/skeleton_warrior.tscn")
 
+var enemy_list = [
+	skeleton_minion,
+	skeleton_mage,
+	skeleton_rogue,
+	skeleton_warrior,
+]
+
+# -- Export variables --
+@export var min_distance_from_player = 5
+@export var max_distance_to_add = 10
+
+# -- Variables --
 @onready var spawn_timer = $SpawnTimer
 var rng = RandomNumberGenerator.new()
 var player:Node3D
@@ -22,7 +36,7 @@ func _process(delta:float):
 
 func _on_spawn_timer_timeout():
 	
-	var enemy = enemy_scene.instantiate()
+	var enemy = enemy_list.pick_random().instantiate()
 	get_parent().add_child(enemy)
 	var x = (min_distance_from_player + get_random_number(0,max_distance_to_add)) * get_positive_or_negative()
 	var z = (min_distance_from_player + get_random_number(0,max_distance_to_add)) * get_positive_or_negative()

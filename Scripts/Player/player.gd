@@ -125,11 +125,11 @@ func _attack_cooldown() -> void:
 
 # -- Fonctions d'attaques --
 func _add_attack_list(body: Node3D) -> void:
-	if("Enemy" in body.name):
+	if(body.is_in_group("Enemy")):
 		attack_range_list.append(body)
 
 func _remove_attack_list(body: Node3D) -> void:
-	if("Enemy" in body.name):
+	if(body.is_in_group("Enemy")):
 		attack_range_list.erase(body)
 
 func add_kill():
