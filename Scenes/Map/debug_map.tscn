@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://dw0d2mlohph0p"]
+
+[ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="1_1ugow"]
+[ext_resource type="PackedScene" uid="uid://dw6klygwdqi7x" path="res://Scenes/Enemy/enemy_spawner.tscn" id="2_f38rr"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_phvva"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phvva"]
+albedo_color = Color(0, 0.358904, 0.35949, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ngmhs"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="DebugMap" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(30, 0, 0, 0, 0.49, 0, 0, 0, 30, 0, 0, 0)
+mesh = SubResource("BoxMesh_phvva")
+surface_material_override/0 = SubResource("StandardMaterial3D_phvva")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ngmhs")
+
+[node name="Barbarian" parent="." instance=ExtResource("1_1ugow")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.3238)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.413327, 0.910583, 0, -0.910583, 0.413327, 0, 5.7661, 15.2215)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("2_f38rr")]

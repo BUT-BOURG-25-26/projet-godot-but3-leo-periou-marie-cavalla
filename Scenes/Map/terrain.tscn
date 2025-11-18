@@ -1,8 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://eycwk1wjydb2"]
+[gd_scene load_steps=7 format=3 uid="uid://eycwk1wjydb2"]
 
-[ext_resource type="Script" uid="uid://np7fkbkqal3d" path="res://Scripts/terrain_generation.gd" id="1_62tj5"]
-[ext_resource type="PackedScene" uid="uid://dgc2qgimnhad7" path="res://Scenes/Player/knight.tscn" id="2_62tj5"]
-[ext_resource type="PackedScene" uid="uid://dw6klygwdqi7x" path="res://Scenes/enemy_spawner.tscn" id="3_pmkc2"]
+[ext_resource type="Script" uid="uid://cj5scyk3gggno" path="res://Scripts/Map/terrain_generation.gd" id="1_nkyio"]
 
 [sub_resource type="Shader" id="Shader_j4ig8"]
 code = "
@@ -119,9 +117,5 @@ environment = SubResource("Environment_icyg6")
 transform = Transform3D(1, 0, 0, 0, 0.0301024, 0.999547, 0, -0.999547, 0.0301024, 0, 10.4373, 0)
 
 [node name="TerrainGeneration" type="Node3D" parent="."]
-script = ExtResource("1_62tj5")
+script = ExtResource("1_nkyio")
 noise = SubResource("FastNoiseLite_j4ig8")
-
-[node name="EnemySpawner" parent="." instance=ExtResource("3_pmkc2")]
-
-[node name="Knight" parent="." instance=ExtResource("2_62tj5")]

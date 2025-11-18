@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cygjqnnlqbe23"]
 
-[ext_resource type="FontFile" uid="uid://cw5nt2fri6pui" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="1_uwb1u"]
-[ext_resource type="Script" uid="uid://fmrlyv0fr4nk" path="res://scripts/UI/pause_ui.gd" id="1_ypbrs"]
+[ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="1_uwb1u"]
+[ext_resource type="Script" uid="uid://fmrlyv0fr4nk" path="res://Scripts/UI/pause_ui.gd" id="1_ypbrs"]
 
 [node name="PauseUi" type="Control"]
 process_mode = 3
