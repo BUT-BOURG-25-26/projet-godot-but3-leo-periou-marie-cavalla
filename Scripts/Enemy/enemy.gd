@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-# Object
 @onready var player: Node3D = get_tree().get_nodes_in_group("Player")[0]
 @onready var model = $Model
 @onready var collision = $CollisionShape3D
