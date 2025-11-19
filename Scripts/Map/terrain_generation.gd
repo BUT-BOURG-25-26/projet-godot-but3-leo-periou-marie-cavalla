@@ -56,11 +56,23 @@ func load_chunk_if_needed():
 	var temp_chunk_x:int = floor(player.global_position.x / size_width)
 	var temp_chunk_z:int = floor(player.global_position.z / size_depth)
 	var chunk_vector = Vector2(temp_chunk_x,temp_chunk_z)
-	if(!map_loaded_chunks.has(chunk_vector)):
-		map_loaded_chunks.push_back(chunk_vector)
-		var chunk_x = temp_chunk_x * size_width
-		var chunk_z = temp_chunk_z * size_depth
-		generate(chunk_x,chunk_z)
+	var radius_around_player = [
+		Vector2(temp_chunk_x, temp_chunk_z),
+		Vector2(temp_chunk_x + 1, temp_chunk_z),
+		Vector2(temp_chunk_x, temp_chunk_z + 1),
+		Vector2(temp_chunk_x + 1, temp_chunk_z + 1),
+		Vector2(temp_chunk_x - 1, temp_chunk_z),
+		Vector2(temp_chunk_x, temp_chunk_z - 1),
+		Vector2(temp_chunk_x - 1, temp_chunk_z - 1),
+		Vector2(temp_chunk_x + 1, temp_chunk_z - 1),
+		Vector2(temp_chunk_x - 1, temp_chunk_z + 1)
+	]
+	for chunk in radius_around_player:
+		if(!map_loaded_chunks.has(chunk)):
+			map_loaded_chunks.push_back(chunk)
+			var chunk_x = chunk.x * size_width
+			var chunk_z = chunk.y * size_depth
+			generate(chunk_x,chunk_z)
 
 func generate(chunk_x:float, chunk_z:float):
 	#1 - On crée un terain plat que l'on divise plein de fois
