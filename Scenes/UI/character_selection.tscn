@@ -1,0 +1,157 @@
+[gd_scene load_steps=9 format=3 uid="uid://clx6ct8m6b2yx"]
+
+[ext_resource type="Script" uid="uid://jc2oe0uckhkt" path="res://Scripts/UI/character_selection.gd" id="1_aj0io"]
+[ext_resource type="Texture2D" uid="uid://badfhwiovthbk" path="res://Assets/Menu/Selection/mage.png" id="1_c4n5n"]
+[ext_resource type="Texture2D" uid="uid://cryyjr0v5vhlr" path="res://Assets/Menu/Selection/knight.png" id="2_rhilo"]
+[ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_vkfj6"]
+[ext_resource type="Texture2D" uid="uid://cxnoawf7enceu" path="res://Assets/Menu/Selection/rogue.png" id="3_y1d72"]
+[ext_resource type="Texture2D" uid="uid://bimbawke8jhna" path="res://Assets/Menu/Selection/barbarian.png" id="4_855g8"]
+[ext_resource type="Texture2D" uid="uid://dwk24uqrf71xa" path="res://Assets/Menu/Selection/ranger.png" id="5_5xjxx"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_aj0io"]
+font = ExtResource("2_vkfj6")
+font_size = 18
+
+[node name="CharacterSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aj0io")
+
+[node name="BtnMage" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 150.0
+offset_right = -931.6
+offset_bottom = -198.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("1_c4n5n")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="BtnMage"]
+layout_mode = 0
+offset_top = 314.0
+offset_right = 170.0
+offset_bottom = 338.0
+text = "Mage"
+label_settings = SubResource("LabelSettings_aj0io")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnKnight" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 270.4
+offset_top = 150.0
+offset_right = -711.2
+offset_bottom = -198.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("2_rhilo")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label2" type="Label" parent="BtnKnight"]
+layout_mode = 0
+offset_left = -0.399994
+offset_top = 314.0
+offset_right = 169.6
+offset_bottom = 338.0
+text = "Knight"
+label_settings = SubResource("LabelSettings_aj0io")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnRogue" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 490.8
+offset_top = 150.0
+offset_right = -490.8
+offset_bottom = -198.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("3_y1d72")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label3" type="Label" parent="BtnRogue"]
+layout_mode = 0
+offset_left = 0.200012
+offset_top = 314.0
+offset_right = 170.2
+offset_bottom = 338.0
+text = "Rogue"
+label_settings = SubResource("LabelSettings_aj0io")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnBarbarian" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 711.2
+offset_top = 150.0
+offset_right = -270.4
+offset_bottom = -198.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("4_855g8")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label4" type="Label" parent="BtnBarbarian"]
+layout_mode = 0
+offset_left = -0.200012
+offset_top = 314.0
+offset_right = 169.8
+offset_bottom = 338.0
+text = "Barbarian"
+label_settings = SubResource("LabelSettings_aj0io")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnRanger" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 931.6
+offset_top = 150.0
+offset_right = -50.0
+offset_bottom = -198.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("5_5xjxx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label5" type="Label" parent="BtnRanger"]
+layout_mode = 0
+offset_left = 0.400024
+offset_top = 314.0
+offset_right = 170.4
+offset_bottom = 338.0
+text = "Ranger"
+label_settings = SubResource("LabelSettings_aj0io")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="BtnMage" to="." method="_on_btn_mage_pressed"]
+[connection signal="pressed" from="BtnKnight" to="." method="_on_btn_knight_pressed"]
+[connection signal="pressed" from="BtnRogue" to="." method="_on_btn_rogue_pressed"]
+[connection signal="pressed" from="BtnBarbarian" to="." method="_on_btn_barbarian_pressed"]
+[connection signal="pressed" from="BtnRanger" to="." method="_on_btn_ranger_pressed"]

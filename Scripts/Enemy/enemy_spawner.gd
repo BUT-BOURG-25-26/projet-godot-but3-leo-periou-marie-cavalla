@@ -28,9 +28,13 @@ var start_time = 0;
 var difficulty_limit = 5;
 
 func _ready() -> void:
-	player = get_tree().get_first_node_in_group("Player")
 	timer = get_child(0)
 	start_time = Time.get_unix_time_from_system()
+	get_tree().current_scene.connect("player_spawned", Callable(self, "_on_player_spawned"))
+
+# Quand le joueur spawn
+func _on_player_spawned(spawned_player):
+	player = spawned_player
 
 func _process(delta:float):
 	timer.wait_time = get_difficulty_timer_time()
