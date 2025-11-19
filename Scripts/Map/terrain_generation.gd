@@ -8,6 +8,8 @@ var mesh: MeshInstance3D
 var size_depth : int = 60
 var size_width : int = 60
 var mesh_resolution : int = 2 #Une valeur haute coûtera plus de temps à générer
+var highest_point = 50
+var frequency = 0.001
 
 var medium_models : Array[PackedScene]
 var small_models : Array[PackedScene]
@@ -19,9 +21,11 @@ var map_loaded_chunks : Array[Vector2]
 var map_x_offset = -568
 var map_y_offset = 657
 
-var highest_point = 50
+var was_player_placed:bool = false
 
 func _ready():
+	noise.seed =  randi()
+	noise.frequency = frequency
 	noise.offset = Vector3(map_x_offset,map_y_offset,0)
 	load_forest_models()
 
@@ -31,6 +35,7 @@ func _ready():
 # Quand le joueur spawn
 func _on_player_spawned(spawned_player):
 	player = spawned_player
+	player.position = Vector3(0,get_noise_y(0,0),0)
 	
 func _process(_delta:float) -> void:
 	load_chunk_if_needed()
@@ -85,7 +90,6 @@ func generate(chunk_x:float, chunk_z:float):
 		vertex.y = y
 		data.set_vertex(i,vertex)
 		
-	
 	#3 - On applique des directions et des normes sur nos vertices
 	array_plane.clear_surfaces()
 	data.commit_to_surface(array_plane)
@@ -104,7 +108,6 @@ func generate(chunk_x:float, chunk_z:float):
 	
 	#5 - On ajoute les structures sur le terrain
 	generate_structures(chunk_x,chunk_z)
-	
 
 func generate_structures(chunk_x:float, chunk_z:float):
 	generate_from_array("small",small_mesh_count,small_models, chunk_x, chunk_z)
@@ -123,6 +126,9 @@ func generate_from_array(type:String, models_count:int, models_array:Array[Packe
 		var model_to_instance = models_array.pick_random()
 		var instance = model_to_instance.instantiate()
 		instance.position = Vector3(x,y,z)
+		if(!was_player_placed):
+			was_player_placed = true;
+			player.position = Vector3(x+3,y,z)
 		instance.rotation.y = randf() * (PI*2)
 		if(type == "medium"):
 			instance.scale = Vector3.ONE * randf_range(0.8, 1.2)
