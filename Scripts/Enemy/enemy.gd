@@ -27,6 +27,7 @@ extends CharacterBody3D
 @export var health: float = 100
 @export var speed: float = 1
 @export var attack_damage: float = 10.0
+@export var max_distance_to_player: float = 50.0
 var can_action: bool = true
 var player_in_range: bool = false
 var player_detected: bool = false
@@ -37,6 +38,12 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not player:
+		return
+	
+	# Joueur trop loin
+	var distance = global_transform.origin.distance_to(player.global_transform.origin)
+	if distance > max_distance_to_player:
+		queue_free()
 		return
 	
 	# Joueur hors range
