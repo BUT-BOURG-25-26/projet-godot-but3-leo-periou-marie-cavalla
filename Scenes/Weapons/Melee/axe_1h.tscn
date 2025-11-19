@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxc3y2vb63uka"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/weapons.gd" id="1_uiw76"]
+[ext_resource type="PackedScene" uid="uid://2olxovy1f0ix" path="res://Assets/Adventurers/Stuffs/axe_1handed.gltf" id="2_gdvik"]
+
+[node name="Axe1H" type="Node3D"]
+script = ExtResource("1_uiw76")
+damage = 5.0
+reload_cooldown = 0.5
+weight = 0.2
+melee_range = 1
+
+[node name="Model" parent="." instance=ExtResource("2_gdvik")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

@@ -12,21 +12,27 @@ extends CharacterBody3D
 @onready var joystick = $MobileUi/VirtualJoystick
 @onready var anim_tree = $Model/AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
+@onready var weapon_slot = $Model/Rig_Medium/Skeleton3D/HandSlotRight
+@onready var range_box = $AttackRange/CollisionShape3D
 
-# Export variables
+# Export stats
 @export var speed: float = 5.0
 @export var jump_force: float = 4.0
-@export var attack_damage: float = 20.0
+@export var strenght: float = 5
+@export var attack: float = 5
 @export var health: float = 100.0
+@export var weight: float = 0
 @export var kill: int = 0
 
 # Variables
 var can_action: bool = true
 var blocking: bool = false
 var attack_range_list = []
+var current_weapon: Node3D
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health) # Init UI health
+	equip_weapon("Melee/dagger")
 
 func _physics_process(delta: float) -> void:
 	var direction
@@ -37,8 +43,8 @@ func _physics_process(delta: float) -> void:
 		direction = (transform.basis * move_inputs).normalized()
 		direction = direction.rotated(Vector3.UP, camera.global_rotation.y)
 
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+		velocity.x = direction.x * speed * (1 - weight)
+		velocity.z = direction.z * speed * (1 - weight)
 		
 		if Input.is_action_just_pressed("attack"):
 			anim_state.travel("Attack") # Attack animation
@@ -98,6 +104,52 @@ func read_move_input() -> Vector3:
 	
 	return move_inputs.normalized()
 
+# -- Equiper une arme --
+func equip_weapon(weapon: String):
+	var path = "res://Scenes/Weapons/%s.tscn" % weapon
+	var weapon_scene = load(path)
+	if weapon_scene == null:
+		push_error("Impossible de charger l'arme : " + path)
+		return
+
+	# Supprimer l'ancienne arme si présente
+	for child in weapon_slot.get_children():
+		child.queue_free()
+
+	# Instancier la nouvelle
+	var new_weapon = weapon_scene.instantiate()
+	weapon_slot.add_child( new_weapon )
+	
+	current_weapon = new_weapon
+	set_stat(current_weapon)
+
+func set_stat(weapon: Node3D):
+	if weapon == null:
+		push_error("Error weapon stats not found")
+		return
+
+	attack = weapon.damage * strenght
+	attack_cooldown.wait_time = weapon.reload_cooldown
+	weight = weapon.weight
+	# MELEE WEAPON
+	if(weapon.type == 0):
+		# SHORT
+		if(weapon.melee_range == 0):
+			range_box.shape.size.x = 2.0
+			range_box.shape.size.z = 1.5
+			range_box.position.z = 0.75
+		# MEDIUM
+		elif(weapon.melee_range == 1):
+			range_box.shape.size.x = 2.0
+			range_box.shape.size.z = 2.0
+			range_box.position.z = 1.0
+		# LONG
+		elif(weapon.melee_range == 2):
+			range_box.shape.size.x = 2.5
+			range_box.shape.size.z = 2.0
+			range_box.position.z = 1.0
+	var ranged_distance: float
+
 # -- Input d'actions --
 func attack_input():
 	can_action = false
@@ -116,7 +168,10 @@ func unblocking_input():
 func _attack_delay() -> void:
 	attack_sound.play()
 	for enemy in attack_range_list:
-		enemy.call("take_damage", attack_damage)
+		if(current_weapon):
+			enemy.call("take_damage", attack)
+		else:
+			enemy.call("take_damage", strenght)
 	attack_cooldown.start()
 	
 func _attack_cooldown() -> void:

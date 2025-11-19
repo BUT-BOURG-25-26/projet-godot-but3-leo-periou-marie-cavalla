@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6q6yiouydto7"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/weapons.gd" id="1_bp415"]
+[ext_resource type="PackedScene" uid="uid://cclk1pguobn1w" path="res://Assets/Adventurers/Stuffs/sword_2handed.gltf" id="2_bp415"]
+
+[node name="Sword2H" type="Node3D"]
+script = ExtResource("1_bp415")
+damage = 7.0
+reload_cooldown = 7.0
+weight = 0.4
+melee_range = 2
+
+[node name="Model" parent="." instance=ExtResource("2_bp415")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
