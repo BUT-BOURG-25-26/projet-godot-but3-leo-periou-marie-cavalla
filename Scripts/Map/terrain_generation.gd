@@ -25,29 +25,10 @@ func _ready():
 	noise.offset = Vector3(map_x_offset,map_y_offset,0)
 	player = get_tree().get_nodes_in_group("Player")[0]
 	load_forest_models()
-	load_radius_chunks()
 	
 func _process(_delta:float) -> void:
 	load_chunk_if_needed()
 	
-func load_radius_chunks():
-	var temp_chunk_x = floor(player.global_position.x / size_width)
-	var temp_chunk_z = floor(player.global_position.z / size_depth)
-
-	var radius_around_player = [
-		Vector2(temp_chunk_x, temp_chunk_z),
-		Vector2(temp_chunk_x - 1, temp_chunk_z),
-		Vector2(temp_chunk_x, temp_chunk_z - 1),
-		Vector2(temp_chunk_x - 1, temp_chunk_z - 1)
-	]
-
-	for chunk in radius_around_player:
-			var chunk_x = chunk.x * size_width
-			var chunk_z = chunk.y * size_depth
-			map_loaded_chunks.append(chunk)
-			generate(chunk_x, chunk_z)
-
-
 func load_chunk_if_needed():
 	if(!player):
 		return
@@ -55,7 +36,6 @@ func load_chunk_if_needed():
 	var player_z =  player.global_position.z
 	var temp_chunk_x:int = floor(player.global_position.x / size_width)
 	var temp_chunk_z:int = floor(player.global_position.z / size_depth)
-	var chunk_vector = Vector2(temp_chunk_x,temp_chunk_z)
 	var radius_around_player = [
 		Vector2(temp_chunk_x, temp_chunk_z),
 		Vector2(temp_chunk_x + 1, temp_chunk_z),
