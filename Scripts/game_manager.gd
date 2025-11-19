@@ -9,6 +9,7 @@ var enemy_kill_count: int = 0
 @export var main_scene_node:Node3D
 var is_initialized = false
 var started_time = 0
+var selected_character: String = ""
 
 func initialize() -> void:
 	if(!is_initialized):

@@ -23,8 +23,14 @@ var highest_point = 50
 
 func _ready():
 	noise.offset = Vector3(map_x_offset,map_y_offset,0)
-	player = get_tree().get_nodes_in_group("Player")[0]
 	load_forest_models()
+
+	# Récupère le player
+	get_tree().current_scene.connect("player_spawned", Callable(self, "_on_player_spawned"))
+
+# Quand le joueur spawn
+func _on_player_spawned(spawned_player):
+	player = spawned_player
 	
 func _process(_delta:float) -> void:
 	load_chunk_if_needed()
