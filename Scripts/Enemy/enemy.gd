@@ -25,6 +25,7 @@ extends CharacterBody3D
 
 # Export variables
 @export var health: float = 100
+@export var boss_health: float = 150
 @export var speed: float = 1
 @export var attack_damage: float = 10.0
 @export var max_distance_to_player: float = 50.0

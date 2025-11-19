@@ -3,8 +3,6 @@ extends Node3D
 @export var game_over_scene: PackedScene = preload("res://Scenes/UI/death_screen.tscn")
 @export var main_scene: PackedScene = preload("res://Scenes/game.tscn")
 
-var enemy_kill_count: int = 0
-@export var kill_counter_label:Control
 @export var difficulty_label:Control
 @export var main_scene_node:Node3D
 var is_initialized = false
@@ -14,10 +12,6 @@ func initialize() -> void:
 	if(!is_initialized):
 		main_scene_node = $"/root/Terrain"
 		process_mode = Node.PROCESS_MODE_ALWAYS
-
-func update_enemy_kill_count(new_counter_value):
-	enemy_kill_count = new_counter_value
-	kill_counter_label.text = str(enemy_kill_count)
 
 func update_difficulty(value:int):
 	#TODO difficulty_label.text = str(value)
@@ -31,7 +25,6 @@ func game_over() -> void:
 func play() -> void:
 	get_tree().change_scene_to_packed(main_scene)
 	
-
 func restart() -> void:
 	get_tree().paused = false;
 	get_tree().reload_current_scene()
