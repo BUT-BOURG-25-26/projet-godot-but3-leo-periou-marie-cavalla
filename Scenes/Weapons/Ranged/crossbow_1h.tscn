@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c12eqjit48eax"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/weapons.gd" id="1_j6yb2"]
+[ext_resource type="PackedScene" uid="uid://bkg0vjo2h1836" path="res://Assets/Adventurers/Stuffs/crossbow_1handed.gltf" id="2_j6yb2"]
+
+[node name="Crossbow1H" type="Node3D"]
+script = ExtResource("1_j6yb2")
+type = 1
+
+[node name="Model" parent="." instance=ExtResource("2_j6yb2")]
+transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 0, 0, 0)

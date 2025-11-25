@@ -27,12 +27,12 @@ extends CharacterBody3D
 # Variables
 var can_action: bool = true
 var blocking: bool = false
+var two_handed: bool = false
 var attack_range_list = []
 var current_weapon: Node3D
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health) # Init UI health
-	equip_weapon("Melee/dagger")
 
 func _physics_process(delta: float) -> void:
 	var direction
@@ -47,7 +47,10 @@ func _physics_process(delta: float) -> void:
 		velocity.z = direction.z * speed * (1 - weight)
 		
 		if Input.is_action_just_pressed("attack"):
-			anim_state.travel("Attack") # Attack animation
+			if(two_handed):
+				anim_state.travel("Attack_2H") # Attack animation 2 hands
+			else:
+				anim_state.travel("Attack") # Attack animation
 			attack_input()
 		
 		elif Input.is_action_pressed("block"):
@@ -65,7 +68,10 @@ func _physics_process(delta: float) -> void:
 			anim_state.travel("Running") # Walk animation
 		
 		else:
-			anim_state.travel("Idle") # Idle animation
+			if(two_handed):
+				anim_state.travel("Idle_2H") # Idle animation 2 hands
+			else:
+				anim_state.travel("Idle") # Idle animation
 	
 	# Bouge pas pendant une action
 	elif is_on_floor() and not can_action:
@@ -131,6 +137,7 @@ func set_stat(weapon: Node3D):
 	attack = weapon.damage * strenght
 	attack_cooldown.wait_time = weapon.reload_cooldown
 	weight = weapon.weight
+	two_handed = weapon.two_handed
 	# MELEE WEAPON
 	if(weapon.type == 0):
 		# SHORT
@@ -148,6 +155,13 @@ func set_stat(weapon: Node3D):
 			range_box.shape.size.x = 2.5
 			range_box.shape.size.z = 2.0
 			range_box.position.z = 1.0
+	
+	# Delay attack	
+	if(two_handed):
+		attack_delay.wait_time = 0.5
+	else:
+		attack_delay.wait_time = 0.3
+	
 	var ranged_distance: float
 
 # -- Input d'actions --
