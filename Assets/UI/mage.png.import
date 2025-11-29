@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jo7vjq87ay7a"
-path="res://.godot/imported/mage.png-d51d149d2c581b50ebc62c93cd927abd.ctex"
+path="res://.godot/imported/Mage.png-abcf68a98002e04e93ad4aa2a9cd7579.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/mage.png"
-dest_files=["res://.godot/imported/mage.png-d51d149d2c581b50ebc62c93cd927abd.ctex"]
+source_file="res://Assets/UI/Mage.png"
+dest_files=["res://.godot/imported/Mage.png-abcf68a98002e04e93ad4aa2a9cd7579.ctex"]
 
 [params]
 

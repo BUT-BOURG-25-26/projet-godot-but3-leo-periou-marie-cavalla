@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b1p17nghloo3c"
-path="res://.godot/imported/ranger.png-017b091a0976e68e8dc1556b7ebe4120.ctex"
+path="res://.godot/imported/Ranger.png-1b7f7a8028719f5317c52a156e1a8f49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/ranger.png"
-dest_files=["res://.godot/imported/ranger.png-017b091a0976e68e8dc1556b7ebe4120.ctex"]
+source_file="res://Assets/UI/Ranger.png"
+dest_files=["res://.godot/imported/Ranger.png-1b7f7a8028719f5317c52a156e1a8f49.ctex"]
 
 [params]
 

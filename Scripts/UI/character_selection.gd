@@ -11,29 +11,30 @@ func start_game(selected_character: String):
 func show_details():
 	get_node("Details").show()
 	get_node("Selection").hide()
-	var path:String = path_to_textures + selected_character + textures_format
+	var path:String = path_to_textures + selected_character.capitalize() + textures_format
 	get_node("Details/Title").text = selected_character.capitalize()
-	get_node("Details/Character").texture = load(path)
+	get_node("Details/Character").texture = load(path) as Texture2D
+	print(path)
 
 func _on_btn_mage_pressed() -> void:
-	show_details()
 	selected_character = "mage"
+	show_details()
 
 func _on_btn_knight_pressed() -> void:
-	show_details()
 	selected_character = "knight"
+	show_details()
 
 func _on_btn_rogue_pressed() -> void:
-	show_details()
 	selected_character = "rogue"
+	show_details()
 
 func _on_btn_barbarian_pressed() -> void:
-	show_details()
 	selected_character = "barbarian"
+	show_details()
 
 func _on_btn_ranger_pressed() -> void:
-	show_details()
 	selected_character = "ranger"
+	show_details()
 
 func _on_start_pressed() -> void:
 	start_game(selected_character)

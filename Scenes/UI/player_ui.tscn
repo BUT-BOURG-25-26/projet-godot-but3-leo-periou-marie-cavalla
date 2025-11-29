@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://5i5l8nr83koe"]
+[gd_scene load_steps=8 format=3 uid="uid://5i5l8nr83koe"]
 
 [ext_resource type="Script" uid="uid://bwny6mx6rsr6x" path="res://Scripts/UI/player_ui.gd" id="1_jkj6h"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_sk4pr"]
+[ext_resource type="Texture2D" uid="uid://dj0galbxycae4" path="res://Assets/UI/Sword.png" id="2_t3flm"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_guxnq"]
 
@@ -24,19 +25,22 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t3flm"]
+content_margin_left = 70.0
+content_margin_top = 60.0
+content_margin_right = 100.0
+texture = ExtResource("2_t3flm")
+
 [node name="PlayerUi" type="Sprite3D" node_paths=PackedStringArray("health_bar", "kill_counter")]
 script = ExtResource("1_jkj6h")
 health_bar = NodePath("Panel/ProgressBar")
 kill_counter = NodePath("Label")
 
-[node name="Label" type="Label" parent="."]
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 288.0
-offset_bottom = 50.0
-theme_override_fonts/font = ExtResource("2_sk4pr")
-theme_override_font_sizes/font_size = 28
-text = "Kill : 0"
+[node name="BackgroundScore" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(220.75, 51.75)
+scale = Vector2(0.707913, 0.676966)
+texture = ExtResource("2_t3flm")
 
 [node name="Panel" type="Panel" parent="."]
 anchors_preset = 15
@@ -67,3 +71,13 @@ theme_override_fonts/font = ExtResource("2_sk4pr")
 theme_override_styles/background = SubResource("StyleBoxFlat_jkj6h")
 theme_override_styles/fill = SubResource("StyleBoxFlat_sk4pr")
 value = 100.0
+
+[node name="Label" type="Label" parent="."]
+offset_left = 778.0
+offset_top = 1.0
+offset_right = 1146.0
+offset_bottom = 134.0
+theme_override_fonts/font = ExtResource("2_sk4pr")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxTexture_t3flm")
+text = "Kills : 0"
