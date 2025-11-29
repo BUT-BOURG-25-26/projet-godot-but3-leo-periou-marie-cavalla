@@ -64,5 +64,21 @@ theme_override_styles/pressed = ExtResource("5_k33u3")
 theme_override_styles/normal = ExtResource("5_gih0s")
 text = "Exit"
 
+[node name="Credits" type="Label" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 627.0
+offset_right = 275.0
+offset_bottom = 654.0
+text = "Credits - 3D assets by Kay Lousberg"
+
+[node name="Development" type="Label" parent="."]
+layout_mode = 0
+offset_left = 899.0
+offset_top = 627.0
+offset_right = 1130.0
+offset_bottom = 671.0
+text = "Game by L.Periou & M.Cavalla"
+
 [connection signal="pressed" from="Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]
