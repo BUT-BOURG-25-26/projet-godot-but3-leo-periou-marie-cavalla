@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgjcy8k8wehle"]
+
+[ext_resource type="Script" uid="uid://vm3rf8nlar0q" path="res://Scripts/Map/boost.gd" id="1_vqyr4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_70855"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vqyr4"]
+
+[node name="Boost" type="Node3D" groups=["Boost"]]
+script = ExtResource("1_vqyr4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_70855")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("BoxShape3D_vqyr4")

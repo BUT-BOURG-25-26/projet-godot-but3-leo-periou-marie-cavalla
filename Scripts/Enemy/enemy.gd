@@ -29,6 +29,7 @@ extends CharacterBody3D
 @export var speed: float = 1
 @export var attack_damage: float = 10.0
 @export var max_distance_to_player: float = 50.0
+@export var boost_spawn_rate: int = 3
 var can_action: bool = true
 var player_in_range: bool = false
 var player_detected: bool = false
@@ -127,6 +128,11 @@ func die():
 	anim_state.travel("Death")
 	death_sound.play()
 	dead_cooldown.start()
+	create_boost()
+	
+func create_boost():
+	if(randi_range(0,10)<boost_spawn_rate):
+		game_manager.create_boost(position)
 
 # -- Cooldown/Delay --
 func _attack_delay() -> void:

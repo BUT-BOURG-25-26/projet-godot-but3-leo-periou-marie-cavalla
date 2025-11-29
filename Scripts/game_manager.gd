@@ -2,6 +2,8 @@ extends Node3D
 
 @export var game_over_scene: PackedScene = preload("res://Scenes/UI/death_screen.tscn")
 @export var main_scene: PackedScene = preload("res://Scenes/game.tscn")
+@export var boost_scene: PackedScene = preload("res://Scenes/Map/boost.tscn")
+
 
 @export var difficulty_label:Control
 @export var main_scene_node:Node3D
@@ -11,12 +13,17 @@ var selected_character: String = ""
 
 func initialize() -> void:
 	if(!is_initialized):
-		main_scene_node = $"/root/Terrain"
+		main_scene_node = $"/root/Game/Terrain"
 		process_mode = Node.PROCESS_MODE_ALWAYS
 
 func update_difficulty(value:int):
 	#TODO difficulty_label.text = str(value)
 	pass
+	
+func create_boost(position:Vector3):
+	var boost = boost_scene.instantiate()
+	boost.position = position
+	main_scene_node.add_child(boost)
 
 func game_over() -> void:
 	get_tree().paused = true;
