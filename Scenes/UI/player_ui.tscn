@@ -1,0 +1,83 @@
+[gd_scene load_steps=8 format=3 uid="uid://5i5l8nr83koe"]
+
+[ext_resource type="Script" uid="uid://bwny6mx6rsr6x" path="res://Scripts/UI/player_ui.gd" id="1_jkj6h"]
+[ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_sk4pr"]
+[ext_resource type="Texture2D" uid="uid://dj0galbxycae4" path="res://Assets/UI/Sword.png" id="2_t3flm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_guxnq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkj6h"]
+bg_color = Color(0.794495, 0.174632, 0.207786, 1)
+border_width_bottom = 3
+border_color = Color(0.4435, 0.0718523, 0.0940217, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sk4pr"]
+bg_color = Color(2.5028e-06, 0.702738, 0.317008, 1)
+border_width_bottom = 3
+border_color = Color(0, 0.269946, 0.104969, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t3flm"]
+content_margin_left = 70.0
+content_margin_top = 60.0
+content_margin_right = 100.0
+texture = ExtResource("2_t3flm")
+
+[node name="PlayerUi" type="Sprite3D" node_paths=PackedStringArray("health_bar", "kill_counter")]
+script = ExtResource("1_jkj6h")
+health_bar = NodePath("Panel/ProgressBar")
+kill_counter = NodePath("Label")
+
+[node name="BackgroundScore" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(220.75, 51.75)
+scale = Vector2(0.707913, 0.676966)
+texture = ExtResource("2_t3flm")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 320.0
+offset_top = 576.0
+offset_right = -320.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_guxnq")
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.038
+anchor_top = 0.5
+anchor_right = 0.962
+anchor_bottom = 0.5
+offset_left = 0.0959988
+offset_top = -13.0
+offset_right = -0.0960083
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_sk4pr")
+theme_override_styles/background = SubResource("StyleBoxFlat_jkj6h")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sk4pr")
+value = 100.0
+
+[node name="Label" type="Label" parent="."]
+offset_left = 778.0
+offset_top = 1.0
+offset_right = 1146.0
+offset_bottom = 134.0
+theme_override_fonts/font = ExtResource("2_sk4pr")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxTexture_t3flm")
+text = "Kills : 0"

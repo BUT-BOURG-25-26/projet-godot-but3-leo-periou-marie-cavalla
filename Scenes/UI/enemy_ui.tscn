@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqeba56sys60m"]
+
+[ext_resource type="Script" uid="uid://cj1pdjp8ywqap" path="res://Scripts/UI/ennemy_ui.gd" id="1_y3cq0"]
+[ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_txhmy"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tuyoq"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dqkch"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dqkch"]
+bg_color = Color(0.794495, 0.174632, 0.207786, 1)
+border_width_bottom = 3
+border_color = Color(0.4435, 0.0718523, 0.0940217, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qlg0r"]
+bg_color = Color(2.5028e-06, 0.702738, 0.317008, 1)
+border_width_bottom = 3
+border_color = Color(0, 0.269946, 0.104969, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="EnemyUi" type="Sprite3D" node_paths=PackedStringArray("health_bar")]
+billboard = 1
+texture = SubResource("ViewportTexture_tuyoq")
+script = ExtResource("1_y3cq0")
+health_bar = NodePath("SubViewport/Panel/ProgressBar")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(200, 512)
+
+[node name="Panel" type="Panel" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dqkch")
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewport/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.038
+anchor_top = 0.5
+anchor_right = 0.962
+anchor_bottom = 0.5
+offset_left = 0.0959997
+offset_top = -13.0
+offset_right = -0.0960083
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_txhmy")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/background = SubResource("StyleBoxFlat_dqkch")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qlg0r")
+value = 100.0
