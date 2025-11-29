@@ -1,16 +1,27 @@
-[gd_scene load_steps=9 format=3 uid="uid://clx6ct8m6b2yx"]
+[gd_scene load_steps=16 format=3 uid="uid://clx6ct8m6b2yx"]
 
 [ext_resource type="Script" uid="uid://jc2oe0uckhkt" path="res://Scripts/UI/character_selection.gd" id="1_aj0io"]
-[ext_resource type="Texture2D" uid="uid://badfhwiovthbk" path="res://Assets/Menu/Selection/mage.png" id="1_c4n5n"]
-[ext_resource type="Texture2D" uid="uid://cryyjr0v5vhlr" path="res://Assets/Menu/Selection/knight.png" id="2_rhilo"]
+[ext_resource type="Texture2D" uid="uid://dgm72ibasr4lq" path="res://Assets/UI/Background.png" id="2_rrd2k"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_vkfj6"]
-[ext_resource type="Texture2D" uid="uid://cxnoawf7enceu" path="res://Assets/Menu/Selection/rogue.png" id="3_y1d72"]
-[ext_resource type="Texture2D" uid="uid://bimbawke8jhna" path="res://Assets/Menu/Selection/barbarian.png" id="4_855g8"]
-[ext_resource type="Texture2D" uid="uid://dwk24uqrf71xa" path="res://Assets/Menu/Selection/ranger.png" id="5_5xjxx"]
+[ext_resource type="Texture2D" uid="uid://bvobw60vj7lsm" path="res://Assets/UI/Characters.png" id="3_oe7ax"]
+[ext_resource type="StyleBox" uid="uid://dcnuw2s72vp6l" path="res://Themes/ButtonNormal.tres" id="5_nwqkb"]
+[ext_resource type="Texture2D" uid="uid://dr0o0itt151ow" path="res://Assets/UI/Button.png" id="6_xv4yp"]
+[ext_resource type="StyleBox" uid="uid://bfl5ticsb5lqg" path="res://Themes/ButtonHover.tres" id="7_pb1v1"]
+[ext_resource type="StyleBox" uid="uid://cd3g5f6ybtu1m" path="res://Themes/ButtonPressed.tres" id="8_r7boc"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_aj0io"]
-font = ExtResource("2_vkfj6")
-font_size = 18
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rrd2k"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5t5qi"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iteob"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_336cn"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_845l7"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oxayx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oe7ax"]
 
 [node name="CharacterSelection" type="Control"]
 layout_mode = 3
@@ -21,137 +32,149 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_aj0io")
 
-[node name="BtnMage" type="TextureButton" parent="."]
-layout_mode = 1
-anchors_preset = 15
+[node name="BackgroundSelection" type="Sprite2D" parent="."]
+position = Vector2(586, 326)
+scale = Vector2(0.598148, 0.598148)
+texture = ExtResource("2_rrd2k")
+
+[node name="Selection" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1153.0
+offset_bottom = 646.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rrd2k")
+
+[node name="Characters" type="Sprite2D" parent="Selection"]
+position = Vector2(579, 323)
+scale = Vector2(0.521296, 0.521296)
+texture = ExtResource("3_oe7ax")
+
+[node name="ButtonMage" type="Button" parent="Selection/Characters"]
+offset_left = -1164.0
+offset_top = -599.0
+offset_right = -405.0
+offset_bottom = 180.0
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("5_nwqkb")
+theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_5t5qi")
+
+[node name="ButtonRogue" type="Button" parent="Selection/Characters"]
+offset_left = -433.535
+offset_top = -602.345
+offset_right = 325.465
+offset_bottom = 176.655
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("5_nwqkb")
+theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_iteob")
+
+[node name="ButtonRanger" type="Button" parent="Selection/Characters"]
+offset_left = 333.783
+offset_top = -602.345
+offset_right = 1092.78
+offset_bottom = 176.655
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("5_nwqkb")
+theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_336cn")
+
+[node name="ButtonKnight" type="Button" parent="Selection/Characters"]
+offset_left = -11.5099
+offset_top = 613.854
+offset_right = 747.49
+offset_bottom = 1392.85
+rotation = 3.14159
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("5_nwqkb")
+theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_845l7")
+
+[node name="ButtonBarbarian" type="Button" parent="Selection/Characters"]
+offset_left = 742.38
+offset_top = 606.181
+offset_right = 1501.38
+offset_bottom = 1385.18
+rotation = 3.14159
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("5_nwqkb")
+theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_oxayx")
+
+[node name="Details" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 1151.0
+offset_bottom = 644.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oe7ax")
+
+[node name="Character" type="Sprite2D" parent="Details"]
+position = Vector2(229, 321)
+scale = Vector2(0.858238, 0.829014)
+texture = ExtResource("6_xv4yp")
+
+[node name="Title" type="Label" parent="Details"]
+layout_mode = 2
+offset_left = 429.0
+offset_top = 34.0
+offset_right = 752.0
+offset_bottom = 77.0
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 35
+text = "Character"
+
+[node name="Description" type="Label" parent="Details"]
+layout_mode = 2
+offset_left = 469.0
+offset_top = 129.0
+offset_right = 868.0
+offset_bottom = 453.0
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 20
+text = "Description"
+
+[node name="Start" type="Button" parent="Details"]
+layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = 150.0
-offset_right = -931.6
-offset_bottom = -198.0
+offset_left = 893.0
+offset_top = 408.0
+offset_right = -9.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("1_c4n5n")
-ignore_texture_size = true
-stretch_mode = 0
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/hover = ExtResource("7_pb1v1")
+theme_override_styles/pressed = ExtResource("8_r7boc")
+theme_override_styles/normal = ExtResource("5_nwqkb")
+text = "Start"
 
-[node name="Label" type="Label" parent="BtnMage"]
-layout_mode = 0
-offset_top = 314.0
-offset_right = 170.0
-offset_bottom = 338.0
-text = "Mage"
-label_settings = SubResource("LabelSettings_aj0io")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BtnKnight" type="TextureButton" parent="."]
-layout_mode = 1
-anchors_preset = 15
+[node name="Back" type="Button" parent="Details"]
+layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 270.4
-offset_top = 150.0
-offset_right = -711.2
-offset_bottom = -198.0
+offset_left = 891.0
+offset_top = 28.0
+offset_right = -11.0
+offset_bottom = -400.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("2_rhilo")
-ignore_texture_size = true
-stretch_mode = 0
+theme_override_fonts/font = ExtResource("2_vkfj6")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/hover = ExtResource("7_pb1v1")
+theme_override_styles/pressed = ExtResource("8_r7boc")
+theme_override_styles/normal = ExtResource("5_nwqkb")
+text = "Back"
 
-[node name="Label2" type="Label" parent="BtnKnight"]
-layout_mode = 0
-offset_left = -0.399994
-offset_top = 314.0
-offset_right = 169.6
-offset_bottom = 338.0
-text = "Knight"
-label_settings = SubResource("LabelSettings_aj0io")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BtnRogue" type="TextureButton" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 490.8
-offset_top = 150.0
-offset_right = -490.8
-offset_bottom = -198.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = ExtResource("3_y1d72")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label3" type="Label" parent="BtnRogue"]
-layout_mode = 0
-offset_left = 0.200012
-offset_top = 314.0
-offset_right = 170.2
-offset_bottom = 338.0
-text = "Rogue"
-label_settings = SubResource("LabelSettings_aj0io")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BtnBarbarian" type="TextureButton" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 711.2
-offset_top = 150.0
-offset_right = -270.4
-offset_bottom = -198.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = ExtResource("4_855g8")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label4" type="Label" parent="BtnBarbarian"]
-layout_mode = 0
-offset_left = -0.200012
-offset_top = 314.0
-offset_right = 169.8
-offset_bottom = 338.0
-text = "Barbarian"
-label_settings = SubResource("LabelSettings_aj0io")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BtnRanger" type="TextureButton" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 931.6
-offset_top = 150.0
-offset_right = -50.0
-offset_bottom = -198.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = ExtResource("5_5xjxx")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label5" type="Label" parent="BtnRanger"]
-layout_mode = 0
-offset_left = 0.400024
-offset_top = 314.0
-offset_right = 170.4
-offset_bottom = 338.0
-text = "Ranger"
-label_settings = SubResource("LabelSettings_aj0io")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[connection signal="pressed" from="BtnMage" to="." method="_on_btn_mage_pressed"]
-[connection signal="pressed" from="BtnKnight" to="." method="_on_btn_knight_pressed"]
-[connection signal="pressed" from="BtnRogue" to="." method="_on_btn_rogue_pressed"]
-[connection signal="pressed" from="BtnBarbarian" to="." method="_on_btn_barbarian_pressed"]
-[connection signal="pressed" from="BtnRanger" to="." method="_on_btn_ranger_pressed"]
+[connection signal="pressed" from="Selection/Characters/ButtonMage" to="." method="_on_btn_mage_pressed"]
+[connection signal="pressed" from="Selection/Characters/ButtonRogue" to="." method="_on_btn_rogue_pressed"]
+[connection signal="pressed" from="Selection/Characters/ButtonRanger" to="." method="_on_btn_ranger_pressed"]
+[connection signal="pressed" from="Selection/Characters/ButtonKnight" to="." method="_on_btn_knight_pressed"]
+[connection signal="pressed" from="Selection/Characters/ButtonBarbarian" to="." method="_on_btn_barbarian_pressed"]
+[connection signal="pressed" from="Details/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Details/Back" to="." method="_on_back_pressed"]
