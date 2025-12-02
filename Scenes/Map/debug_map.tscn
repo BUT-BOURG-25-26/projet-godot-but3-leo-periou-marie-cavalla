@@ -135,4 +135,10 @@ transform = Transform3D(1, 0, 0, 0, 0.413327, 0.910583, 0, -0.910583, 0.413327, 
 environment = SubResource("Environment_1ugow")
 
 [node name="SkeletonMinion" parent="." instance=ExtResource("2_1ugow")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.21567, 0, 8.42607)
+
+[node name="SkeletonMinion2" parent="." instance=ExtResource("2_1ugow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.42607)
+
+[node name="SkeletonMinion3" parent="." instance=ExtResource("2_1ugow")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.04396, 0, 8.42607)

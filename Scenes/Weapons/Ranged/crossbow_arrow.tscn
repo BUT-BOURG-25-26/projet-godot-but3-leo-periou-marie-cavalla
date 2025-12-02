@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctyfq87l3ko8p"]
+
+[ext_resource type="Script" uid="uid://ceij4ublrumn0" path="res://Scripts/Weapons/projectile.gd" id="1_nfaom"]
+[ext_resource type="PackedScene" uid="uid://cn68ofqqcwutu" path="res://Assets/Adventurers/Stuffs/arrow_crossbow.gltf" id="2_nfaom"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p6twk"]
+size = Vector3(0.127289, 0.0867424, 0.74929)
+
+[node name="CrossbowArrow" type="Area3D"]
+script = ExtResource("1_nfaom")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000106812, 0.00134083, 0.0139093)
+shape = SubResource("BoxShape3D_p6twk")
+
+[node name="Model" parent="." instance=ExtResource("2_nfaom")]

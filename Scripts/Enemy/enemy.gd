@@ -87,13 +87,16 @@ func _physics_process(delta: float) -> void:
 		
 
 # -- Attack/Damage --
-func take_damage(damage: float):
+func take_damage(damage: float, get_stand: bool):
+	if(!player_detected):
+		player_detected = true
 	health -= damage
 	enemy_ui.take_damage(damage)
 	hit_sound[randi_range(0,1)].play()
 	anim_state.travel("Hit")
 	can_action = false
-	speed = 0.0
+	if(get_stand):
+		speed = 0.0
 	hit_cooldown.start()
 	if(health<=0):
 		die()
