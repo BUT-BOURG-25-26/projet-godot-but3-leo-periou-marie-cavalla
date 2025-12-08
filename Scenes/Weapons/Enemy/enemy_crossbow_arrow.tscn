@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://62o1dwrs0oh2"]
+
+[ext_resource type="Script" uid="uid://ceij4ublrumn0" path="res://Scripts/Weapons/projectile.gd" id="1_2us2f"]
+[ext_resource type="PackedScene" uid="uid://budru5aor3036" path="res://Assets/Skeleton/Stuffs/Skeleton_Arrow.gltf" id="2_a7s7a"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p6twk"]
+size = Vector3(0.127289, 0.0867424, 0.74929)
+
+[node name="CrossbowArrow" type="Area3D"]
+script = ExtResource("1_2us2f")
+target = "Player"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000106812, 0.00134083, 0.0139093)
+shape = SubResource("BoxShape3D_p6twk")
+
+[node name="Model" parent="." instance=ExtResource("2_a7s7a")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)

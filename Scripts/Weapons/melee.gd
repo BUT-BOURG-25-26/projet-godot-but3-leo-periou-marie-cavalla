@@ -7,6 +7,7 @@ signal attack_finished
 @export var cooldown_time: float = 0.8
 @export var is_two_handed: bool = false
 @export var weight: float = 0.0
+@export_enum("Enemy","Player") var target: String = "Enemy"
 @export_enum("Left","Right") var hand: String = "Right"
 
 @onready var hitbox: Area3D = $Hitbox 
@@ -67,8 +68,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 # Degat
 func _try_deal_damage(body: Node3D) -> void:
-	# Si c'est un ennemi et qu'on ne l'a pas encore touché
-	if body.is_in_group("Enemy") and body not in hit_history:
+	if body.is_in_group(target) and body not in hit_history:
 		if body.has_method("take_damage"):
 			body.take_damage(damage + wielder_strength, is_two_handed)
 			hit_history.append(body) # On le note pour ne pas le retoucher à la frame suivante
