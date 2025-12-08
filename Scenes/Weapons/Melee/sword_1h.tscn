@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://bsuetwp16aafp"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/melee.gd" id="1_ar8ev"]
+[ext_resource type="PackedScene" uid="uid://c1d5d3twptk67" path="res://Assets/Adventurers/Stuffs/sword_1handed.gltf" id="2_ar8ev"]
+[ext_resource type="AudioStream" uid="uid://115jg11p3gsp" path="res://Assets/Sound/Whoosh.mp3" id="3_hgam2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7th3v"]
+size = Vector3(0.557082, 1.80247, 0.209295)
+
+[node name="Sword1H" type="Node3D"]
+script = ExtResource("1_ar8ev")
+damage = 5.0
+cooldown_time = 0.3
+weight = 0.2
+
+[node name="Model" parent="." instance=ExtResource("2_ar8ev")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Hitbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00253153, 0.523283, -0.00222301)
+shape = SubResource("BoxShape3D_7th3v")
+
+[node name="DelayTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_hgam2")
