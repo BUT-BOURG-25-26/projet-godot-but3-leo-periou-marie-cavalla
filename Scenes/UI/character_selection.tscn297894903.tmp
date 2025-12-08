@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_vkfj6"]
 [ext_resource type="Texture2D" uid="uid://bvobw60vj7lsm" path="res://Assets/UI/Characters.png" id="3_oe7ax"]
 [ext_resource type="StyleBox" uid="uid://dcnuw2s72vp6l" path="res://Themes/ButtonNormal.tres" id="5_nwqkb"]
-[ext_resource type="Texture2D" uid="uid://cu5g0ws5i3c5k" path="res://Assets/UI/knight.png" id="6_rrd2k"]
+[ext_resource type="Texture2D" uid="uid://dr0o0itt151ow" path="res://Assets/UI/Button.png" id="6_xv4yp"]
 [ext_resource type="StyleBox" uid="uid://bfl5ticsb5lqg" path="res://Themes/ButtonHover.tres" id="7_pb1v1"]
 [ext_resource type="StyleBox" uid="uid://cd3g5f6ybtu1m" path="res://Themes/ButtonPressed.tres" id="8_r7boc"]
 
@@ -38,6 +38,7 @@ scale = Vector2(0.598148, 0.598148)
 texture = ExtResource("2_rrd2k")
 
 [node name="Selection" type="Panel" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 1153.0
 offset_bottom = 646.0
@@ -106,40 +107,38 @@ theme_override_styles/pressed = ExtResource("5_nwqkb")
 theme_override_styles/normal = SubResource("StyleBoxTexture_oxayx")
 
 [node name="Details" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_right = 1151.0
 offset_bottom = 644.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_oe7ax")
 
 [node name="Character" type="Sprite2D" parent="Details"]
-position = Vector2(561, 346)
-scale = Vector2(0.506922, 0.489661)
-texture = ExtResource("6_rrd2k")
+z_index = 5
+position = Vector2(229, 321)
+scale = Vector2(0.858238, 0.829014)
+texture = ExtResource("6_xv4yp")
 
 [node name="Title" type="Label" parent="Details"]
 layout_mode = 2
 offset_left = 429.0
-offset_top = 78.0
+offset_top = 34.0
 offset_right = 752.0
-offset_bottom = 121.0
+offset_bottom = 77.0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 35
 text = "Character"
 
 [node name="Description" type="Label" parent="Details"]
 layout_mode = 2
-offset_left = 402.0
-offset_top = 190.0
-offset_right = 869.0
-offset_bottom = 489.0
+offset_left = 469.0
+offset_top = 129.0
+offset_right = 868.0
+offset_bottom = 453.0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 20
 text = "Description"
-autowrap_mode = 2
 
 [node name="Start" type="Button" parent="Details"]
-z_index = 1
 layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -157,7 +156,6 @@ theme_override_styles/normal = ExtResource("5_nwqkb")
 text = "Start"
 
 [node name="Back" type="Button" parent="Details"]
-z_index = 1
 layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0

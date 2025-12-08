@@ -11,4 +11,4 @@ func set_health_bar(hp):
 	health_bar.value = hp
 
 func set_kill_counter(number):
-	kill_counter.text = "Kill : " + str(number)
+	kill_counter.text = "Kills : " + str(number)

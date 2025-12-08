@@ -27,7 +27,7 @@ var current_weapon: Node3D
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health)
-	equip_weapon("Ranged/bow")
+	equip_weapon("Melee/sword_2h")
 
 func _physics_process(delta: float) -> void:
 	if is_dead:

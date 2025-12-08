@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cygjqnnlqbe23"]
+[gd_scene load_steps=6 format=3 uid="uid://cygjqnnlqbe23"]
 
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="1_uwb1u"]
 [ext_resource type="Script" uid="uid://fmrlyv0fr4nk" path="res://Scripts/UI/pause_ui.gd" id="1_ypbrs"]
+[ext_resource type="StyleBox" uid="uid://bfl5ticsb5lqg" path="res://Themes/ButtonHover.tres" id="3_i0vfa"]
+[ext_resource type="StyleBox" uid="uid://cd3g5f6ybtu1m" path="res://Themes/ButtonPressed.tres" id="4_pr555"]
+[ext_resource type="StyleBox" uid="uid://dcnuw2s72vp6l" path="res://Themes/ButtonNormal.tres" id="5_8dpcc"]
 
 [node name="PauseUi" type="Control"]
 process_mode = 3
@@ -20,15 +23,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -20.0
-offset_right = 128.0
-offset_bottom = 44.0
+offset_left = 49.0
+offset_top = -8.0
+offset_right = 379.0
+offset_bottom = 257.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_uwb1u")
-theme_override_font_sizes/font_size = 24
-text = "Continue"
+theme_override_font_sizes/font_size = 20
+theme_override_styles/hover = ExtResource("3_i0vfa")
+theme_override_styles/pressed = ExtResource("4_pr555")
+theme_override_styles/normal = ExtResource("5_8dpcc")
+text = " Continue"
 
 [node name="Exit" type="Button" parent="."]
 layout_mode = 1
@@ -37,15 +43,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = 68.0
-offset_right = 128.0
-offset_bottom = 133.0
+offset_left = -348.0
+offset_top = -12.0
+offset_right = -18.0
+offset_bottom = 253.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_uwb1u")
 theme_override_font_sizes/font_size = 24
-text = "Exit"
+theme_override_styles/hover = ExtResource("3_i0vfa")
+theme_override_styles/pressed = ExtResource("4_pr555")
+theme_override_styles/normal = ExtResource("5_8dpcc")
+text = "Quit"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
