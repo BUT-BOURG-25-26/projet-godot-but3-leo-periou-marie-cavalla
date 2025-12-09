@@ -3,6 +3,7 @@ extends Node3D
 signal player_spawned(player)
 
 func _ready():
+	game_manager.initialize()
 	var name = game_manager.selected_character
 	if name == "":
 		push_error("No character selected!")

@@ -1,4 +1,4 @@
-extends CharacterBody3D
+class_name Player extends CharacterBody3D
 
 # --- OBJECTS ---
 @onready var camera = $SpringArmPivot/Camera3D
@@ -15,8 +15,9 @@ extends CharacterBody3D
 # --- EXPORT STATS ---
 @export var speed: float = 5.0
 @export var jump_force: float = 4.0
-@export var strength: float = 5
+@export var strength: float = 20
 @export var health: float = 100.0
+@export var max_health: float = 100.0
 @export var kill: int = 0
 
 # --- VARIABLES ---
@@ -119,6 +120,28 @@ func update_locomotion():
 	anim_state.travel("Idle" + get_anim_suffix())
 
 # --- ACTIONS ---
+
+func add_boost(type:String):
+	match type :
+		"Health" :
+			if(health<max_health):
+				if(health+30>max_health):
+					health = max_health
+					player_ui.heal(max_health-health)
+				else:
+					health += 30
+					player_ui.heal(30)
+		"Attack" : 
+			strength += 5
+		"Speed" :
+			speed += 5
+			
+func remove_boost(type:String):
+	match type :
+		"Attack" : 
+			strength -= 5
+		"Speed" :
+			speed -= 5
 
 func trigger_attack():
 	can_action = false
