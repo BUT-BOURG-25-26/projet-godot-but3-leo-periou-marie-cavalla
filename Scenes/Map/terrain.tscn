@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cj5scyk3gggno" path="res://Scripts/Map/terrain_generation.gd" id="1_nkyio"]
 
-[sub_resource type="Shader" id="Shader_j4ig8"]
+[sub_resource type="Shader" id="Shader_nkyio"]
 code = "
 // NOTE: Shader automatically converted from Godot Engine 4.4.1.stable.mono's ProceduralSkyMaterial.
 
@@ -81,7 +81,7 @@ void sky() {
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icyg6"]
-shader = SubResource("Shader_j4ig8")
+shader = SubResource("Shader_nkyio")
 shader_parameter/sky_top_color = Color(0.5074, 0.654317, 0.86, 1)
 shader_parameter/sky_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
 shader_parameter/sky_curve = 0.15
@@ -95,12 +95,12 @@ shader_parameter/sun_angle_max = 0.523599
 shader_parameter/sun_curve = 0.15
 shader_parameter/exposure = 1.0
 
-[sub_resource type="Sky" id="Sky_c45jm"]
+[sub_resource type="Sky" id="Sky_j7f5b"]
 sky_material = SubResource("ShaderMaterial_icyg6")
 
 [sub_resource type="Environment" id="Environment_icyg6"]
 background_mode = 2
-sky = SubResource("Sky_c45jm")
+sky = SubResource("Sky_j7f5b")
 fog_enabled = true
 fog_light_color = Color(0.539, 0.600717, 0.7, 1)
 

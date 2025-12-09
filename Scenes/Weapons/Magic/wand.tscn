@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7y01rlxe8nur"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/melee.gd" id="1_va3n0"]
+[ext_resource type="PackedScene" uid="uid://cku47a6daheum" path="res://Assets/Adventurers/Stuffs/wand.gltf" id="2_ngk8s"]
+
+[node name="Wand" type="Node3D"]
+script = ExtResource("1_va3n0")
+type = 2
+
+[node name="Model" parent="." instance=ExtResource("2_ngk8s")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

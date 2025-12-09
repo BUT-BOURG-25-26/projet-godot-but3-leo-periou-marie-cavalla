@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://yoxs051n0ex"]
+
+[ext_resource type="Script" uid="uid://ceij4ublrumn0" path="res://Scripts/Weapons/projectile.gd" id="1_p6twk"]
+[ext_resource type="PackedScene" uid="uid://7bv813dep55" path="res://Assets/Adventurers/Stuffs/arrow_bow.gltf" id="1_r8jdu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p6twk"]
+size = Vector3(0.127289, 0.115112, 1.27185)
+
+[node name="BowArrow" type="Area3D"]
+script = ExtResource("1_p6twk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000106812, -0.00140381, -0.0137665)
+shape = SubResource("BoxShape3D_p6twk")
+
+[node name="Model" parent="." instance=ExtResource("1_r8jdu")]
