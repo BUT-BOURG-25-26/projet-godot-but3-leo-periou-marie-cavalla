@@ -53,7 +53,6 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		velocity.x = 0
 		velocity.z = 0
-		velocity.y += get_gravity().y * delta
 		move_and_slide()
 		return
 
@@ -76,7 +75,14 @@ func _physics_process(delta: float) -> void:
 	
 	# --- LOGIQUE DE MOUVEMENT / ATTAQUE ---
 	var direction = Vector3.ZERO
+	direction = (player.global_transform.origin - global_transform.origin)
+	direction.y = 0
+	direction = direction.normalized()
 	
+	# Rotation vers le joueur
+	var target_rotation = atan2(direction.x, direction.z)
+	model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta*10)
+
 	if is_on_floor() and can_action:
 		# Si on est assez proche pour taper
 		if dist_to_player <= attack_range:
@@ -88,10 +94,6 @@ func _physics_process(delta: float) -> void:
 		
 		# Sinon on avance vers le joueur
 		else:
-			direction = (player.global_transform.origin - global_transform.origin)
-			direction.y = 0
-			direction = direction.normalized()
-			
 			velocity.x = direction.x * speed
 			velocity.z = direction.z * speed
 	
@@ -103,12 +105,6 @@ func _physics_process(delta: float) -> void:
 			velocity.z = 0
 	
 	move_and_slide()
-	
-	# Rotation vers le joueur
-	if direction.length() > 0.01 and can_action:
-		var target_rotation = atan2(direction.x, direction.z)
-		model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
-		
 	update_locomotion()
 
 # --- GESTION ANIMATION ---
@@ -128,6 +124,9 @@ func update_locomotion():
 # --- COMBAT ---
 
 func trigger_attack():
+	if(!hit_cooldown.is_stopped()):
+		return
+	
 	can_action = false
 	velocity = Vector3.ZERO
 	
@@ -171,6 +170,7 @@ func die():
 		
 	death_particle.emitting = true
 	eyes_light.queue_free()
+	collision.queue_free()
 	
 	anim_state.travel("Death")
 	death_sound.play()
@@ -180,10 +180,13 @@ func die():
 
 func _on_weapon_attack_finished():
 	if is_dead: return
-	can_action = true
-	update_locomotion()
+	if(hit_cooldown.is_stopped()):
+		can_action = true
 
 func _on_weapon_needs_reload(duration: float):
+	if(!hit_cooldown.is_stopped()):
+		return
+	
 	can_action = false
 	velocity = Vector3.ZERO
 	

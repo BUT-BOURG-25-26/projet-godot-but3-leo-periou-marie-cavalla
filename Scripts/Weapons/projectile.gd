@@ -23,7 +23,7 @@ func _physics_process(delta: float) -> void:
 	position -= transform.basis.z * speed * delta
 
 func _on_body_entered(body: Node) -> void:
-	# Si on touche un ennemi
+	# Si on touche une cible
 	if body.is_in_group(target):
 		if body.has_method("take_damage"):
 			body.take_damage(damage, enemy_stand)
