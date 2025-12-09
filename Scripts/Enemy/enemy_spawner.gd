@@ -2,7 +2,7 @@ extends Node3D
 
 # -- Enemy import  --
 var skeleton_minion: PackedScene = preload("res://Scenes/Enemy/skeleton_minion.tscn")
-var skeleton_mage: PackedScene = preload("res://Scenes/Enemy/skeleton_mage.tscn")
+# var skeleton_mage: PackedScene = preload("res://Scenes/Enemy/skeleton_mage.tscn")
 var skeleton_rogue: PackedScene = preload("res://Scenes/Enemy/skeleton_rogue.tscn")
 var skeleton_warrior: PackedScene = preload("res://Scenes/Enemy/skeleton_warrior.tscn")
 
@@ -10,7 +10,7 @@ var skeleton_warrior: PackedScene = preload("res://Scenes/Enemy/skeleton_warrior
 
 var enemy_list = [
 	skeleton_minion,
-	skeleton_mage,
+	#skeleton_mage,
 	skeleton_rogue,
 	skeleton_warrior,
 ]
