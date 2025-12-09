@@ -28,9 +28,8 @@ var is_looted: bool = false
 var is_cycling: bool = false 
 var generated_weapon_name: String = ""
 
-# Le conteneur qui va monter et tourner
+
 var loot_pivot: Node3D = null 
-# L'arme actuelle à l'intérieur du conteneur
 var visual_weapon_node: Node3D = null
 
 func _ready() -> void:
@@ -40,8 +39,6 @@ func _ready() -> void:
 	interaction_area.body_exited.connect(_on_body_exited)
 
 func _process(delta: float) -> void:
-	# On fait tourner le PIVOT, pas l'arme directement.
-	# Comme ça, la rotation est continue même quand l'arme change.
 	if is_open and not is_looted and loot_pivot:
 		loot_pivot.rotation.y += delta * 1.5
 
@@ -74,25 +71,22 @@ func open_chest():
 	_process_mystery_box_sequence()
 
 func _process_mystery_box_sequence():
-	# 1. CRÉATION DU PIVOT (CONTENEUR)
-	# C'est lui qui va gérer la montée fluide
+	# CRÉATION DU PIVOT (CONTENEUR)
 	loot_pivot = Node3D.new()
 	add_child(loot_pivot)
 	loot_pivot.global_position = spawn_point.global_position
 	
-	# 2. ANIMATION DE MONTÉE (TWEEN)
-	# Le pivot monte doucement pendant toute la durée du mystère (mystery_duration)
+	# ANIMATION DE MONTÉE (TWEEN)
 	var rise_tween = create_tween()
 	rise_tween.tween_property(loot_pivot, "position:y", spawn_point.position.y + 1.5, mystery_duration).from(spawn_point.position.y).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	
-	# 3. BOUCLE DE DÉFILEMENT DES ARMES
+	# BOUCLE DE DÉFILEMENT DES ARMES
 	var elapsed_time = 0.0
 	var current_delay = initial_switch_speed
 	
 	while elapsed_time < mystery_duration:
 		var temp_weapon = available_weapons.pick_random()
 		
-		# On fait spawn l'arme DANS le pivot
 		update_visual_model(temp_weapon)
 		
 		await get_tree().create_timer(current_delay).timeout
@@ -102,7 +96,7 @@ func _process_mystery_box_sequence():
 		var progress = elapsed_time / mystery_duration
 		current_delay = lerp(initial_switch_speed, final_switch_speed, pow(progress, 2))
 		
-	# 4. FINALISATION
+	# FINALISATION
 	generated_weapon_name = available_weapons.pick_random()
 	update_visual_model(generated_weapon_name)
 	
@@ -114,7 +108,6 @@ func _process_mystery_box_sequence():
 		
 	is_cycling = false
 
-# Cette fonction remplace juste le modèle 3D à l'intérieur du pivot
 func update_visual_model(weapon_name: String):
 	# Suppression de l'ancien modèle
 	if visual_weapon_node:
@@ -124,7 +117,6 @@ func update_visual_model(weapon_name: String):
 	var scene = load(path)
 	if scene:
 		visual_weapon_node = scene.instantiate()
-		# IMPORTANT : On l'ajoute comme enfant du PIVOT, pas du coffre
 		loot_pivot.add_child(visual_weapon_node)
 		
 		visual_weapon_node.process_mode = Node.PROCESS_MODE_DISABLED
