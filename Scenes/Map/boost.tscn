@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgjcy8k8wehle"]
+
+[ext_resource type="Script" uid="uid://vm3rf8nlar0q" path="res://Scripts/Map/boost.gd" id="1_vqyr4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqyr4"]
+transparency = 1
+albedo_color = Color(0.321569, 0.631373, 0.466667, 0.854902)
+
+[sub_resource type="SphereMesh" id="SphereMesh_k4umm"]
+material = SubResource("StandardMaterial3D_vqyr4")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k4umm"]
+size = Vector3(1.30687, 1, 1.29007)
+
+[node name="Boost" type="Node3D" groups=["Boost"]]
+script = ExtResource("1_vqyr4")
+
+[node name="BoostMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.624616, 0)
+mesh = SubResource("SphereMesh_k4umm")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00246429, 0, -0.0116425)
+shape = SubResource("BoxShape3D_k4umm")
+
+[node name="BoostTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="OmniLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0643234, 0.997929, 0, -0.997929, -0.0643234, 0, 0.628299, -0.116592)
+light_energy = 6.302
+spot_range = 1.66575
+spot_angle = 59.0625
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_boost_body_entered"]
+[connection signal="timeout" from="BoostTimer" to="." method="_on_boost_timer_timeout"]

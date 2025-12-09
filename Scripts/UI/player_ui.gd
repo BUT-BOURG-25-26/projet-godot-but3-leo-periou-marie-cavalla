@@ -6,6 +6,9 @@ extends Sprite3D
 func take_damage(damage: float):
 	health_bar.value -= damage
 
+func heal(bonus: float):
+	health_bar.value += bonus
+
 func set_health_bar(hp):
 	health_bar.max_value = hp
 	health_bar.value = hp

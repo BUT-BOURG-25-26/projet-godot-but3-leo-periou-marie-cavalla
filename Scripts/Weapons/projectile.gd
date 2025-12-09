@@ -4,6 +4,7 @@ var damage: float = 0.0
 var speed: float = 0.0
 var lifetime: float = 10.0
 var enemy_stand: bool = false
+@export_enum("Enemy","Player") var target: String = "Enemy"
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
@@ -22,8 +23,8 @@ func _physics_process(delta: float) -> void:
 	position -= transform.basis.z * speed * delta
 
 func _on_body_entered(body: Node) -> void:
-	# Si on touche un ennemi
-	if body.is_in_group("Enemy"):
+	# Si on touche une cible
+	if body.is_in_group(target):
 		if body.has_method("take_damage"):
 			body.take_damage(damage, enemy_stand)
 		queue_free() # La flèche disparait après l'impact
