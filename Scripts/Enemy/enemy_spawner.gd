@@ -10,7 +10,7 @@ var skeleton_warrior: PackedScene = preload("res://Scenes/Enemy/skeleton_warrior
 
 var enemy_list = [
 	skeleton_minion,
-	skeleton_mage,
+	#skeleton_mage,
 	skeleton_rogue,
 	skeleton_warrior,
 ]
