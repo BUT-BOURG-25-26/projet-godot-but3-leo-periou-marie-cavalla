@@ -3,15 +3,18 @@ extends StaticBody3D
 # --- CONFIGURATION ---
 @export_group("Loot Settings")
 
-# Liste des chemins d'armes
 @export var available_weapons: Array[String] = [
 	"Melee/sword_1h",
 	"Melee/axe_1h",
 	"Melee/dagger",
 	"Ranged/crossbow_1h",
 ]
-# Temps d'attente avant que l'arme apparaisse (en secondes)
 @export var opening_delay: float = 0.3
+
+@export_subgroup("Mystery Box Effect")
+@export var mystery_duration: float = 3.5
+@export var initial_switch_speed: float = 0.05
+@export var final_switch_speed: float = 0.6
 
 @onready var interaction_area = $InteractionArea
 @onready var spawn_point = $SpawnPoint
@@ -22,7 +25,11 @@ extends StaticBody3D
 var player_in_range: Node3D = null
 var is_open: bool = false
 var is_looted: bool = false
+var is_cycling: bool = false 
 var generated_weapon_name: String = ""
+
+
+var loot_pivot: Node3D = null 
 var visual_weapon_node: Node3D = null
 
 func _ready() -> void:
@@ -32,57 +39,91 @@ func _ready() -> void:
 	interaction_area.body_exited.connect(_on_body_exited)
 
 func _process(delta: float) -> void:
-	# Rotation de l'arme
-	if is_open and not is_looted and visual_weapon_node:
-		visual_weapon_node.rotation.y += delta * 1.0
+	if is_open and not is_looted and loot_pivot:
+		loot_pivot.rotation.y += delta * 1.5
 
-	# Gestion de l'input
 	if player_in_range and Input.is_action_just_pressed("interact"):
 		handle_interaction()
 
 func handle_interaction():
+	if is_cycling: return
+		
 	if not is_open:
 		open_chest()
 	elif is_open and not is_looted:
 		take_loot()
 
 func open_chest():
+	if available_weapons.size() == 0:
+		push_error("Aucune arme dans la liste du coffre !")
+		return
+
 	is_open = true
+	is_cycling = true
 	
-	if label: label.text = ""
+	if label: label.text = "..."
 	
 	var anim_player = model.get_node("AnimationPlayer")
 	if anim_player: anim_player.play("open")
 	
 	await get_tree().create_timer(opening_delay).timeout
 	
-	# Choisir une arme au hasard
-	if available_weapons.size() > 0:
-		generated_weapon_name = available_weapons.pick_random()
-		spawn_visual_weapon(generated_weapon_name)
+	_process_mystery_box_sequence()
+
+func _process_mystery_box_sequence():
+	# CRÉATION DU PIVOT (CONTENEUR)
+	loot_pivot = Node3D.new()
+	add_child(loot_pivot)
+	loot_pivot.global_position = spawn_point.global_position
+	
+	# ANIMATION DE MONTÉE (TWEEN)
+	var rise_tween = create_tween()
+	rise_tween.tween_property(loot_pivot, "position:y", spawn_point.position.y + 1.5, mystery_duration).from(spawn_point.position.y).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# BOUCLE DE DÉFILEMENT DES ARMES
+	var elapsed_time = 0.0
+	var current_delay = initial_switch_speed
+	
+	while elapsed_time < mystery_duration:
+		var temp_weapon = available_weapons.pick_random()
 		
-		var display_name = generated_weapon_name.split("/")[-1]
-		display_name = display_name.replace("_", " ") 
+		update_visual_model(temp_weapon)
+		
+		await get_tree().create_timer(current_delay).timeout
+		elapsed_time += current_delay
+		
+		# Ralentissement progressif
+		var progress = elapsed_time / mystery_duration
+		current_delay = lerp(initial_switch_speed, final_switch_speed, pow(progress, 2))
+		
+	# FINALISATION
+	generated_weapon_name = available_weapons.pick_random()
+	update_visual_model(generated_weapon_name)
+	
+	# Mise à jour du label
+	var display_name = generated_weapon_name.split("/")[-1].replace("_", " ") 
 
-		if label:
-			label.text = "Prendre : " + display_name
-	else:
-		push_error("Aucune arme dans la liste du coffre !")
+	if label:
+		label.text = "Prendre : " + display_name
+		
+	is_cycling = false
 
-func spawn_visual_weapon(weapon_name: String):
+func update_visual_model(weapon_name: String):
+	# Suppression de l'ancien modèle
+	if visual_weapon_node:
+		visual_weapon_node.queue_free()
+	
 	var path = "res://Scenes/Weapons/%s.tscn" % weapon_name
 	var scene = load(path)
 	if scene:
 		visual_weapon_node = scene.instantiate()
-		add_child(visual_weapon_node)
-		
-		# On la place au spawn point
-		visual_weapon_node.global_position = spawn_point.global_position
+		loot_pivot.add_child(visual_weapon_node)
 		
 		visual_weapon_node.process_mode = Node.PROCESS_MODE_DISABLED
 		
-		var tween = create_tween()
-		tween.tween_property(visual_weapon_node, "position:y", spawn_point.position.y + 1.5, 0.5).from(spawn_point.position.y)
+		# Position locale à 0, car c'est le pivot qui gère la hauteur globale
+		visual_weapon_node.position = Vector3.ZERO
+		visual_weapon_node.rotation = Vector3.ZERO
 
 func take_loot():
 	is_looted = true
@@ -90,22 +131,25 @@ func take_loot():
 	if player_in_range.has_method("equip_weapon"):
 		player_in_range.equip_weapon(generated_weapon_name)
 	
-	if visual_weapon_node:
-		visual_weapon_node.queue_free()
+	# On supprime tout le pivot (qui contient l'arme)
+	if loot_pivot:
+		loot_pivot.queue_free()
 	
 	if label: label.text = ""
-
 	interaction_area.queue_free()
 
 # --- DETECTION JOUEUR ---
 func _on_body_entered(body: Node3D):
 	if body.is_in_group("Player"):
 		player_in_range = body
-		if not is_open:
+		
+		if is_cycling:
+			if label: label.text = "..."
+		elif not is_open:
 			if label: label.text = "Ouvrir"
-		elif not is_looted:
-			if visual_weapon_node:
-				if label: label.text = "Prendre"
+		elif not is_looted and loot_pivot:
+			var display_name = generated_weapon_name.split("/")[-1].replace("_", " ")
+			if label: label.text = "Prendre : " + display_name
 
 func _on_body_exited(body: Node3D):
 	if body == player_in_range:
