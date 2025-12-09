@@ -7,6 +7,7 @@ signal attack_finished
 @export var cooldown_time: float = 0.8
 @export var is_two_handed: bool = false
 @export var weight: float = 0.0
+@export_enum("Enemy","Player") var target: String = "Enemy"
 @export_enum("Left","Right") var hand: String = "Right"
 
 @onready var hitbox: Area3D = $Hitbox 
@@ -18,7 +19,7 @@ var delay_time: float  # Temps avant que le coup parte
 var active_time: float # Temps de la hitbox d'attaque
 var wielder_strength: float = 0.0
 var is_hitbox_active: bool = false
-var hit_history: Array[Node3D] = [] # Pour ne pas toucher le même ennemi 2 fois
+var hit_history: Array[Node3D] = [] # Pour ne pas toucher la meme cible 2 fois
 
 func _ready() -> void:
 	hitbox.monitoring = false 
@@ -49,10 +50,10 @@ func _on_delay_timeout() -> void:
 		attack_sound.play()
 	
 	is_hitbox_active = true
-	hit_history.clear() # Clear enemy touché
+	hit_history.clear() # Clear cible touché
 	hitbox.monitoring = true # On active la détection physique
 	
-	# Si des ennemis sont deja dans l'épée
+	# Si des cibles sont deja dans l'épée
 	if hitbox.has_overlapping_bodies():
 		for body in hitbox.get_overlapping_bodies():
 			_try_deal_damage(body)
@@ -60,15 +61,14 @@ func _on_delay_timeout() -> void:
 	# On crée un timer temporaire pour arrêter l'attaque après "active_time"
 	get_tree().create_timer(active_time).timeout.connect(_on_active_time_finished)
 
-# Un ennemi rentre dans l'arme
+# Une cible rentre dans l'arme
 func _on_body_entered(body: Node3D) -> void:
 	if is_hitbox_active:
 		_try_deal_damage(body)
 
 # Degat
 func _try_deal_damage(body: Node3D) -> void:
-	# Si c'est un ennemi et qu'on ne l'a pas encore touché
-	if body.is_in_group("Enemy") and body not in hit_history:
+	if body.is_in_group(target) and body not in hit_history:
 		if body.has_method("take_damage"):
 			body.take_damage(damage + wielder_strength, is_two_handed)
 			hit_history.append(body) # On le note pour ne pas le retoucher à la frame suivante

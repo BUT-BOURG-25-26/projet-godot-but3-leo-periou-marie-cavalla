@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://vm3rf8nlar0q" path="res://Scripts/Map/boost.gd" id="1_vqyr4"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_70855"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqyr4"]
+transparency = 1
+albedo_color = Color(0.3213, 0.63, 0.46536, 0.580392)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vqyr4"]
+[sub_resource type="SphereMesh" id="SphereMesh_k4umm"]
+material = SubResource("StandardMaterial3D_vqyr4")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k4umm"]
 size = Vector3(1.30687, 1, 1.29007)
@@ -13,12 +16,7 @@ size = Vector3(1.30687, 1, 1.29007)
 script = ExtResource("1_vqyr4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_70855")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-shape = SubResource("BoxShape3D_vqyr4")
+mesh = SubResource("SphereMesh_k4umm")
 
 [node name="Area3D" type="Area3D" parent="."]
 

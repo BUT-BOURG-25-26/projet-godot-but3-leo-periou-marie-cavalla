@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://rfh2nnaxc40k"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/melee.gd" id="1_bmi2l"]
+[ext_resource type="PackedScene" uid="uid://dko8ypc7sqosn" path="res://Assets/Skeleton/Stuffs/Skeleton_Blade.gltf" id="2_ptcci"]
+[ext_resource type="AudioStream" uid="uid://115jg11p3gsp" path="res://Assets/Sound/Whoosh.mp3" id="3_dn2dk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_53mni"]
+size = Vector3(0.56648, 1.52242, 0.198021)
+
+[node name="EnemyBlade" type="Node3D"]
+script = ExtResource("1_bmi2l")
+damage = 5.0
+cooldown_time = 0.3
+weight = 0.2
+target = "Player"
+
+[node name="Model" parent="." instance=ExtResource("2_ptcci")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Hitbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000663284, 0.418438, 0.00243759)
+shape = SubResource("BoxShape3D_53mni")
+
+[node name="DelayTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_dn2dk")

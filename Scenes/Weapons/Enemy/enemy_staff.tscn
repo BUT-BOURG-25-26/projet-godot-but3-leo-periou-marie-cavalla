@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://1ggqm1aaw1if"]
+
+[ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/melee.gd" id="1_7pa1b"]
+[ext_resource type="PackedScene" uid="uid://bo4x7rsja210w" path="res://Assets/Skeleton/Stuffs/Skeleton_Staff.gltf" id="2_setha"]
+
+[node name="EnemyStaff" type="Node3D"]
+script = ExtResource("1_7pa1b")
+
+[node name="Model" parent="." instance=ExtResource("2_setha")]

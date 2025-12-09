@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcojorq3ehbti"]
+
+[ext_resource type="Script" uid="uid://cy7uq4b3exqhw" path="res://Scripts/Weapons/ranged.gd" id="1_5ywhg"]
+[ext_resource type="PackedScene" uid="uid://62o1dwrs0oh2" path="res://Scenes/Weapons/Enemy/enemy_crossbow_arrow.tscn" id="2_8r5tj"]
+[ext_resource type="PackedScene" uid="uid://cf2h362t7asls" path="res://Assets/Skeleton/Stuffs/Skeleton_Crossbow.gltf" id="3_8r5tj"]
+[ext_resource type="AudioStream" uid="uid://115jg11p3gsp" path="res://Assets/Sound/Whoosh.mp3" id="4_vybw4"]
+
+[node name="EnemyCrossbow" type="Node3D"]
+script = ExtResource("1_5ywhg")
+reload_time = 1.1
+projectile_scene = ExtResource("2_8r5tj")
+
+[node name="Model" parent="." instance=ExtResource("3_8r5tj")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.514598, 0.208493, 0)
+
+[node name="DelayTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_vybw4")

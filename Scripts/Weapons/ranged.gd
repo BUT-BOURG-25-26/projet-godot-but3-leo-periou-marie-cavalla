@@ -38,7 +38,6 @@ func start_attack(strength: float) -> void:
 	wielder_strength = strength
 	delay_timer.start()
 
-# 1. La flèche part
 func _on_delay_timeout() -> void:
 	if shoot_sound:
 		shoot_sound.play()
@@ -46,15 +45,12 @@ func _on_delay_timeout() -> void:
 	spawn_projectile()
 	cooldown_timer.start()
 
-# 2. Le recul est fini -> ON FORCE LE RELOAD
 func _on_cooldown_finished() -> void:
 	if(is_bow):
 		attack_finished.emit()
 	else:
 		needs_reload.emit(reload_time)
 	
-
-# 3. Fonction appelée par le Player quand l'anim de reload est finie
 func complete_reload() -> void:
 	attack_finished.emit()
 

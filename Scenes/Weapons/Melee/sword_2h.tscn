@@ -10,7 +10,7 @@ size = Vector3(0.482324, 2.40875, 0.208363)
 [node name="Sword2H" type="Node3D"]
 script = ExtResource("1_bp415")
 damage = 8.0
-cooldown_time = 0.4
+cooldown_time = 0.3
 is_two_handed = true
 weight = 0.3
 
