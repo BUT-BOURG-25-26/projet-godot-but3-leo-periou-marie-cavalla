@@ -32,7 +32,7 @@ extends CharacterBody3D
 @export var max_distance_to_player: float = 50.0
 @export var attack_range: float = 1.5
 @export_enum("axe","blade","crossbow","staff") var weapon: String
-@export var boost_spawn_rate: int = 3
+@export var boost_spawn_rate: int = 5
 
 # --- VARIABLES ---
 var current_weapon: Node3D
@@ -181,7 +181,7 @@ func die():
 func create_boost():
 	if(randi_range(0,10)<boost_spawn_rate):
 		game_manager.create_boost(position)
-
+		
 # --- WEAPON SIGNALS ---
 
 func _on_weapon_attack_finished():
