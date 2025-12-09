@@ -13,9 +13,11 @@ var frequency = 0.001
 
 var medium_models : Array[PackedScene]
 var small_models : Array[PackedScene]
+var interactive_mesh : Array[PackedScene]
 var terrain_texture: Texture2D
 var medium_mesh_count = 30
 var small_mesh_count = 30
+var interactive_mesh_count = 1
 
 var map_loaded_chunks : Array[Vector2]
 var map_x_offset = -568
@@ -112,6 +114,7 @@ func generate(chunk_x:float, chunk_z:float):
 func generate_structures(chunk_x:float, chunk_z:float):
 	generate_from_array("small",small_mesh_count,small_models, chunk_x, chunk_z)
 	generate_from_array("medium",medium_mesh_count,medium_models, chunk_x, chunk_z)
+	generate_from_array("interactive",interactive_mesh_count,interactive_mesh, chunk_x, chunk_z)
 
 func generate_from_array(type:String, models_count:int, models_array:Array[PackedScene], chunk_x:float, chunk_z:float) -> void:
 	randomize()
@@ -137,7 +140,7 @@ func generate_from_array(type:String, models_count:int, models_array:Array[Packe
 		add_child(instance)
 		var mesh_instance = instance.get_child(0)
 		mesh_instance.add_to_group("Structure")
-		if(type != "small"):
+		if(type == "medium"):
 			mesh_instance.create_trimesh_collision()
 
 
@@ -151,7 +154,8 @@ func load_forest_models():
 	
 	for i in range(1,trees_count+1):
 		medium_models.push_back(load("res://Assets/Forest/Tree" + str(i) + ".gltf"))
-
+	
+	interactive_mesh.push_back(load("res://Scenes/Structure/chest.tscn"))
 
 func get_noise_y(x,z) -> float:
 	var value = noise.get_noise_2d(x+map_x_offset,z+map_x_offset)
