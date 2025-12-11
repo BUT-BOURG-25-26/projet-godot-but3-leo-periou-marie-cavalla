@@ -1,5 +1,9 @@
 extends CharacterBody3D
 
+# --- SIGNAUX ---
+signal enemy_died(enemy)
+signal enemy_despawned(enemy)
+
 # --- REFERENCES ---
 @onready var player: Node3D = get_tree().get_first_node_in_group("Player")
 @onready var model = $Model
@@ -50,7 +54,6 @@ func _ready() -> void:
 	equip_weapon(weapon)
 
 func _physics_process(delta: float) -> void:
-	# Gestion de la mort
 	if is_dead:
 		velocity.x = 0
 		velocity.z = 0
@@ -59,9 +62,10 @@ func _physics_process(delta: float) -> void:
 
 	if not player: return
 	
-	# Gestion de la distance max (Despawn)
+	# Gestion du Despawn
 	var dist_to_player = global_transform.origin.distance_to(player.global_transform.origin)
 	if dist_to_player > max_distance_to_player:
+		emit_signal("enemy_despawned", self) # On prévient le spawner
 		queue_free()
 		return
 	
@@ -165,7 +169,10 @@ func take_damage(damage: float, get_stand: bool = false):
 		die()
 
 func die():
+	if is_dead: return # Sécurité pour ne pas mourir 2 fois
 	is_dead = true
+	emit_signal("enemy_died", self)
+	
 	if player.has_method("add_kill"):
 		player.call("add_kill")
 		

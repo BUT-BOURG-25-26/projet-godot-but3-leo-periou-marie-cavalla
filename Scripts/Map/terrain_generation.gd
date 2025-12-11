@@ -14,7 +14,7 @@ extends Node
 @export var noise_scale : float = 0.001
 
 @export_group("Spawning Settings")
-@export_range(0.0, 1.0) var structure_spawn_chance: float = 0.8
+@export_range(0.0, 1.0) var structure_spawn_chance: float = 0.2
 @export var structure_exclusion_radius: float = 20.0
 @export var spawn_radius_protection: float = 5.0
 
