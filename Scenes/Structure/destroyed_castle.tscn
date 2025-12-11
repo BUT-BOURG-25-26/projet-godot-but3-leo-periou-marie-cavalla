@@ -905,7 +905,7 @@ skeleton = NodePath("")
 shape = SubResource("ConcavePolygonShape3D_7e8v6")
 
 [node name="Chest" parent="." instance=ExtResource("12_comop")]
-transform = Transform3D(0.0318294, 0, -0.999493, 0, 1, 0, 0.999493, 0, 0.0318294, -4.43069, 0.0555975, -5.97846)
+transform = Transform3D(0.0318294, 0, -0.999493, 0, 1, 0, 0.999493, 0, 0.0318294, -4.68034, 0.0555975, -5.97846)
 
 [node name="barrel_small_stack2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.54656, 4, -3.20738)

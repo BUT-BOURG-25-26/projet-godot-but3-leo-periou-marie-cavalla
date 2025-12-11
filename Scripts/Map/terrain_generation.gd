@@ -14,15 +14,16 @@ extends Node
 @export var noise_scale : float = 0.001
 
 @export_group("Spawning Settings")
-@export_range(0.0, 1.0) var structure_spawn_chance: float = 0.2
-@export var structure_exclusion_radius: float = 12.0
+@export_range(0.0, 1.0) var structure_spawn_chance: float = 0.8
+@export var structure_exclusion_radius: float = 20.0
+@export var spawn_radius_protection: float = 5.0
 
 @export_group("Flattening Settings")
-@export var flat_radius: float = 8.0
-@export var blend_radius: float = 16.0
+@export var flat_radius: float = 16.0 # Doit être inférieur à blend_radius
+@export var blend_radius: float = 25.0 # Rayon d'impact sur le terrain
 
 @export_group("Performance")
-@export var items_per_frame: int = 5 # Nombre d'objets à faire spawn par frame
+@export var items_per_frame: int = 5
 
 # --- VARIABLES ---
 var terrain_texture: Texture2D
@@ -84,29 +85,63 @@ func load_chunks_around_player(center_x: int, center_z: int):
 				WorkerThreadPool.add_task(Callable(self, "_thread_generate_chunk_data").bind(chunk_coord))
 
 # ------------------------------------------------------------------------------
-# THREAD (Calculs Maths)
+# FONCTION DETERMINISTE
+# ------------------------------------------------------------------------------
+func _get_structure_info_for_chunk(chunk_x_idx: int, chunk_z_idx: int) -> Dictionary:
+	var rng = RandomNumberGenerator.new()
+	rng.seed = hash(Vector2i(chunk_x_idx, chunk_z_idx)) + noise.seed
+	
+	# Vérification spawn chance
+	if rng.randf() >= structure_spawn_chance:
+		return {} # Pas de structure ici
+	
+	# Vérification Spawn Chunk (0,0)
+	if abs(chunk_x_idx) == 0 and abs(chunk_z_idx) == 0:
+		return {}
+
+	if structure_scenes.is_empty():
+		return {}
+
+	# On recalcule la position exacte théorique
+	var world_x_start = chunk_x_idx * size_width
+	var world_z_start = chunk_z_idx * size_depth
+	
+	var s_x = rng.randf_range(world_x_start + 5, world_x_start + size_width - 5)
+	var s_z = rng.randf_range(world_z_start + 5, world_z_start + size_depth - 5)
+	var s_y = get_noise_y(s_x, s_z)
+	
+	var struct_pos = Vector3(s_x, s_y, s_z)
+	var struct_idx = rng.randi() % structure_scenes.size()
+	var rot_y = rng.randf() * TAU
+	
+	return {
+		"exists": true,
+		"pos": struct_pos,
+		"idx": struct_idx,
+		"rot": rot_y
+	}
+
+# ------------------------------------------------------------------------------
+# THREAD
 # ------------------------------------------------------------------------------
 func _thread_generate_chunk_data(chunk_coord: Vector2):
 	var chunk_world_x = chunk_coord.x * size_width
 	var chunk_world_z = chunk_coord.y * size_depth
 	
-	# -- Structure --
-	var has_structure = false
-	var struct_pos = Vector3.ZERO
-	var chosen_structure_index = -1
+	# RECUPERER LES STRUCTURES VOISINES (3x3)
+	var nearby_structures = []
+	var my_structure_info = {} # Pour stocker celle de ce chunk spécifiquement
 	
-	var is_spawn_chunk = (abs(chunk_world_x) < 1.0 and abs(chunk_world_z) < 1.0)
-	
-	if not is_spawn_chunk and structure_scenes.size() > 0:
-		if randf() < structure_spawn_chance:
-			has_structure = true
-			var s_x = randf_range(chunk_world_x + 5, chunk_world_x + size_width - 5)
-			var s_z = randf_range(chunk_world_z + 5, chunk_world_z + size_depth - 5)
-			var s_y = get_noise_y(s_x, s_z)
-			struct_pos = Vector3(s_x, s_y, s_z)
-			chosen_structure_index = randi() % structure_scenes.size()
+	for x in range(chunk_coord.x - 1, chunk_coord.x + 2):
+		for z in range(chunk_coord.y - 1, chunk_coord.y + 2):
+			var info = _get_structure_info_for_chunk(x, z)
+			if info.has("exists"):
+				nearby_structures.append(info.pos)
+				# Si c'est le chunk actuel, on sauvegarde les infos complètes pour l'instanciation plus tard
+				if x == chunk_coord.x and z == chunk_coord.y:
+					my_structure_info = info
 
-	# -- Terrain Vertices --
+	# GENERATION DU TERRAIN
 	var temp_mesh = PlaneMesh.new()
 	temp_mesh.size = Vector2(size_width, size_depth)
 	temp_mesh.subdivide_width = size_width * mesh_resolution
@@ -123,62 +158,83 @@ func _thread_generate_chunk_data(chunk_coord: Vector2):
 		var raw_y = get_noise_y(gx, gz)
 		var final_y = raw_y
 		
-		if has_structure:
+		# On vérifie l'influence de toutes les structures voisines
+		for struct_pos in nearby_structures:
 			var dist = Vector2(gx, gz).distance_to(Vector2(struct_pos.x, struct_pos.z))
-			if dist < flat_radius:
-				final_y = struct_pos.y
-			elif dist < blend_radius:
-				var t = (dist - flat_radius) / (blend_radius - flat_radius)
-				t = smoothstep(0.0, 1.0, t)
-				final_y = lerp(struct_pos.y, raw_y, t)
-		
+			
+			if dist < blend_radius:
+				# Si on est dans le rayon d'influence, on applique l'aplatissement
+				if dist < flat_radius:
+					# Force le plat
+					final_y = struct_pos.y
+				else:
+					# Interpolation douce
+					var t = (dist - flat_radius) / (blend_radius - flat_radius)
+					t = smoothstep(0.0, 1.0, t)
+					var blended_y = lerp(struct_pos.y, raw_y, t)
+					
+					if abs(final_y - raw_y) < abs(blended_y - raw_y):
+						final_y = blended_y
+					else:
+						final_y = blended_y
+
 		vertices[i].y = final_y
 	
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	
-	# Normales (SurfaceTool)
 	var surface_tool = SurfaceTool.new()
 	surface_tool.create_from_arrays(arrays)
 	surface_tool.generate_normals()
 	var final_mesh_arrays = surface_tool.commit_to_arrays()
 
-	# -- Nature --
-	var nature_data = [] 
-	
-	if not is_spawn_chunk:
-		var avoid = struct_pos if has_structure else Vector3.INF
-		_thread_calc_nature("small", small_mesh_count, chunk_world_x, chunk_world_z, avoid, nature_data)
-		_thread_calc_nature("medium", medium_mesh_count, chunk_world_x, chunk_world_z, avoid, nature_data)
+	# NATURE
+	var nature_data = []
+
+	_thread_calc_nature("small", small_mesh_count, chunk_world_x, chunk_world_z, nearby_structures, nature_data)
+	_thread_calc_nature("medium", medium_mesh_count, chunk_world_x, chunk_world_z, nearby_structures, nature_data)
 
 	var chunk_data = {
 		"coord": chunk_coord,
 		"world_pos": Vector3(chunk_world_x + size_width * 0.5, 0, chunk_world_z + size_depth * 0.5),
 		"mesh_arrays": final_mesh_arrays,
-		"has_structure": has_structure,
-		"structure_pos": struct_pos,
-		"structure_idx": chosen_structure_index,
+		"structure_info": my_structure_info, # Contient {pos, idx, rot} ou vide
 		"nature_data": nature_data
 	}
 	
 	call_deferred("_finalize_chunk_generation", chunk_data)
 
-func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_pos: Vector3, result_array: Array):
+func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_structures: Array, result_array: Array):
 	for i in range(count):
 		var x = randf_range(cx, cx + size_width)
 		var z = randf_range(cz, cz + size_depth)
+		
+		# Protection Spawn (Zone carrée autour de 0,0)
+		if x > -spawn_radius_protection and x < spawn_radius_protection and z > -spawn_radius_protection and z < spawn_radius_protection:
+			continue
+
 		var raw_y = get_noise_y(x, z)
 		var final_y = raw_y
 		var current_pos = Vector3(x, raw_y, z)
 		
-		if avoid_pos != Vector3.INF:
-			var dist = current_pos.distance_to(avoid_pos)
-			if dist < structure_exclusion_radius: continue
+		var skip = false
+		
+		# Vérification contre toutes les structures voisines
+		for s_pos in avoid_structures:
+			var dist = current_pos.distance_to(s_pos)
+			
+			if dist < structure_exclusion_radius:
+				skip = true
+				break
+	
 			if dist < blend_radius:
-				if dist < flat_radius: final_y = avoid_pos.y
+				if dist < flat_radius:
+					final_y = s_pos.y
 				else:
 					var t = (dist - flat_radius) / (blend_radius - flat_radius)
 					t = smoothstep(0.0, 1.0, t)
-					final_y = lerp(avoid_pos.y, raw_y, t)
+					final_y = lerp(s_pos.y, raw_y, t)
+		
+		if skip: continue
 		
 		current_pos.y = final_y
 		
@@ -190,7 +246,7 @@ func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_p
 		result_array.append({"type": type, "pos": current_pos, "rot_y": randf() * TAU, "scale": scale_val})
 
 # ------------------------------------------------------------------------------
-# MAIN THREAD (Visuel avec Time Slicing)
+# MAIN THREAD
 # ------------------------------------------------------------------------------
 func _finalize_chunk_generation(data: Dictionary):
 	var new_mesh = ArrayMesh.new()
@@ -207,22 +263,19 @@ func _finalize_chunk_generation(data: Dictionary):
 	mesh_instance.add_to_group("NavSource")
 	add_child(mesh_instance)
 	
-	# PAUSE
 	await get_tree().process_frame
-	
-	# Collision Terrain
 	mesh_instance.create_trimesh_collision()
-	
-	# PAUSE
 	await get_tree().process_frame
 	
-	# Structure
-	if data.has_structure and data.structure_idx >= 0:
-		var scene = structure_scenes[data.structure_idx]
+	# Instanciation de la structure
+	var s_info = data.structure_info
+	if s_info.has("exists") and s_info.exists:
+		var scene = structure_scenes[s_info.idx]
 		var instance = scene.instantiate()
-		instance.position = data.structure_pos + Vector3(0, 0.05, 0)
+		
+		instance.position = s_info.pos + Vector3(0, 0.05, 0)
 		instance.scale = Vector3(1.2, 1.2, 1.2)
-		instance.rotation.y = randf() * TAU
+		instance.rotation.y = s_info.rot
 		add_child(instance)
 		
 		if instance.has_node("Chest") and randf() < 0.5:
@@ -232,9 +285,8 @@ func _finalize_chunk_generation(data: Dictionary):
 			var child = instance.get_child(0)
 			if child is MeshInstance3D: child.create_trimesh_collision()
 
-	# Nature (Avec Time Slicing)
+	# Nature
 	var items_spawned = 0
-	
 	for item in data.nature_data:
 		var scene_array = small_models if item.type == "small" else medium_models
 		if scene_array.is_empty(): continue
@@ -252,7 +304,6 @@ func _finalize_chunk_generation(data: Dictionary):
 				child.create_trimesh_collision()
 		
 		items_spawned += 1
-		
 		if items_spawned >= items_per_frame:
 			items_spawned = 0
 			await get_tree().process_frame
