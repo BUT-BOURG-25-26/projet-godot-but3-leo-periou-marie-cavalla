@@ -41,15 +41,15 @@ signal enemy_despawned(enemy)
 # --- VARIABLES ---
 var current_weapon: Node3D
 var can_action: bool = true
-var player_detected: bool = false
+#var player_detected: bool = false
 var is_dead: bool = false
 
 func _ready() -> void:
 	enemy_ui.call("set_health_bar", health)
 	
-	if detector:
-		if not detector.body_entered.is_connected(_detector_body):
-			detector.body_entered.connect(_detector_body)
+	#if detector:
+		#if not detector.body_entered.is_connected(_detector_body):
+			#detector.body_entered.connect(_detector_body)
 	
 	equip_weapon(weapon)
 
@@ -70,13 +70,13 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# Si le joueur n'est pas détecté
-	if not player_detected:
-		velocity.x = 0
-		velocity.z = 0
-		velocity.y += get_gravity().y * delta
-		update_locomotion()
-		move_and_slide()
-		return
+	#if not player_detected:
+		#velocity.x = 0
+		#velocity.z = 0
+		#velocity.y += get_gravity().y * delta
+		#update_locomotion()
+		#move_and_slide()
+		#return
 	
 	# --- LOGIQUE DE MOUVEMENT / ATTAQUE ---
 	var direction = Vector3.ZERO
@@ -148,8 +148,8 @@ func take_damage(damage: float, get_stand: bool = false):
 	if is_dead: return
 	
 	# Si on prend des dégâts, on détecte automatiquement le joueur
-	if not player_detected:
-		player_detected = true
+	#if not player_detected:
+		#player_detected = true
 		
 	health -= damage
 	enemy_ui.take_damage(damage)
@@ -250,9 +250,9 @@ func equip_weapon(weapon_name: String):
 		
 	update_locomotion()
 
-func _detector_body(body: Node3D) -> void:
-	if body == player:
-		player_detected = true
+#func _detector_body(body: Node3D) -> void:
+	##if body == player:
+		##player_detected = true
 
 func _hit_cooldown() -> void:
 	can_action = true

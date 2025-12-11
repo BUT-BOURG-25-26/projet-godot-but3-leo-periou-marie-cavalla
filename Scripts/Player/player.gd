@@ -179,7 +179,7 @@ func _on_weapon_attack_finished():
 
 # --- GESTION MORT ---
 
-func take_damage(damage: float, get_stand: bool = false):
+func take_damage(damage: float, _get_stand: bool = false):
 	if health > 0 and not blocking:
 		health -= damage
 		player_ui.take_damage(damage)

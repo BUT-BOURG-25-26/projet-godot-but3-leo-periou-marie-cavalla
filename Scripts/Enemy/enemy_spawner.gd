@@ -22,7 +22,7 @@ var current_round: int = 1
 var enemies_to_kill_total: int = 0   # Objectif de la manche
 var enemies_killed_current: int = 0  # Progression
 var enemies_active_count: int = 0    # Ennemis présents sur la scène
-
+var player_ui: Sprite3D
 var is_round_in_progress: bool = false
 var player: Node3D
 var rng = RandomNumberGenerator.new()
@@ -40,6 +40,7 @@ func _ready() -> void:
 
 func _on_player_spawned(spawned_player):
 	player = spawned_player
+	player_ui = player.get_node("PlayerUi")
 
 func start_round():
 	is_round_in_progress = true
@@ -50,9 +51,7 @@ func start_round():
 	
 	print("--- DEBUT MANCHE " + str(current_round) + " --- Objectif: " + str(enemies_to_kill_total) + " kills")
 	
-	# Affichage UI
-	if game_manager.has_method("update_round_display"):
-		game_manager.update_round_display(current_round)
+	player_ui.call("set_wave_counter", current_round)
 	
 	spawn_timer.start()
 
