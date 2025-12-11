@@ -1,162 +1,290 @@
 class_name TerrainGeneration
 extends Node
 
+# --- EXPORTS ---
+@export_group("References")
 @export var player: CharacterBody3D
 @export var noise : FastNoiseLite
 
-var mesh: MeshInstance3D
-var size_depth : int = 60
-var size_width : int = 60
-var mesh_resolution : int = 2 #Une valeur haute coûtera plus de temps à générer
-var highest_point = 50
-var frequency = 0.001
+@export_group("Settings")
+@export var size_depth : int = 60
+@export var size_width : int = 60
+@export var mesh_resolution : int = 2
+@export var highest_point : float = 50.0
+@export var noise_scale : float = 0.001
 
-var medium_models : Array[PackedScene]
-var small_models : Array[PackedScene]
-var interactive_mesh : Array[PackedScene]
+@export_group("Spawning Settings")
+@export_range(0.0, 1.0) var structure_spawn_chance: float = 0.2
+@export var structure_exclusion_radius: float = 12.0
+
+@export_group("Flattening Settings")
+@export var flat_radius: float = 8.0
+@export var blend_radius: float = 16.0
+
+@export_group("Performance")
+@export var items_per_frame: int = 5 # Nombre d'objets à faire spawn par frame (plus bas = plus fluide, mais plus lent à charger)
+
+# --- VARIABLES INTERNES ---
 var terrain_texture: Texture2D
+var medium_models : Array[PackedScene] = []
+var small_models : Array[PackedScene] = []
+var structure_scenes : Array[PackedScene] = []
+
 var medium_mesh_count = 30
 var small_mesh_count = 30
-var interactive_mesh_count = 1
 
-var map_loaded_chunks : Array[Vector2]
-var map_x_offset = -568
-var map_y_offset = 657
+var map_loaded_chunks : Array[Vector2] = []
+var map_offset_vector = Vector2(-568, 657)
 
-var was_player_placed:bool = false
+var was_player_placed: bool = false
+var last_player_chunk: Vector2 = Vector2(9999, 9999)
+
+var mutex: Mutex = Mutex.new()
 
 func _ready():
-	noise.seed =  randi()
-	noise.frequency = frequency
-	noise.offset = Vector3(map_x_offset,map_y_offset,0)
-	load_forest_models()
+	randomize()
+	if noise:
+		noise.seed = randi()
+		noise.frequency = noise_scale
+	
+	load_assets()
 
-	# Récupère le player
-	get_tree().current_scene.connect("player_spawned", Callable(self, "_on_player_spawned"))
+	var current_scene = get_tree().current_scene
+	if current_scene.has_signal("player_spawned"):
+		current_scene.connect("player_spawned", Callable(self, "_on_player_spawned"))
 
-# Quand le joueur spawn
 func _on_player_spawned(spawned_player):
 	player = spawned_player
-	player.position = Vector3(0,get_noise_y(0,0),0)
-	
-func _process(_delta:float) -> void:
-	load_chunk_if_needed()
-	
-func load_chunk_if_needed():
-	if(!player):
-		return
-	var player_x =  player.global_position.x
-	var player_z =  player.global_position.z
-	var temp_chunk_x:int = floor(player.global_position.x / size_width)
-	var temp_chunk_z:int = floor(player.global_position.z / size_depth)
-	var radius_around_player = [
-		Vector2(temp_chunk_x, temp_chunk_z),
-		Vector2(temp_chunk_x + 1, temp_chunk_z),
-		Vector2(temp_chunk_x, temp_chunk_z + 1),
-		Vector2(temp_chunk_x + 1, temp_chunk_z + 1),
-		Vector2(temp_chunk_x - 1, temp_chunk_z),
-		Vector2(temp_chunk_x, temp_chunk_z - 1),
-		Vector2(temp_chunk_x - 1, temp_chunk_z - 1),
-		Vector2(temp_chunk_x + 1, temp_chunk_z - 1),
-		Vector2(temp_chunk_x - 1, temp_chunk_z + 1)
-	]
-	for chunk in radius_around_player:
-		if(!map_loaded_chunks.has(chunk)):
-			map_loaded_chunks.push_back(chunk)
-			var chunk_x = chunk.x * size_width
-			var chunk_z = chunk.y * size_depth
-			generate(chunk_x,chunk_z)
+	var ground_y = get_noise_y(0, 0)
+	player.global_position = Vector3(0, ground_y + 2.0, 0)
 
-func generate(chunk_x:float, chunk_z:float):
-	#1 - On crée un terain plat que l'on divise plein de fois
-	var plane_mesh = PlaneMesh.new()
-	plane_mesh.size = Vector2(size_width,size_depth)
-	plane_mesh.subdivide_depth = size_depth * mesh_resolution
-	plane_mesh.subdivide_width = size_width * mesh_resolution
-	var texture: Texture2D = terrain_texture
-	var material := StandardMaterial3D.new()
-	material.albedo_texture = texture
-	plane_mesh.material = material
-	
-	var surface = SurfaceTool.new() #L'outil permettant de créer une mesh à partir de nos objets
-	var data = MeshDataTool.new() #L'outil permettant d'accéder aux vertices
-	surface.create_from(plane_mesh,0)
-	
-	var array_plane = surface.commit()
-	data.create_from_surface(array_plane,0)
-	
-	#2 - On vient traiter chaque vertex du terrain plat
-	for i in range(data.get_vertex_count()):
-		var vertex = data.get_vertex(i)
-		var y = get_noise_y(vertex.x + chunk_x,vertex.z + chunk_z)
-		vertex.y = y
-		data.set_vertex(i,vertex)
+func _process(_delta: float) -> void:
+	if not player: return
 		
-	#3 - On applique des directions et des normes sur nos vertices
-	array_plane.clear_surfaces()
-	data.commit_to_surface(array_plane)
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface.create_from(array_plane,0)
-	surface.generate_normals()
+	var current_chunk_x = floor(player.global_position.x / size_width)
+	var current_chunk_z = floor(player.global_position.z / size_depth)
+	var current_chunk = Vector2(current_chunk_x, current_chunk_z)
 	
-	#4 - On vient créer la mesh à partir de toutes nos données
-	mesh = MeshInstance3D.new()
-	mesh.mesh = surface.commit()
-	mesh.position = Vector3(chunk_x + size_width/2, 0, chunk_z + size_depth/2)
-	mesh.create_trimesh_collision() #La collision de notre terrain
-	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	mesh.add_to_group("NavSource")
-	add_child(mesh)
+	if current_chunk != last_player_chunk:
+		last_player_chunk = current_chunk
+		load_chunks_around_player(current_chunk_x, current_chunk_z)
+
+func load_chunks_around_player(center_x: int, center_z: int):
+	for x in range(center_x - 1, center_x + 2):
+		for z in range(center_z - 1, center_z + 2):
+			var chunk_coord = Vector2(x, z)
+			
+			mutex.lock()
+			var already_loaded = map_loaded_chunks.has(chunk_coord)
+			if not already_loaded:
+				map_loaded_chunks.push_back(chunk_coord)
+			mutex.unlock()
+			
+			if not already_loaded:
+				WorkerThreadPool.add_task(Callable(self, "_thread_generate_chunk_data").bind(chunk_coord))
+
+# ------------------------------------------------------------------------------
+# THREAD (Calculs Maths)
+# ------------------------------------------------------------------------------
+func _thread_generate_chunk_data(chunk_coord: Vector2):
+	var chunk_world_x = chunk_coord.x * size_width
+	var chunk_world_z = chunk_coord.y * size_depth
 	
-	#5 - On ajoute les structures sur le terrain
-	generate_structures(chunk_x,chunk_z)
+	# -- Structure --
+	var has_structure = false
+	var struct_pos = Vector3.ZERO
+	var chosen_structure_index = -1
+	
+	var is_spawn_chunk = (abs(chunk_world_x) < 1.0 and abs(chunk_world_z) < 1.0)
+	
+	if not is_spawn_chunk and structure_scenes.size() > 0:
+		if randf() < structure_spawn_chance:
+			has_structure = true
+			var s_x = randf_range(chunk_world_x + 5, chunk_world_x + size_width - 5)
+			var s_z = randf_range(chunk_world_z + 5, chunk_world_z + size_depth - 5)
+			var s_y = get_noise_y(s_x, s_z)
+			struct_pos = Vector3(s_x, s_y, s_z)
+			chosen_structure_index = randi() % structure_scenes.size()
 
-func generate_structures(chunk_x:float, chunk_z:float):
-	generate_from_array("small",small_mesh_count,small_models, chunk_x, chunk_z)
-	generate_from_array("medium",medium_mesh_count,medium_models, chunk_x, chunk_z)
-	generate_from_array("interactive",interactive_mesh_count,interactive_mesh, chunk_x, chunk_z)
+	# -- Terrain Vertices --
+	var temp_mesh = PlaneMesh.new()
+	temp_mesh.size = Vector2(size_width, size_depth)
+	temp_mesh.subdivide_width = size_width * mesh_resolution
+	temp_mesh.subdivide_depth = size_depth * mesh_resolution
+	
+	var arrays = temp_mesh.get_mesh_arrays()
+	var vertices = arrays[Mesh.ARRAY_VERTEX]
+	
+	for i in range(vertices.size()):
+		var v = vertices[i]
+		var gx = chunk_world_x + (size_width * 0.5) + v.x
+		var gz = chunk_world_z + (size_depth * 0.5) + v.z
+		
+		var raw_y = get_noise_y(gx, gz)
+		var final_y = raw_y
+		
+		if has_structure:
+			var dist = Vector2(gx, gz).distance_to(Vector2(struct_pos.x, struct_pos.z))
+			if dist < flat_radius:
+				final_y = struct_pos.y
+			elif dist < blend_radius:
+				var t = (dist - flat_radius) / (blend_radius - flat_radius)
+				t = smoothstep(0.0, 1.0, t)
+				final_y = lerp(struct_pos.y, raw_y, t)
+		
+		vertices[i].y = final_y
+	
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	
+	# Normales (SurfaceTool)
+	var surface_tool = SurfaceTool.new()
+	surface_tool.create_from_arrays(arrays)
+	surface_tool.generate_normals()
+	var final_mesh_arrays = surface_tool.commit_to_arrays()
 
-func generate_from_array(type:String, models_count:int, models_array:Array[PackedScene], chunk_x:float, chunk_z:float) -> void:
-	randomize()
-	for i in range(models_count):
-		var min_x = chunk_x 
-		var max_x = chunk_x + size_width 
-		var min_z = chunk_z
-		var max_z = chunk_z + size_depth 
-		var x = randf_range(min_x, max_x)
-		var z = randf_range(min_z, max_z)
-		var y = get_noise_y(x-size_width/2, z-size_width/2)
-		var model_to_instance = models_array.pick_random()
-		var instance = model_to_instance.instantiate()
-		instance.position = Vector3(x,y,z)
-		if(!was_player_placed):
-			was_player_placed = true;
-			player.position = Vector3(x+3,y,z)
-		instance.rotation.y = randf() * (PI*2)
-		if(type == "medium"):
-			instance.scale = Vector3.ONE * randf_range(0.8, 1.2)
-			instance.scale.y = instance.scale.y * 2.5
-			instance.scale.x = instance.scale.x * 1.5
+	# -- Nature --
+	var nature_data = [] 
+	
+	if not is_spawn_chunk:
+		var avoid = struct_pos if has_structure else Vector3.INF
+		_thread_calc_nature("small", small_mesh_count, chunk_world_x, chunk_world_z, avoid, nature_data)
+		_thread_calc_nature("medium", medium_mesh_count, chunk_world_x, chunk_world_z, avoid, nature_data)
+
+	var chunk_data = {
+		"coord": chunk_coord,
+		"world_pos": Vector3(chunk_world_x + size_width * 0.5, 0, chunk_world_z + size_depth * 0.5),
+		"mesh_arrays": final_mesh_arrays,
+		"has_structure": has_structure,
+		"structure_pos": struct_pos,
+		"structure_idx": chosen_structure_index,
+		"nature_data": nature_data
+	}
+	
+	call_deferred("_finalize_chunk_generation", chunk_data)
+
+func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_pos: Vector3, result_array: Array):
+	for i in range(count):
+		var x = randf_range(cx, cx + size_width)
+		var z = randf_range(cz, cz + size_depth)
+		var raw_y = get_noise_y(x, z)
+		var final_y = raw_y
+		var current_pos = Vector3(x, raw_y, z)
+		
+		if avoid_pos != Vector3.INF:
+			var dist = current_pos.distance_to(avoid_pos)
+			if dist < structure_exclusion_radius: continue
+			if dist < blend_radius:
+				if dist < flat_radius: final_y = avoid_pos.y
+				else:
+					var t = (dist - flat_radius) / (blend_radius - flat_radius)
+					t = smoothstep(0.0, 1.0, t)
+					final_y = lerp(avoid_pos.y, raw_y, t)
+		
+		current_pos.y = final_y
+		
+		var scale_val = Vector3.ONE
+		if type == "medium":
+			var s = randf_range(4.0, 6.0)
+			scale_val = Vector3(s, s, s)
+			
+		result_array.append({"type": type, "pos": current_pos, "rot_y": randf() * TAU, "scale": scale_val})
+
+# ------------------------------------------------------------------------------
+# MAIN THREAD (Visuel avec Time Slicing)
+# ------------------------------------------------------------------------------
+func _finalize_chunk_generation(data: Dictionary):
+	# 1. Mesh Terrain (Rapide à créer, lent à collisionner)
+	var new_mesh = ArrayMesh.new()
+	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data.mesh_arrays)
+	
+	var material := StandardMaterial3D.new()
+	if terrain_texture: material.albedo_texture = terrain_texture
+	new_mesh.surface_set_material(0, material)
+	
+	var mesh_instance = MeshInstance3D.new()
+	mesh_instance.mesh = new_mesh
+	mesh_instance.position = data.world_pos
+	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	mesh_instance.add_to_group("NavSource")
+	add_child(mesh_instance)
+	
+	# PAUSE : On laisse le jeu respirer une frame avant de faire la collision du terrain
+	await get_tree().process_frame
+	
+	# Collision Terrain (Lourd !)
+	mesh_instance.create_trimesh_collision()
+	
+	# PAUSE
+	await get_tree().process_frame
+	
+	# 2. Structure
+	if data.has_structure and data.structure_idx >= 0:
+		var scene = structure_scenes[data.structure_idx]
+		var instance = scene.instantiate()
+		instance.position = data.structure_pos + Vector3(0, 0.05, 0)
+		instance.scale = Vector3(1.2, 1.2, 1.2)
+		instance.rotation.y = randf() * TAU
 		add_child(instance)
-		var mesh_instance = instance.get_child(0)
-		mesh_instance.add_to_group("Structure")
-		if(type == "medium"):
-			mesh_instance.create_trimesh_collision()
+		
+		if instance.has_node("Chest") and randf() < 0.5:
+			instance.get_node("Chest").queue_free()
+			
+		if instance.get_child_count() > 0:
+			var child = instance.get_child(0)
+			if child is MeshInstance3D: child.create_trimesh_collision()
 
+	# 3. Nature (Avec Time Slicing)
+	var items_spawned = 0
+	
+	for item in data.nature_data:
+		var scene_array = small_models if item.type == "small" else medium_models
+		if scene_array.is_empty(): continue
+		
+		var instance = scene_array.pick_random().instantiate()
+		instance.position = item.pos
+		instance.rotation.y = item.rot_y
+		instance.scale = item.scale
+		add_child(instance)
+		
+		if item.type == "medium" and instance.get_child_count() > 0:
+			var child = instance.get_child(0)
+			if child is MeshInstance3D:
+				child.add_to_group("Structure")
+				# Attention, create_trimesh_collision est lourd
+				child.create_trimesh_collision()
+		
+		items_spawned += 1
+		
+		# SI on a fait spawn X objets, on fait une pause pour rendre la main au jeu
+		if items_spawned >= items_per_frame:
+			items_spawned = 0
+			await get_tree().process_frame
 
-func load_forest_models():
-	terrain_texture = preload("res://Assets/Textures/Green.png")
-	var bushes_count = 22
-	var trees_count = 20
+# ------------------------------------------------------------------------------
+# UTILITAIRES
+# ------------------------------------------------------------------------------
+func load_assets():
+	terrain_texture = load("res://Assets/Textures/Green.png")
 	
-	for i in range(1,bushes_count+1):
-		small_models.push_back(load("res://Assets/Forest/Bush" + str(i) + ".gltf"))
+	for i in range(1, 23):
+		var path = "res://Assets/Forest/Bush" + str(i) + ".gltf"
+		if ResourceLoader.exists(path): small_models.push_back(load(path))
 	
-	for i in range(1,trees_count+1):
-		medium_models.push_back(load("res://Assets/Forest/Tree" + str(i) + ".gltf"))
+	for i in range(1, 21):
+		var path = "res://Assets/Forest/Tree" + str(i) + ".gltf"
+		if ResourceLoader.exists(path): medium_models.push_back(load(path))
 	
-	interactive_mesh.push_back(load("res://Scenes/Structure/chest.tscn"))
+	var dir_path = "res://Scenes/Structure/"
+	var dir = DirAccess.open(dir_path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if not dir.current_is_dir() and (file_name.ends_with(".tscn") or file_name.ends_with(".scn")):
+				structure_scenes.push_back(load(dir_path + "/" + file_name))
+			file_name = dir.get_next()
 
-func get_noise_y(x,z) -> float:
-	var value = noise.get_noise_2d(x+map_x_offset,z+map_x_offset)
+func get_noise_y(global_x: float, global_z: float) -> float:
+	if not noise: return 0.0
+	var value = noise.get_noise_2d(global_x + map_offset_vector.x, global_z + map_offset_vector.y)
 	return value * highest_point

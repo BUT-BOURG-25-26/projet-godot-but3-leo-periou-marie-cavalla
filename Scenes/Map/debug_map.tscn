@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="1_1ugow"]
 [ext_resource type="PackedScene" uid="uid://dqi6v1mhurwxd" path="res://Scenes/Enemy/skeleton_minion.tscn" id="2_1ugow"]
 [ext_resource type="PackedScene" uid="uid://w6d8aawsgbeg" path="res://Scenes/Structure/tiny_tower.tscn" id="4_ad7u8"]
-[ext_resource type="PackedScene" uid="uid://dcvjg1cxmxftn" path="res://Scenes/Structure/chest.tscn" id="5_agagg"]
+[ext_resource type="PackedScene" uid="uid://dcvjg1cxmxftn" path="res://Scenes/Structure/Elements/chest.tscn" id="5_agagg"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_phvva"]
 
