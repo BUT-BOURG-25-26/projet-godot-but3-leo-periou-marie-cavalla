@@ -22,9 +22,9 @@ extends Node
 @export var blend_radius: float = 16.0
 
 @export_group("Performance")
-@export var items_per_frame: int = 5 # Nombre d'objets à faire spawn par frame (plus bas = plus fluide, mais plus lent à charger)
+@export var items_per_frame: int = 5 # Nombre d'objets à faire spawn par frame
 
-# --- VARIABLES INTERNES ---
+# --- VARIABLES ---
 var terrain_texture: Texture2D
 var medium_models : Array[PackedScene] = []
 var small_models : Array[PackedScene] = []
@@ -193,7 +193,6 @@ func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_p
 # MAIN THREAD (Visuel avec Time Slicing)
 # ------------------------------------------------------------------------------
 func _finalize_chunk_generation(data: Dictionary):
-	# 1. Mesh Terrain (Rapide à créer, lent à collisionner)
 	var new_mesh = ArrayMesh.new()
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data.mesh_arrays)
 	
@@ -208,16 +207,16 @@ func _finalize_chunk_generation(data: Dictionary):
 	mesh_instance.add_to_group("NavSource")
 	add_child(mesh_instance)
 	
-	# PAUSE : On laisse le jeu respirer une frame avant de faire la collision du terrain
+	# PAUSE
 	await get_tree().process_frame
 	
-	# Collision Terrain (Lourd !)
+	# Collision Terrain
 	mesh_instance.create_trimesh_collision()
 	
 	# PAUSE
 	await get_tree().process_frame
 	
-	# 2. Structure
+	# Structure
 	if data.has_structure and data.structure_idx >= 0:
 		var scene = structure_scenes[data.structure_idx]
 		var instance = scene.instantiate()
@@ -233,7 +232,7 @@ func _finalize_chunk_generation(data: Dictionary):
 			var child = instance.get_child(0)
 			if child is MeshInstance3D: child.create_trimesh_collision()
 
-	# 3. Nature (Avec Time Slicing)
+	# Nature (Avec Time Slicing)
 	var items_spawned = 0
 	
 	for item in data.nature_data:
@@ -250,12 +249,10 @@ func _finalize_chunk_generation(data: Dictionary):
 			var child = instance.get_child(0)
 			if child is MeshInstance3D:
 				child.add_to_group("Structure")
-				# Attention, create_trimesh_collision est lourd
 				child.create_trimesh_collision()
 		
 		items_spawned += 1
 		
-		# SI on a fait spawn X objets, on fait une pause pour rendre la main au jeu
 		if items_spawned >= items_per_frame:
 			items_spawned = 0
 			await get_tree().process_frame
