@@ -3,6 +3,7 @@ extends Sprite3D
 @export var health_bar: ProgressBar
 @export var kill_counter: Label
 @export var wave_counter: Label
+@export var next_wave: Label
 
 func take_damage(damage: float):
 	health_bar.value -= damage
@@ -19,3 +20,10 @@ func set_kill_counter(number):
 	
 func set_wave_counter(number):
 	wave_counter.text = "Wave : " + str(number)
+	
+func set_next_wave(number):
+	if (number == 0):
+		next_wave.hide()
+	else:
+		next_wave.show()
+		next_wave.text = "PROCHAINE VAGUE : " + str(number) + "s"

@@ -47,7 +47,7 @@ func start_round():
 	enemies_killed_current = 0
 	
 	# Calcul du nombre d'ennemis pour cette manche
-	enemies_to_kill_total = 5 + (current_round - 1)
+	enemies_to_kill_total = 1 + (current_round - 1)
 	
 	print("--- DEBUT MANCHE " + str(current_round) + " --- Objectif: " + str(enemies_to_kill_total) + " kills")
 	
@@ -104,10 +104,21 @@ func _on_enemy_despawned(enemy_ref):
 func end_round():
 	is_round_in_progress = false
 	spawn_timer.stop()
-	print("MANCHE TERMINEE ! Pause de " + str(round_cooldown_time) + "s.")
+	print("MANCHE TERMINEE !")
 	
-	# Pause
-	await get_tree().create_timer(round_cooldown_time).timeout
+	# Compte à rebours
+	var time_left = round_cooldown_time
+	
+	# Boucle tant qu'il reste du temps
+	while time_left > 0:
+		if player_ui:
+			player_ui.call("set_next_wave", time_left)
+		await get_tree().create_timer(1.0).timeout
+		time_left -= 1
+	
+	# Une fois le temps écoulé
+	if player_ui:
+		player_ui.call("set_next_wave", 0) 
 	
 	# Nouvelle manche
 	current_round += 1

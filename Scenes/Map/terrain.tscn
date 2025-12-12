@@ -102,7 +102,7 @@ sky_material = SubResource("ShaderMaterial_icyg6")
 background_mode = 2
 sky = SubResource("Sky_j7f5b")
 fog_enabled = true
-fog_light_color = Color(0.539, 0.600717, 0.7, 1)
+fog_light_color = Color(0.113846, 0.140527, 0.183593, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_j4ig8"]
 noise_type = 0
@@ -115,6 +115,7 @@ environment = SubResource("Environment_icyg6")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.0301024, 0.999547, 0, -0.999547, 0.0301024, 0, 10.4373, 0)
+light_color = Color(0.290196, 0.290196, 0.529412, 1)
 
 [node name="TerrainGeneration" type="Node3D" parent="."]
 script = ExtResource("1_nkyio")
