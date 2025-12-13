@@ -11,6 +11,7 @@ class_name Player extends CharacterBody3D
 @onready var weapon_slot_right = $Model/Rig_Medium/Skeleton3D/HandSlotRight
 @onready var weapon_slot_left = $Model/Rig_Medium/Skeleton3D/HandSlotLeft
 @onready var collision_shape = $CollisionShape3D
+@onready var separation_ray = $SeparationRay
 
 # --- EXPORT STATS ---
 @export var speed: float = 5.0
@@ -25,6 +26,7 @@ var can_action: bool = true
 var blocking: bool = false
 var is_dead: bool = false
 var current_weapon: Node3D
+var ray_offset_distance: float = 0.45
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health)
@@ -83,9 +85,16 @@ func _physics_process(delta: float) -> void:
 		var target_rotation = atan2(direction.x, direction.z)
 		model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
 		
+		var offset_vector = Vector3(0, 0, ray_offset_distance)
+		var rotated_offset = offset_vector.rotated(Vector3.UP, model.rotation.y)
+		if separation_ray:
+			separation_ray.position.x = rotated_offset.x
+			separation_ray.position.z = rotated_offset.z
+		
+		
 	update_locomotion()
 
-# --- OPTIMISATION ANIMATION ---
+# --- ANIMATION ---
 
 # Cette fonction détermine le suffixe à utiliser (_1H, _2H, _Bow)
 func get_anim_suffix() -> String:

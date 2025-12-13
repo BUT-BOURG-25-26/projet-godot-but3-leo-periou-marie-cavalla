@@ -9,7 +9,6 @@ signal enemy_despawned(enemy)
 @onready var model = $Model
 @onready var collision = $CollisionShape3D
 @onready var enemy_ui = $EnemyUi
-@onready var detector = $Detector
 @onready var eyes_light = $Model/SpotLight3D
 @onready var death_particle = $DeathParticle
 @onready var weapon_slot_right = $Model/Rig_Medium/Skeleton3D/HandSlotRight
@@ -41,16 +40,11 @@ signal enemy_despawned(enemy)
 # --- VARIABLES ---
 var current_weapon: Node3D
 var can_action: bool = true
-#var player_detected: bool = false
 var is_dead: bool = false
+var ray_offset_distance: float = 0.75
 
 func _ready() -> void:
 	enemy_ui.call("set_health_bar", health)
-	
-	#if detector:
-		#if not detector.body_entered.is_connected(_detector_body):
-			#detector.body_entered.connect(_detector_body)
-	
 	equip_weapon(weapon)
 
 func _physics_process(delta: float) -> void:
@@ -68,15 +62,6 @@ func _physics_process(delta: float) -> void:
 		emit_signal("enemy_despawned", self) # On prévient le spawner
 		queue_free()
 		return
-	
-	# Si le joueur n'est pas détecté
-	#if not player_detected:
-		#velocity.x = 0
-		#velocity.z = 0
-		#velocity.y += get_gravity().y * delta
-		#update_locomotion()
-		#move_and_slide()
-		#return
 	
 	# --- LOGIQUE DE MOUVEMENT / ATTAQUE ---
 	var direction = Vector3.ZERO
@@ -146,10 +131,6 @@ func trigger_attack():
 
 func take_damage(damage: float, get_stand: bool = false):
 	if is_dead: return
-	
-	# Si on prend des dégâts, on détecte automatiquement le joueur
-	#if not player_detected:
-		#player_detected = true
 		
 	health -= damage
 	enemy_ui.take_damage(damage)
@@ -249,10 +230,6 @@ func equip_weapon(weapon_name: String):
 		current_weapon.needs_reload.connect(_on_weapon_needs_reload)
 		
 	update_locomotion()
-
-#func _detector_body(body: Node3D) -> void:
-	##if body == player:
-		##player_detected = true
 
 func _hit_cooldown() -> void:
 	can_action = true

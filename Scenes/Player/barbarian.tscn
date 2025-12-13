@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=4 uid="uid://bab6l552nlgow"]
+[gd_scene load_steps=92 format=4 uid="uid://bab6l552nlgow"]
 
 [ext_resource type="Script" uid="uid://dbxgy53bxnoa1" path="res://Scripts/Player/player.gd" id="1_w3qu7"]
 [ext_resource type="Texture2D" uid="uid://dl3v4hxux5n18" path="res://Assets/Adventurers/Characters/Barbarian/Barbarian_barbarian_texture.png" id="2_4ul4d"]
@@ -463,9 +463,11 @@ blend_shape_mode = 0
 [sub_resource type="SphereShape3D" id="SphereShape3D_dqkch"]
 radius = 0.3
 
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_w3qu7"]
+length = 0.5
+
 [node name="Barbarian" type="CharacterBody3D" groups=["Player"]]
-floor_max_angle = 1.5708
-floor_snap_length = 0.5
+floor_max_angle = 0.872665
 script = ExtResource("1_w3qu7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -712,3 +714,7 @@ spring_arm = NodePath("../SpringArm3D/SpringPosition")
 [node name="MobileUi" parent="." instance=ExtResource("13_ox7lb")]
 
 [node name="PauseUi" parent="." instance=ExtResource("14_frwf0")]
+
+[node name="SeparationRay" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.45)
+shape = SubResource("SeparationRayShape3D_w3qu7")

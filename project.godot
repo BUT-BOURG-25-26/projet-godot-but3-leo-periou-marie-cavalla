@@ -26,6 +26,8 @@ project/assembly_name="Moteur3D-Projet-Template"
 [global_group]
 
 Player=""
+Enemy=""
+Terrain=""
 
 [input]
 

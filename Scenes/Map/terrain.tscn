@@ -108,7 +108,7 @@ fog_light_color = Color(0.113846, 0.140527, 0.183593, 1)
 noise_type = 0
 frequency = 0.001
 
-[node name="Terrain" type="Node3D"]
+[node name="Terrain" type="Node3D" groups=["Terrain"]]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_icyg6")

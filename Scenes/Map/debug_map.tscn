@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dw0d2mlohph0p"]
+[gd_scene load_steps=11 format=3 uid="uid://dw0d2mlohph0p"]
 
 [ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="1_1ugow"]
 [ext_resource type="PackedScene" uid="uid://dqi6v1mhurwxd" path="res://Scenes/Enemy/skeleton_minion.tscn" id="2_1ugow"]
-[ext_resource type="PackedScene" uid="uid://w6d8aawsgbeg" path="res://Scenes/Structure/tiny_tower.tscn" id="4_ad7u8"]
-[ext_resource type="PackedScene" uid="uid://dcvjg1cxmxftn" path="res://Scenes/Structure/Elements/chest.tscn" id="5_agagg"]
+[ext_resource type="PackedScene" uid="uid://cmolhoqu4adpx" path="res://Scenes/Structure/tower.tscn" id="3_f38rr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_phvva"]
 
@@ -139,8 +138,8 @@ environment = SubResource("Environment_1ugow")
 [node name="SkeletonMinion" parent="." instance=ExtResource("2_1ugow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.402, 0, 12.158)
 
-[node name="Chest" parent="." instance=ExtResource("5_agagg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4589, 0.245, -11.8381)
+[node name="SkeletonMinion2" parent="." instance=ExtResource("2_1ugow")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1435, 0, 12.158)
 
-[node name="TinyTower" parent="." instance=ExtResource("4_ad7u8")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.316251, 0)
+[node name="Tower" parent="." instance=ExtResource("3_f38rr")]
+transform = Transform3D(-0.992377, 0, -0.123238, 0, 1, 0, 0.123238, 0, -0.992377, 0, 0.599971, 0)

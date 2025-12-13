@@ -434,9 +434,6 @@ blend_shape_mode = 0
 [sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_bxvsj"]
-size = Vector3(10.0087, 7.96558, 10.0088)
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bxvsj"]
 gravity = Vector3(0, 2, 0)
 linear_accel_min = -1.69
@@ -463,9 +460,10 @@ radius = 0.075
 height = 0.3
 rings = 1
 
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_kym0k"]
+length = 0.5
+
 [node name="SkeletonWarrior" type="CharacterBody3D" groups=["Enemy"]]
-floor_max_angle = 1.5708
-floor_snap_length = 0.5
 script = ExtResource("1_intqh")
 weapon = "axe"
 
@@ -756,19 +754,16 @@ stream = ExtResource("14_htyhg")
 volume_db = -10.0
 pitch_scale = 0.9
 
-[node name="Detector" type="Area3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00820923, 0.00256348, 0.00798035)
-shape = SubResource("BoxShape3D_bxvsj")
-
 [node name="DeathParticle" type="GPUParticles3D" parent="."]
 emitting = false
 amount = 30
 process_material = SubResource("ParticleProcessMaterial_bxvsj")
 draw_pass_1 = SubResource("SphereMesh_40eh0")
 
+[node name="SeparationRay" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.8)
+shape = SubResource("SeparationRayShape3D_kym0k")
+
 [connection signal="timeout" from="DeadCooldown" to="." method="_dead_cooldown"]
 [connection signal="timeout" from="DestroyCooldown" to="." method="_destroy_cooldown"]
 [connection signal="timeout" from="HitCooldown" to="." method="_hit_cooldown"]
-[connection signal="body_entered" from="Detector" to="." method="_detector_body"]
