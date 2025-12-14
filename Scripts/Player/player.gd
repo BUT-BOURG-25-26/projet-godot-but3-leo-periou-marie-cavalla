@@ -147,7 +147,6 @@ func update_locomotion():
 # --- ACTIONS ---
 
 func add_boost(type:String):
-	print(health,max_health,health+30>max_health)
 	match type :
 		"Health" :
 			if(health<max_health):

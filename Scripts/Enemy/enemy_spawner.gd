@@ -49,8 +49,6 @@ func start_round():
 	# Calcul du nombre d'ennemis pour cette manche
 	enemies_to_kill_total = 1 + (current_round - 1)
 	
-	print("--- DEBUT MANCHE " + str(current_round) + " --- Objectif: " + str(enemies_to_kill_total) + " kills")
-	
 	player_ui.call("set_wave_counter", current_round)
 	
 	spawn_timer.start()
@@ -94,18 +92,15 @@ func spawn_enemy():
 func _on_enemy_killed(enemy_ref):
 	enemies_killed_current += 1
 	enemies_active_count -= 1
-	print("Ennemi tué. Progression: " + str(enemies_killed_current) + "/" + str(enemies_to_kill_total))
-
+	
 func _on_enemy_despawned(enemy_ref):
 	# Si un ennemi despawn (trop loin)
 	enemies_active_count -= 1
-	print("Ennemi despawn (trop loin). Est remplacé.")
-
+	
 func end_round():
 	is_round_in_progress = false
 	spawn_timer.stop()
-	print("MANCHE TERMINEE !")
-	
+
 	# Compte à rebours
 	var time_left = round_cooldown_time
 	

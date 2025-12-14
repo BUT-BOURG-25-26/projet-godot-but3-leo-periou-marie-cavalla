@@ -19,7 +19,7 @@ func start_game(selected_character: String):
 func show_details():
 	get_node("Details").show()
 	get_node("Selection").hide()
-	var path:String = path_to_textures + selected_character.capitalize() + textures_format
+	var path:String = path_to_textures + selected_character + textures_format
 	get_node("Details/Title").text = selected_character.capitalize()
 	get_node("Details/Character").texture = load(path) as Texture2D
 	get_node("Details/Description").text = descriptions[selected_character]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7lena4tr0moy"
-path="res://.godot/imported/barbarian.png-c537a4352fab1857d3c2e2a0d4aae633.ctex"
+uid="uid://72hg3614riyh"
+path="res://.godot/imported/ButtonReversed.png-ccda99a67e31e4a4f2018787ef5396b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/barbarian.png"
-dest_files=["res://.godot/imported/barbarian.png-c537a4352fab1857d3c2e2a0d4aae633.ctex"]
+source_file="res://Assets/UI/ButtonReversed.png"
+dest_files=["res://.godot/imported/ButtonReversed.png-ccda99a67e31e4a4f2018787ef5396b2.ctex"]
 
 [params]
 

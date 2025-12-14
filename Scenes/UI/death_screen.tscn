@@ -30,14 +30,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -79.0
-offset_top = 2.0
-offset_right = 989.0
-offset_bottom = 434.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_vvkn6")
+expand_mode = 1
 
 [node name="ColorRect" type="TextureRect" parent="."]
 layout_mode = 1
