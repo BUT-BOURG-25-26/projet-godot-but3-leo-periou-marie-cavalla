@@ -59,7 +59,7 @@ func _on_buy_item(weapon_data: Dictionary, button_ref: Button):
 func refresh_buttons_state():
 	for btn in items_container.get_children():
 		# On ignore ceux déjà vendus/achetés
-		if btn.disabled and (btn.text.contains("(Sould out)") or btn.text.contains("(Bought)")):
+		if btn.disabled and (btn.text.contains("(Sold out)") or btn.text.contains("(Bought)")):
 			continue
 			
 		var text_parts = btn.text.split(" - ")
