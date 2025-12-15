@@ -483,6 +483,7 @@ length = 0.5
 script = ExtResource("1_pk5oc")
 attack_range = 10.0
 weapon = "crossbow"
+reward = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)

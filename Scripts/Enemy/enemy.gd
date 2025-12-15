@@ -36,6 +36,7 @@ signal enemy_despawned(enemy)
 @export var attack_range: float = 1.5
 @export_enum("axe","blade","crossbow","staff") var weapon: String
 @export var boost_spawn_rate: int = 5
+@export var reward: int = 0
 
 # --- VARIABLES ---
 var current_weapon: Node3D
@@ -154,8 +155,8 @@ func die():
 	is_dead = true
 	emit_signal("enemy_died", self)
 	
-	if player.has_method("add_kill"):
-		player.call("add_kill")
+	if player.has_method("set_money"):
+		player.call("set_money", reward)
 		
 	death_particle.emitting = true
 	eyes_light.queue_free()

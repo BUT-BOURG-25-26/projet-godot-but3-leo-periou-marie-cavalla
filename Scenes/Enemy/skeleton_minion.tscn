@@ -432,6 +432,7 @@ length = 0.5
 [node name="SkeletonMinion" type="CharacterBody3D" groups=["Enemy"]]
 script = ExtResource("1_mhbw6")
 weapon = "blade"
+reward = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)

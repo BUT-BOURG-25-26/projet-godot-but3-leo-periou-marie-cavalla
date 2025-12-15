@@ -692,13 +692,6 @@ shape = SubResource("BoxShape3D_s6ajw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3.6, 6)
 shape = SubResource("BoxShape3D_s6ajw")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(-0.154746, -0.511383, 0.845305, -0.0920862, 0.859353, 0.503024, -0.983653, -7.57414e-09, -0.180073, 4.87267, 2.07917, 3.79855)
-light_color = Color(0.593154, 0.496794, 0.470398, 1)
-light_energy = 5.855
-spot_range = 10.164
-spot_angle = 26.06
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(12, 0, 0, 0, 0.1, 0, 0, 0, 12, -2, 3.5, 6)
 mesh = SubResource("BoxMesh_016ep")

@@ -7,7 +7,9 @@
 
 [node name="Crossbow1H" type="Node3D"]
 script = ExtResource("1_y56eg")
+damage = 5.0
 reload_time = 1.1
+cost = 100
 projectile_scene = ExtResource("2_cs26p")
 
 [node name="Model" parent="." instance=ExtResource("2_j6yb2")]

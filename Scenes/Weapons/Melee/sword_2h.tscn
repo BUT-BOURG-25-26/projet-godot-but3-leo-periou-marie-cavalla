@@ -13,6 +13,7 @@ damage = 8.0
 cooldown_time = 0.3
 is_two_handed = true
 weight = 0.3
+cost = 200
 
 [node name="Model" parent="." instance=ExtResource("2_bp415")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

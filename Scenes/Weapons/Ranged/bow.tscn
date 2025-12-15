@@ -8,10 +8,12 @@
 [node name="Bow" type="Node3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 script = ExtResource("1_d0g0v")
-delay_time = 0.6
+damage = 20.0
+delay_time = 0.4
 is_two_handed = true
 is_bow = true
 hand = "Left"
+cost = 500
 projectile_scene = ExtResource("2_duu5b")
 
 [node name="Model" parent="." instance=ExtResource("1_qewoe")]

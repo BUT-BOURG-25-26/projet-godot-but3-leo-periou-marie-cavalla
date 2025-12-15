@@ -23,6 +23,10 @@ game_manager="*res://Scripts/game_manager.gd"
 
 project/assembly_name="Moteur3D-Projet-Template"
 
+[filesystem]
+
+import/blender/enabled=false
+
 [global_group]
 
 Player=""

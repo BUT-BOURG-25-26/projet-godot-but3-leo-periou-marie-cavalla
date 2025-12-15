@@ -9,6 +9,7 @@ signal attack_finished
 @export var weight: float = 0.0
 @export_enum("Enemy","Player") var target: String = "Enemy"
 @export_enum("Left","Right") var hand: String = "Right"
+@export var cost: int = 1
 
 @onready var hitbox: Area3D = $Hitbox 
 @onready var cooldown_timer: Timer = $CooldownTimer

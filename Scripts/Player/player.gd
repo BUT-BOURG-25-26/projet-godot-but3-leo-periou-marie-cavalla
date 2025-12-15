@@ -19,7 +19,7 @@ class_name Player extends CharacterBody3D
 @export var strength: float = 20
 @export var health: float = 100.0
 @export var max_health: float = 100.0
-@export var kill: int = 0
+@export var money: int = 0
 
 # --- VARIABLES ---
 var can_action: bool = true
@@ -30,6 +30,7 @@ var ray_offset_distance: float = 0.45
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health)
+	player_ui.call("set_money_counter", money)
 	equip_weapon("Melee/sword_2h")
 
 func _physics_process(delta: float) -> void:
@@ -200,9 +201,9 @@ func die():
 	anim_state.travel("Death")
 	death_screen.call("show_death_screen")
 
-func add_kill():
-	kill += 1
-	player_ui.call("set_kill_counter", kill)
+func set_money(amount: int):
+	money += amount
+	player_ui.call("set_money_counter", money)
 
 # --- INPUT / EQUIP ---
 

@@ -1,7 +1,7 @@
 extends Sprite3D
 
 @export var health_bar: ProgressBar
-@export var kill_counter: Label
+@export var money_counter: Label
 @export var wave_counter: Label
 @export var next_wave: Label
 
@@ -15,8 +15,8 @@ func set_health_bar(hp):
 	health_bar.max_value = hp
 	health_bar.value = hp
 
-func set_kill_counter(number):
-	kill_counter.text = "Kills : " + str(number)
+func set_money_counter(number):
+	money_counter.text = str(number)
 	
 func set_wave_counter(number):
 	wave_counter.text = "Wave : " + str(number)

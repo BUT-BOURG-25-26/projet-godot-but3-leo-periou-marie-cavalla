@@ -8,6 +8,7 @@
 [node name="Crossbow2H" type="Node3D"]
 script = ExtResource("1_n2aft")
 is_two_handed = true
+cost = 200
 projectile_scene = ExtResource("2_qslko")
 
 [node name="Model" parent="." instance=ExtResource("2_jbjja")]

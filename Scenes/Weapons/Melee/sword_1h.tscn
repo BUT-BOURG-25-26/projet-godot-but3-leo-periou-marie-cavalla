@@ -12,6 +12,7 @@ script = ExtResource("1_ar8ev")
 damage = 5.0
 cooldown_time = 0.3
 weight = 0.2
+cost = 100
 
 [node name="Model" parent="." instance=ExtResource("2_ar8ev")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

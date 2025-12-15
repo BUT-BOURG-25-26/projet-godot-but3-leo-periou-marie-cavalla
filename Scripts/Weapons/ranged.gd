@@ -13,6 +13,7 @@ signal needs_reload(duration: float) # Signal pour dire au player de jouer l'ani
 @export var weight: float = 0.1
 @export var is_bow: bool = false
 @export_enum("Left","Right") var hand: String = "Right"
+@export var cost: int = 1
 
 @export_group("Projectile Setup")
 @export var projectile_scene: PackedScene 
