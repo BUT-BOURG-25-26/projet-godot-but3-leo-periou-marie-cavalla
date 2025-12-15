@@ -30,12 +30,8 @@ var ray_offset_distance: float = 0.45
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health)
-<<<<<<< HEAD
 	player_ui.call("set_money_counter", money)
-	equip_weapon("Melee/sword_2h")
-=======
 	init_player_class()
->>>>>>> dev
 
 func _physics_process(delta: float) -> void:
 	if is_dead:

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ch77iwwf1hl2r"
 path.s3tc="res://.godot/imported/Mage_mage_texture.png-d0082c48fae8668d7372ea62390991fd.s3tc.ctex"
+path.etc2="res://.godot/imported/Mage_mage_texture.png-d0082c48fae8668d7372ea62390991fd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Adventurers/Characters/Mage/Mage_mage_texture.png"
-dest_files=["res://.godot/imported/Mage_mage_texture.png-d0082c48fae8668d7372ea62390991fd.s3tc.ctex"]
+dest_files=["res://.godot/imported/Mage_mage_texture.png-d0082c48fae8668d7372ea62390991fd.s3tc.ctex", "res://.godot/imported/Mage_mage_texture.png-d0082c48fae8668d7372ea62390991fd.etc2.ctex"]
 
 [params]
 

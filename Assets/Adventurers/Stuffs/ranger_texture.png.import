@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cnt52tmddxl7n"
 path.s3tc="res://.godot/imported/ranger_texture.png-f300315bf48fc5f604c95ec2ad82a763.s3tc.ctex"
+path.etc2="res://.godot/imported/ranger_texture.png-f300315bf48fc5f604c95ec2ad82a763.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Adventurers/Stuffs/ranger_texture.png"
-dest_files=["res://.godot/imported/ranger_texture.png-f300315bf48fc5f604c95ec2ad82a763.s3tc.ctex"]
+dest_files=["res://.godot/imported/ranger_texture.png-f300315bf48fc5f604c95ec2ad82a763.s3tc.ctex", "res://.godot/imported/ranger_texture.png-f300315bf48fc5f604c95ec2ad82a763.etc2.ctex"]
 
 [params]
 
