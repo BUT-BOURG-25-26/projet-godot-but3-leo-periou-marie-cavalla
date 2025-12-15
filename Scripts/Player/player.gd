@@ -26,6 +26,7 @@ var can_action: bool = true
 var blocking: bool = false
 var is_dead: bool = false
 var current_weapon: Node3D
+var current_shield: Node3D
 var ray_offset_distance: float = 0.45
 var base_speed: float
 var base_strength: float
@@ -36,6 +37,7 @@ func _ready() -> void:
 	base_strength = strength
 	player_ui.call("set_health_bar", health)
 	player_ui.call("set_money_counter", money)
+	equip_shield("shield_square")
 	init_player_class()
 
 func _physics_process(delta: float) -> void:
@@ -71,6 +73,7 @@ func _physics_process(delta: float) -> void:
 		elif Input.is_action_pressed("block"):
 			blocking = true
 			velocity = Vector3.ZERO
+			direction = Vector3.ZERO
 		
 		elif Input.is_action_just_released("block"):
 			blocking = false
@@ -338,6 +341,20 @@ func equip_weapon(weapon_name: String):
 		current_weapon.needs_reload.connect(_on_weapon_needs_reload)
 	
 	update_locomotion()
+	
+func equip_shield(shield_name: String):
+	var path = "res://Scenes/Weapons/Shield/%s.tscn" % shield_name
+	var shield_scene = load(path)
+	
+	if not shield_scene:
+		push_error("Bouclier introuvable: " + path)
+		return
+
+	var new_shield = shield_scene.instantiate()
+	
+	weapon_slot_left.add_child(new_shield)
+		
+	current_shield = new_shield
 
 func read_move_input() -> Vector3:
 	var move_inputs: Vector3 = Vector3.ZERO

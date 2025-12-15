@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm4narh3rrm2h"]
+
+[ext_resource type="PackedScene" uid="uid://bpnuok07u4xld" path="res://Assets/Adventurers/Stuffs/shield_spikes.gltf" id="1_em2ur"]
+
+[node name="ShieldSpikes" type="Node3D"]
+
+[node name="shield_spikes2" parent="." instance=ExtResource("1_em2ur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2)

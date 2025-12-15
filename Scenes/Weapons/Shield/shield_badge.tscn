@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://76jpsdc2gfkh"]
+
+[ext_resource type="PackedScene" uid="uid://bnamwos1ca0lw" path="res://Assets/Adventurers/Stuffs/shield_badge.gltf" id="1_5hny7"]
+
+[node name="ShieldBadge" type="Node3D"]
+
+[node name="shield_badge2" parent="." instance=ExtResource("1_5hny7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2)
