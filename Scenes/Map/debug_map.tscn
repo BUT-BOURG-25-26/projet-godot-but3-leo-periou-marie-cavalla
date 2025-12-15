@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dw0d2mlohph0p"]
+[gd_scene load_steps=11 format=3 uid="uid://dw0d2mlohph0p"]
 
 [ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="1_1ugow"]
 [ext_resource type="PackedScene" uid="uid://b3o1jm2pd7eyh" path="res://Scenes/Structure/shop.tscn" id="2_1ugow"]
+[ext_resource type="PackedScene" uid="uid://dgjcy8k8wehle" path="res://Scenes/Map/boost.tscn" id="3_f38rr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_phvva"]
 
@@ -137,3 +138,18 @@ environment = SubResource("Environment_1ugow")
 
 [node name="Shop" parent="." instance=ExtResource("2_1ugow")]
 transform = Transform3D(-1.19846, 0, 0.0607323, 0, 1.2, 0, -0.0607323, 0, -1.19846, 0, 0.330639, -3.38394)
+
+[node name="Boost" parent="." instance=ExtResource("3_f38rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, -5.89078)
+
+[node name="Boost2" parent="." instance=ExtResource("3_f38rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, -8.47588)
+
+[node name="Boost3" parent="." instance=ExtResource("3_f38rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, -3.12967)
+
+[node name="Boost4" parent="." instance=ExtResource("3_f38rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, 0.350884)
+
+[node name="Boost5" parent="." instance=ExtResource("3_f38rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, 4.03789)

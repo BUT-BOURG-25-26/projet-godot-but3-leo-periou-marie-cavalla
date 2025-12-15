@@ -27,13 +27,21 @@ var blocking: bool = false
 var is_dead: bool = false
 var current_weapon: Node3D
 var ray_offset_distance: float = 0.45
+var base_speed: float
+var base_strength: float
+var active_boosts: Dictionary = {}
 
 func _ready() -> void:
+	base_speed = speed
+	base_strength = strength
 	player_ui.call("set_health_bar", health)
 	player_ui.call("set_money_counter", money)
 	init_player_class()
 
 func _physics_process(delta: float) -> void:
+	
+	update_boosts_timers(delta)
+
 	if is_dead:
 		velocity.x = 0
 		velocity.z = 0
@@ -94,22 +102,92 @@ func _physics_process(delta: float) -> void:
 		
 		
 	update_locomotion()
+
+# --- SYSTEME DE BOOST OPTIMISE ---
+
+func apply_boost(type: String, duration: float):
+	# Cas spécial pour la vie
+	if type == "Health":
+		if health < max_health:
+			var heal_amount = 30.0
+			health = min(health + heal_amount, max_health)
+			player_ui.heal(heal_amount)
+			player_ui.set_health_bar(health)
+		return
+
+	# Cas pour les boosts temporaires
+	if active_boosts.has(type):
+		# CUMUL
+		active_boosts[type]["time"] += duration
+	else:
+		active_boosts[type] = {
+			"time": duration,
+			"value": get_boost_value(type)
+		}
 	
+	# On recalcule les stats immédiatement
+	recalc_stats()
+
+func get_boost_value(type: String) -> float:
+	match type:
+		"Attack": return 5.0
+		"Speed": return 5.0
+	return 0.0
+
+func update_boosts_timers(delta: float):
+	if active_boosts.is_empty():
+		return
+		
+	var has_changed = false
+	var keys_to_remove = []
+	
+	for type in active_boosts:
+		active_boosts[type]["time"] -= delta
+		
+		if active_boosts[type]["time"] <= 0:
+			keys_to_remove.append(type)
+			has_changed = true
+	
+	# Nettoyage des boosts expirés
+	for k in keys_to_remove:
+		active_boosts.erase(k)
+	
+	# Si un boost a expiré, on recalcule les stats
+	if has_changed:
+		recalc_stats()
+		
+	# Mise à jour UI
+	player_ui.update_boosts_display(active_boosts)
+
+func recalc_stats():
+	speed = base_speed
+	strength = base_strength
+	
+	# On applique tous les bonus actifs
+	if active_boosts.has("Speed"):
+		speed += active_boosts["Speed"]["value"]
+	
+	if active_boosts.has("Attack"):
+		strength += active_boosts["Attack"]["value"]
+	
+	# Debug print pour vérifier
+	print("Stats Updated: Speed=", speed, " Strength=", strength)
+
 # --- INITIALISATION DE LA CLASSE DU JOUEUR ---
 
 func init_player_class():
 	var current_class_name:String = self.name
 	match current_class_name :
 		"Barbarian":
-			equip_weapon("Melee/axe_2h")
+			equip_weapon("Melee/axe_1h")
 		"Knight":
-			equip_weapon("Melee/sword_2h")
+			equip_weapon("Melee/sword_1h")
 		"Mage":
 			equip_weapon("Melee/hand")
 		"Ranger":
-			equip_weapon("Ranged/bow")
+			equip_weapon("Melee/dagger")
 		"Rogue":
-			equip_weapon("Ranged/crossbow_2h")
+			equip_weapon("Ranged/crossbow_1h")
 
 # --- ANIMATION ---
 
