@@ -104,7 +104,7 @@ func _process_mystery_box_sequence():
 	var display_name = generated_weapon_name.split("/")[-1].replace("_", " ") 
 
 	if label:
-		label.text = "Prendre : " + display_name
+		label.text = "Take : " + display_name
 		
 	is_cycling = false
 
@@ -146,10 +146,10 @@ func _on_body_entered(body: Node3D):
 		if is_cycling:
 			if label: label.text = "..."
 		elif not is_open:
-			if label: label.text = "Ouvrir"
+			if label: label.text = "Open"
 		elif not is_looted and loot_pivot:
 			var display_name = generated_weapon_name.split("/")[-1].replace("_", " ")
-			if label: label.text = "Prendre : " + display_name
+			if label: label.text = "Take : " + display_name
 
 func _on_body_exited(body: Node3D):
 	if body == player_in_range:

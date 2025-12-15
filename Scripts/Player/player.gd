@@ -30,8 +30,12 @@ var ray_offset_distance: float = 0.45
 
 func _ready() -> void:
 	player_ui.call("set_health_bar", health)
+<<<<<<< HEAD
 	player_ui.call("set_money_counter", money)
 	equip_weapon("Melee/sword_2h")
+=======
+	init_player_class()
+>>>>>>> dev
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -94,6 +98,22 @@ func _physics_process(delta: float) -> void:
 		
 		
 	update_locomotion()
+	
+# --- INITIALISATION DE LA CLASSE DU JOUEUR ---
+
+func init_player_class():
+	var current_class_name:String = self.name
+	match current_class_name :
+		"Barbarian":
+			equip_weapon("Melee/axe_2h")
+		"Knight":
+			equip_weapon("Melee/sword_2h")
+		"Mage":
+			equip_weapon("Melee/hand")
+		"Ranger":
+			equip_weapon("Ranged/bow")
+		"Rogue":
+			equip_weapon("Ranged/crossbow_2h")
 
 # --- ANIMATION ---
 
@@ -135,9 +155,10 @@ func add_boost(type:String):
 	match type :
 		"Health" :
 			if(health<max_health):
-				if(health+30>max_health):
+				if((health+30)>max_health):
+					var difference:float = max_health-health
 					health = max_health
-					player_ui.heal(max_health-health)
+					player_ui.heal(difference)
 				else:
 					health += 30
 					player_ui.heal(30)

@@ -1,25 +1,46 @@
-[gd_scene load_steps=16 format=3 uid="uid://clx6ct8m6b2yx"]
+[gd_scene load_steps=24 format=3 uid="uid://clx6ct8m6b2yx"]
 
 [ext_resource type="Script" uid="uid://jc2oe0uckhkt" path="res://Scripts/UI/character_selection.gd" id="1_aj0io"]
 [ext_resource type="Texture2D" uid="uid://dgm72ibasr4lq" path="res://Assets/UI/Background.png" id="2_rrd2k"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_vkfj6"]
-[ext_resource type="Texture2D" uid="uid://bvobw60vj7lsm" path="res://Assets/UI/Characters.png" id="3_oe7ax"]
 [ext_resource type="StyleBox" uid="uid://dcnuw2s72vp6l" path="res://Themes/ButtonNormal.tres" id="5_nwqkb"]
-[ext_resource type="Texture2D" uid="uid://cu5g0ws5i3c5k" path="res://Assets/UI/knight.png" id="6_rrd2k"]
+[ext_resource type="Texture2D" uid="uid://trab7jatjufo" path="res://Assets/UI/mage.png" id="5_pb1v1"]
+[ext_resource type="Texture2D" uid="uid://tcggw5ftdohn" path="res://Assets/UI/rogue.png" id="6_r7boc"]
+[ext_resource type="Texture2D" uid="uid://0p0pmupikf1r" path="res://Assets/UI/knight.png" id="6_rrd2k"]
+[ext_resource type="Texture2D" uid="uid://cw81umb77bxfl" path="res://Assets/UI/ranger.png" id="7_5t5qi"]
 [ext_resource type="StyleBox" uid="uid://bfl5ticsb5lqg" path="res://Themes/ButtonHover.tres" id="7_pb1v1"]
+[ext_resource type="Texture2D" uid="uid://72hg3614riyh" path="res://Assets/UI/ButtonReversed.png" id="8_iteob"]
 [ext_resource type="StyleBox" uid="uid://cd3g5f6ybtu1m" path="res://Themes/ButtonPressed.tres" id="8_r7boc"]
+[ext_resource type="Texture2D" uid="uid://b7lena4tr0moy" path="res://Assets/UI/barbarian.png" id="10_336cn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rrd2k"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5t5qi"]
+texture = ExtResource("5_pb1v1")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iteob"]
+texture = ExtResource("6_r7boc")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_336cn"]
+texture = ExtResource("7_5t5qi")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iibqf"]
+texture = ExtResource("8_iteob")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_thm5u"]
+texture = ExtResource("8_iteob")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_845l7"]
+texture = ExtResource("6_rrd2k")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8cin8"]
+texture = ExtResource("8_iteob")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jw73i"]
+texture = ExtResource("8_iteob")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oxayx"]
+texture = ExtResource("10_336cn")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oe7ax"]
 
@@ -32,27 +53,39 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_aj0io")
 
-[node name="BackgroundSelection" type="Sprite2D" parent="."]
-position = Vector2(586, 326)
-scale = Vector2(0.598148, 0.598148)
+[node name="BackgroundSelection" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_rrd2k")
+expand_mode = 1
 
 [node name="Selection" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 1153.0
-offset_bottom = 646.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rrd2k")
 
-[node name="Characters" type="Sprite2D" parent="Selection"]
-position = Vector2(579, 323)
-scale = Vector2(0.521296, 0.521296)
-texture = ExtResource("3_oe7ax")
+[node name="Characters" type="Control" parent="Selection"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 54.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMage" type="Button" parent="Selection/Characters"]
-offset_left = -1164.0
-offset_top = -599.0
-offset_right = -405.0
-offset_bottom = 180.0
+layout_mode = 1
+offset_right = 340.0
+offset_bottom = 360.0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
 theme_override_styles/hover = ExtResource("5_nwqkb")
@@ -60,10 +93,15 @@ theme_override_styles/pressed = ExtResource("5_nwqkb")
 theme_override_styles/normal = SubResource("StyleBoxTexture_5t5qi")
 
 [node name="ButtonRogue" type="Button" parent="Selection/Characters"]
-offset_left = -433.535
-offset_top = -602.345
-offset_right = 325.465
-offset_bottom = 176.655
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -169.0
+offset_top = -13.0
+offset_right = 171.0
+offset_bottom = 347.0
+grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
 theme_override_styles/hover = ExtResource("5_nwqkb")
@@ -71,10 +109,15 @@ theme_override_styles/pressed = ExtResource("5_nwqkb")
 theme_override_styles/normal = SubResource("StyleBoxTexture_iteob")
 
 [node name="ButtonRanger" type="Button" parent="Selection/Characters"]
-offset_left = 333.783
-offset_top = -602.345
-offset_right = 1092.78
-offset_bottom = 176.655
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -342.0
+offset_top = -5.0
+offset_right = -2.0
+offset_bottom = 355.0
+grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
 theme_override_styles/hover = ExtResource("5_nwqkb")
@@ -82,57 +125,96 @@ theme_override_styles/pressed = ExtResource("5_nwqkb")
 theme_override_styles/normal = SubResource("StyleBoxTexture_336cn")
 
 [node name="ButtonKnight" type="Button" parent="Selection/Characters"]
-offset_left = -11.5099
-offset_top = 613.854
-offset_right = 747.49
-offset_bottom = 1392.85
-rotation = 3.14159
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -380.0
+offset_top = -320.0
+offset_right = -40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = -6.28319
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = ExtResource("5_nwqkb")
-theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_iibqf")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_thm5u")
 theme_override_styles/normal = SubResource("StyleBoxTexture_845l7")
 
 [node name="ButtonBarbarian" type="Button" parent="Selection/Characters"]
-offset_left = 742.38
-offset_top = 606.181
-offset_right = 1501.38
-offset_bottom = 1385.18
-rotation = 3.14159
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 33.0
+offset_top = -314.0
+offset_right = 373.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = ExtResource("5_nwqkb")
-theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8cin8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_jw73i")
 theme_override_styles/normal = SubResource("StyleBoxTexture_oxayx")
 
 [node name="Details" type="Panel" parent="."]
 visible = false
-layout_mode = 0
-offset_right = 1151.0
-offset_bottom = 644.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_oe7ax")
 
-[node name="Character" type="Sprite2D" parent="Details"]
-position = Vector2(561, 346)
-scale = Vector2(0.506922, 0.489661)
+[node name="Character" type="TextureRect" parent="Details"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -271.0
+offset_right = 452.0
+offset_bottom = 299.0
+grow_vertical = 2
+scale = Vector2(1, 0.966)
 texture = ExtResource("6_rrd2k")
+expand_mode = 1
 
 [node name="Title" type="Label" parent="Details"]
-layout_mode = 2
-offset_left = 429.0
-offset_top = 78.0
-offset_right = 752.0
-offset_bottom = 121.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -164.0
+offset_top = 59.0
+offset_right = 159.0
+offset_bottom = 102.0
+grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 35
 text = "Character"
 
 [node name="Description" type="Label" parent="Details"]
-layout_mode = 2
-offset_left = 402.0
-offset_top = 190.0
-offset_right = 869.0
-offset_bottom = 489.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -156.0
+offset_top = -133.0
+offset_right = 311.0
+offset_bottom = 166.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 20
 text = "Description"
@@ -140,15 +222,18 @@ autowrap_mode = 2
 
 [node name="Start" type="Button" parent="Details"]
 z_index = 1
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 893.0
-offset_top = 408.0
-offset_right = -9.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -270.0
+offset_top = -234.0
+offset_right = -20.0
+offset_bottom = -14.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 20
 theme_override_styles/hover = ExtResource("7_pb1v1")
@@ -158,15 +243,15 @@ text = "Start"
 
 [node name="Back" type="Button" parent="Details"]
 z_index = 1
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 891.0
-offset_top = 28.0
-offset_right = -11.0
-offset_bottom = -400.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -262.0
+offset_top = 19.0
+offset_right = -12.0
+offset_bottom = 239.0
+grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 20
 theme_override_styles/hover = ExtResource("7_pb1v1")

@@ -469,6 +469,7 @@ length = 0.5
 [node name="Barbarian" type="CharacterBody3D" groups=["Player"]]
 floor_max_angle = 0.872665
 script = ExtResource("1_w3qu7")
+strength = 30.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
