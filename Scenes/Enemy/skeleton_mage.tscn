@@ -412,9 +412,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
-viewport_path = NodePath("SubViewport")
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bxvsj"]
 gravity = Vector3(0, 2, 0)
 linear_accel_min = -1.69
@@ -429,17 +426,20 @@ turbulence_influence_max = 0.2
 turbulence_initial_displacement_min = -40.0
 turbulence_initial_displacement_max = 40.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nenq2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_evo3p"]
 transparency = 1
-albedo_color = Color(1, 1, 1, 0.607843)
+albedo_color = Color(0.769908, 0.293255, 0.343422, 0.607843)
 metallic_specular = 0.0
 roughness = 0.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_40eh0"]
-material = SubResource("StandardMaterial3D_nenq2")
-radius = 0.075
-height = 0.3
-rings = 1
+material = SubResource("StandardMaterial3D_evo3p")
+radius = 0.091
+height = 0.235
+rings = 2
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_evo3p"]
 length = 0.5
@@ -460,6 +460,7 @@ debug_color = Color(0.867778, 0.353403, 1.92523e-07, 0.42)
 [node name="SpotLight3D" type="SpotLight3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, -0.958983, 0.283463, 0, -0.283463, -0.958983, 0, 1.50829, 0.610549)
 light_color = Color(1, 1, 0.498039, 1)
+light_energy = 5.0
 spot_range = 8.0
 spot_attenuation = 0.0
 spot_angle = 30.0
@@ -703,6 +704,13 @@ transform = Transform3D(-0.999999, -4.98208e-07, -4.87313e-07, -4.59214e-07, -6.
 bone_name = "handslot.l"
 bone_idx = 14
 
+[node name="DeathParticle" type="GPUParticles3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.3)
+emitting = false
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_bxvsj")
+draw_pass_1 = SubResource("SphereMesh_40eh0")
+
 [node name="EnemyUi" parent="." instance=ExtResource("10_3qltn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 texture = SubResource("ViewportTexture_rsyu2")
@@ -712,6 +720,7 @@ wait_time = 3.0
 one_shot = true
 
 [node name="DestroyCooldown" type="Timer" parent="."]
+wait_time = 5.0
 one_shot = true
 
 [node name="HitCooldown" type="Timer" parent="."]
@@ -731,12 +740,6 @@ pitch_scale = 0.9
 stream = ExtResource("14_hbtsn")
 volume_db = -10.0
 pitch_scale = 0.9
-
-[node name="DeathParticle" type="GPUParticles3D" parent="."]
-emitting = false
-amount = 30
-process_material = SubResource("ParticleProcessMaterial_bxvsj")
-draw_pass_1 = SubResource("SphereMesh_40eh0")
 
 [node name="SeparationRay" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.8)

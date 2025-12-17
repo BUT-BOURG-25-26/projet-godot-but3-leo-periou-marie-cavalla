@@ -11,7 +11,7 @@ signal enemy_despawned(enemy)
 @onready var separation_ray = $SeparationRay 
 @onready var enemy_ui = $EnemyUi
 @onready var eyes_light = $Model/SpotLight3D
-@onready var death_particle = $DeathParticle
+@onready var death_particle = $Model/DeathParticle
 @onready var weapon_slot_right = $Model/Rig_Medium/Skeleton3D/HandSlotRight
 @onready var weapon_slot_left = $Model/Rig_Medium/Skeleton3D/HandSlotLeft
 
@@ -166,11 +166,10 @@ func die():
 	if player.has_method("set_money"):
 		player.call("set_money", reward)
 		
-	death_particle.emitting = true
 	eyes_light.queue_free()
 	collision.queue_free()
 	separation_ray.queue_free()
-	
+	enemy_ui.queue_free()
 	anim_state.travel("Death")
 	death_sound.play()
 	dead_cooldown.start()
@@ -252,9 +251,7 @@ func _hit_cooldown() -> void:
 	speed = 2.0
 
 func _dead_cooldown() -> void:
-	model.hide()
-	enemy_ui.hide()
-	death_particle.emitting = false
+	death_particle.emitting = true
 	destroy_cooldown.start()
 
 func _destroy_cooldown() -> void:

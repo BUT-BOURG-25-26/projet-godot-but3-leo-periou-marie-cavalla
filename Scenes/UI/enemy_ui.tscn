@@ -30,7 +30,6 @@ corner_radius_bottom_left = 3
 
 [node name="EnemyUi" type="Sprite3D" node_paths=PackedStringArray("health_bar")]
 gi_lightmap_texel_scale = 0.01
-modulate = Color(0.669865, 0.669865, 0.669865, 1)
 billboard = 1
 texture = SubResource("ViewportTexture_tuyoq")
 script = ExtResource("1_y3cq0")
@@ -69,7 +68,6 @@ value = 100.0
 
 [node name="OverheadMarker" type="Sprite3D" parent="."]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0.661217, 0)
-modulate = Color(0.670588, 0.670588, 0.670588, 1)
 billboard = 1
 no_depth_test = true
 fixed_size = true

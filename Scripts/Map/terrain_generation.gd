@@ -15,7 +15,7 @@ extends Node
 
 @export_group("Spawning Settings")
 @export_range(0.0, 1.0) var structure_spawn_chance: float = 0.4
-@export var structure_exclusion_radius: float = 15.0
+@export var structure_exclusion_radius: float = 20.0
 @export var spawn_radius_protection: float = 5.0
 
 @export_group("Flattening Settings")
@@ -32,7 +32,7 @@ var small_models : Array[PackedScene] = []
 var structure_scenes : Array[PackedScene] = []
 
 var medium_mesh_count = 30
-var small_mesh_count = 80
+var small_mesh_count = 30
 
 var map_loaded_chunks : Array[Vector2] = []
 var map_offset_vector = Vector2(-568, 657)

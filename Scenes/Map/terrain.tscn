@@ -7,10 +7,10 @@ noise_type = 0
 frequency = 0.001
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nkyio"]
-sky_top_color = Color(0.101961, 0.121569, 0.168627, 1)
-sky_horizon_color = Color(0.217939, 0.241559, 0.27935, 1)
-ground_bottom_color = Color(0, 0, 0, 1)
-ground_horizon_color = Color(0.168627, 0.188235, 0.219608, 1)
+sky_top_color = Color(0.361588, 0.395081, 0.600136, 1)
+sky_horizon_color = Color(0.340693, 0.339776, 0.490875, 1)
+ground_bottom_color = Color(0.180392, 0.180392, 0.258824, 1)
+ground_horizon_color = Color(0.566535, 0.609116, 0.98257, 1)
 
 [sub_resource type="Sky" id="Sky_j7f5b"]
 sky_material = SubResource("ProceduralSkyMaterial_nkyio")
@@ -19,17 +19,16 @@ sky_material = SubResource("ProceduralSkyMaterial_nkyio")
 background_mode = 2
 sky = SubResource("Sky_j7f5b")
 ambient_light_source = 3
-tonemap_mode = 3
-tonemap_exposure = 1.6
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 0.5
 glow_enabled = true
-glow_intensity = 1.0
-glow_bloom = 0.2
-volumetric_fog_enabled = true
-volumetric_fog_albedo = Color(0.352941, 0.388235, 0.521569, 1)
+fog_enabled = true
+fog_light_color = Color(0.447262, 0.512633, 0.999995, 1)
+fog_light_energy = 0.3
+fog_sky_affect = 0.5
 adjustment_enabled = true
-adjustment_brightness = 1.1
-adjustment_contrast = 1.1
-adjustment_saturation = 0.8
+adjustment_saturation = 0.7
 
 [node name="Terrain" type="Node3D" groups=["Terrain"]]
 
@@ -42,8 +41,6 @@ environment = SubResource("Environment_t01c8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
-light_color = Color(0.65098, 0.756863, 1, 1)
-light_energy = 0.5
-light_volumetric_fog_energy = 5.0
+light_color = Color(0.584864, 0.671747, 0.786772, 1)
 shadow_enabled = true
-shadow_opacity = 0.2
+shadow_opacity = 0.3

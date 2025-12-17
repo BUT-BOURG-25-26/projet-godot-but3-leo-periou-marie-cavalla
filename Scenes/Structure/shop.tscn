@@ -2241,6 +2241,7 @@ transform = Transform3D(-0.0854965, 0.0291204, -0.995913, 0.322414, 0.946599, 0,
 [node name="OmniLight3D" type="OmniLight3D" parent="torch_lit2"]
 transform = Transform3D(1, 2.98023e-08, 2.98023e-08, 0, 1, -3.72529e-09, -2.98023e-08, 0, 1, -0.0291337, 0.460744, 0.0159731)
 light_color = Color(1, 0.682353, 0.254902, 1)
+light_energy = 5.0
 omni_range = 20.0
 
 [node name="torch_lit3" parent="." instance=ExtResource("13_bcexs")]
@@ -2249,6 +2250,7 @@ transform = Transform3D(-0.0854965, 0.0291204, -0.995913, 0.322414, 0.946599, 0,
 [node name="OmniLight3D2" type="OmniLight3D" parent="torch_lit3"]
 transform = Transform3D(1, 2.98023e-08, 4.47035e-08, 0, 1, -1.86265e-09, -4.47035e-08, 0, 1, -0.0300095, 0.461042, 0.00900888)
 light_color = Color(1, 0.682353, 0.254902, 1)
+light_energy = 5.0
 omni_range = 20.0
 
 [connection signal="animation_finished" from="shopkeeper/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

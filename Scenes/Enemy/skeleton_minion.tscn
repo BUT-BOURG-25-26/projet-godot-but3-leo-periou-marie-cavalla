@@ -397,10 +397,7 @@ states/Start/position = Vector2(323.797, 446.15)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_l6n3p"), "Idle", "Running", SubResource("AnimationNodeStateMachineTransition_olqyp"), "Running", "Idle", SubResource("AnimationNodeStateMachineTransition_wpjfl"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Idle", "Block", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "Block", "Idle", SubResource("AnimationNodeStateMachineTransition_qqcod"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igrcy"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_fs7ks"), "Running", "Block", SubResource("AnimationNodeStateMachineTransition_0gysh"), "Block", "Running", SubResource("AnimationNodeStateMachineTransition_vfarp"), "Jump", "Running", SubResource("AnimationNodeStateMachineTransition_y6uwr"), "Running", "Jump", SubResource("AnimationNodeStateMachineTransition_83xs0"), "Jump", "Block", SubResource("AnimationNodeStateMachineTransition_yh6i2"), "Block", "Jump", SubResource("AnimationNodeStateMachineTransition_nv4vc"), "Shoot", "Idle", SubResource("AnimationNodeStateMachineTransition_0tmd6"), "Idle", "Shoot", SubResource("AnimationNodeStateMachineTransition_o70jo"), "Reload", "Idle", SubResource("AnimationNodeStateMachineTransition_xedyt"), "Idle", "Reload", SubResource("AnimationNodeStateMachineTransition_grtg8"), "Idle", "Death", SubResource("AnimationNodeStateMachineTransition_mknmb"), "Hit", "Idle", SubResource("AnimationNodeStateMachineTransition_8k8vk"), "Idle", "Hit", SubResource("AnimationNodeStateMachineTransition_aqfb7")]
 graph_offset = Vector2(-299, -63)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bxvsj"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pbi3l"]
 gravity = Vector3(0, 2, 0)
 linear_accel_min = -1.69
 linear_accel_max = 5.07
@@ -414,23 +411,27 @@ turbulence_influence_max = 0.2
 turbulence_initial_displacement_min = -40.0
 turbulence_initial_displacement_max = 40.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nenq2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8k8vk"]
 transparency = 1
-albedo_color = Color(1, 1, 1, 0.607843)
+albedo_color = Color(0.769908, 0.293255, 0.343422, 0.607843)
 metallic_specular = 0.0
 roughness = 0.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_40eh0"]
-material = SubResource("StandardMaterial3D_nenq2")
-radius = 0.075
-height = 0.3
-rings = 1
+[sub_resource type="SphereMesh" id="SphereMesh_aqfb7"]
+material = SubResource("StandardMaterial3D_8k8vk")
+radius = 0.091
+height = 0.235
+rings = 2
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_pbi3l"]
 length = 0.5
 
 [node name="SkeletonMinion" type="CharacterBody3D" groups=["Enemy"]]
 script = ExtResource("1_mhbw6")
+health = 50.0
 strength = 2.0
 weapon = "blade"
 reward = 2
@@ -445,6 +446,7 @@ debug_color = Color(0.867778, 0.353403, 1.92523e-07, 0.42)
 [node name="SpotLight3D" type="SpotLight3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, -0.958983, 0.283463, 0, -0.283463, -0.958983, 0, 1.50829, 0.610549)
 light_color = Color(1, 1, 0.498039, 1)
+light_energy = 5.0
 spot_range = 8.0
 spot_attenuation = 0.0
 spot_angle = 30.0
@@ -676,6 +678,13 @@ libraries = {
 tree_root = SubResource("AnimationNodeStateMachine_pbi3l")
 anim_player = NodePath("../AnimationPlayer")
 
+[node name="DeathParticle" type="GPUParticles3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.3)
+emitting = false
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_pbi3l")
+draw_pass_1 = SubResource("SphereMesh_aqfb7")
+
 [node name="EnemyUi" parent="." instance=ExtResource("2_i2sii")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 texture = SubResource("ViewportTexture_rsyu2")
@@ -685,6 +694,7 @@ wait_time = 3.0
 one_shot = true
 
 [node name="DestroyCooldown" type="Timer" parent="."]
+wait_time = 5.0
 one_shot = true
 
 [node name="HitCooldown" type="Timer" parent="."]
@@ -704,12 +714,6 @@ pitch_scale = 0.9
 stream = ExtResource("7_1klhm")
 volume_db = -10.0
 pitch_scale = 0.9
-
-[node name="DeathParticle" type="GPUParticles3D" parent="."]
-emitting = false
-amount = 30
-process_material = SubResource("ParticleProcessMaterial_bxvsj")
-draw_pass_1 = SubResource("SphereMesh_40eh0")
 
 [node name="SeparationRay" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.8)
