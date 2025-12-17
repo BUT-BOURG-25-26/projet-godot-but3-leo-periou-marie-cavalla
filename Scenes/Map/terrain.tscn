@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://eycwk1wjydb2"]
 
 [ext_resource type="Script" uid="uid://cj5scyk3gggno" path="res://Scripts/Map/terrain_generation.gd" id="1_nkyio"]
-[ext_resource type="AudioStream" uid="uid://6rkfwctj0q61" path="res://Assets/Sound/Brume des Ruines.mp3" id="2_j7f5b"]
+[ext_resource type="AudioStream" uid="uid://6rkfwctj0q61" path="res://Assets/Sound/Musique.mp3" id="2_j7f5b"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_j4ig8"]
 noise_type = 0
