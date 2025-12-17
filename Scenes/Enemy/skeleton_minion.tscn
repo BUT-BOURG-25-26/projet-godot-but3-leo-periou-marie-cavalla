@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=4 uid="uid://dqi6v1mhurwxd"]
+[gd_scene load_steps=65 format=4 uid="uid://dqi6v1mhurwxd"]
 
 [ext_resource type="Script" uid="uid://c48k7o5xfy1nd" path="res://Scripts/Enemy/enemy.gd" id="1_mhbw6"]
 [ext_resource type="PackedScene" uid="uid://dqeba56sys60m" path="res://Scenes/UI/enemy_ui.tscn" id="2_i2sii"]
@@ -13,6 +13,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://dlfsjwt6wbpxp" path="res://Animations/MovementBasic.res" id="7_qsyjh"]
 [ext_resource type="AnimationLibrary" uid="uid://cwabe8c0faruf" path="res://Animations/Simulation.res" id="8_ee5d6"]
 [ext_resource type="AnimationLibrary" uid="uid://ctdltg12rqe2v" path="res://Animations/Special.res" id="9_2hb0l"]
+[ext_resource type="Texture2D" uid="uid://dqdcmyuxqmhq6" path="res://Assets/UI/enemy_marker.png" id="14_8k8vk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7waic"]
 radius = 0.9
@@ -715,6 +716,13 @@ draw_pass_1 = SubResource("SphereMesh_40eh0")
 [node name="SeparationRay" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.8)
 shape = SubResource("SeparationRayShape3D_pbi3l")
+
+[node name="OverheadMarker" type="Sprite3D" parent="."]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 3, 0)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("14_8k8vk")
 
 [connection signal="timeout" from="DeadCooldown" to="." method="_dead_cooldown"]
 [connection signal="timeout" from="DestroyCooldown" to="." method="_destroy_cooldown"]
