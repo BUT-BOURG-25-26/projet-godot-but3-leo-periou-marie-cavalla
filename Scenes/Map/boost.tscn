@@ -23,10 +23,9 @@ shape = SubResource("BoxShape3D_k4umm")
 wait_time = 5.0
 
 [node name="OmniLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.1601, 0.0268499)
-light_energy = 6.302
-spot_range = 4.0
-spot_angle = 34.57
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.79906, 0.0268499)
+spot_range = 4.315
+spot_angle = 28.0528
 
 [node name="MadeByJawns_ItchIO_GameItems_v1_0_1_Orb" parent="." instance=ExtResource("2_vlsol")]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 1.2, 0)

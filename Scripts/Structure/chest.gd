@@ -24,6 +24,7 @@ extends StaticBody3D
 @onready var label = $Label3D
 @onready var model = $Model
 @onready var music = $Music
+@onready var light = $SpotLight3D
 
 # Variables d'état
 var player_in_range: Node3D = null
@@ -147,6 +148,7 @@ func take_loot():
 	
 	if label: label.text = ""
 	interaction_area.queue_free()
+	light.queue_free()
 
 # --- DETECTION JOUEUR ---
 func _on_body_entered(body: Node3D):

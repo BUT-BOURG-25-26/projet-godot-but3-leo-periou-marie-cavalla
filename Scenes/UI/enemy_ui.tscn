@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dqeba56sys60m"]
+[gd_scene load_steps=8 format=3 uid="uid://dqeba56sys60m"]
 
 [ext_resource type="Script" uid="uid://cj1pdjp8ywqap" path="res://Scripts/UI/ennemy_ui.gd" id="1_y3cq0"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_txhmy"]
+[ext_resource type="Texture2D" uid="uid://dqdcmyuxqmhq6" path="res://Assets/UI/enemy_marker.png" id="3_ofk50"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tuyoq"]
 viewport_path = NodePath("SubViewport")
@@ -28,6 +29,8 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [node name="EnemyUi" type="Sprite3D" node_paths=PackedStringArray("health_bar")]
+gi_lightmap_texel_scale = 0.01
+modulate = Color(0.669865, 0.669865, 0.669865, 1)
 billboard = 1
 texture = SubResource("ViewportTexture_tuyoq")
 script = ExtResource("1_y3cq0")
@@ -63,3 +66,11 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/background = SubResource("StyleBoxFlat_dqkch")
 theme_override_styles/fill = SubResource("StyleBoxFlat_qlg0r")
 value = 100.0
+
+[node name="OverheadMarker" type="Sprite3D" parent="."]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0.661217, 0)
+modulate = Color(0.670588, 0.670588, 0.670588, 1)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("3_ofk50")

@@ -154,3 +154,12 @@ text = "LOREM IPSUM"
 
 [node name="Music" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_1cib1")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.238737, 0.971084, 0, -0.971084, 0.238737, 0, 3.51715, 0.758083)
+light_color = Color(1, 1, 0.815686, 1)
+light_energy = 5.0
+light_indirect_energy = 5.0
+light_volumetric_fog_energy = 5.0
+spot_range = 3.58199
+spot_angle = 27.406

@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=4 uid="uid://b3o1jm2pd7eyh"]
+[gd_scene load_steps=82 format=4 uid="uid://b3o1jm2pd7eyh"]
 
 [ext_resource type="Script" uid="uid://dysdoj2rf3e2n" path="res://Scripts/Structure/shop.gd" id="1_ugume"]
 [ext_resource type="PackedScene" uid="uid://yanx8xpwhdbu" path="res://Scenes/UI/shop_ui.tscn" id="2_p0vlh"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bfctj05sk2v5y" path="res://Assets/Dungeon/box_small_decorated.gltf" id="9_e48dl"]
 [ext_resource type="PackedScene" uid="uid://dex2twqs6ybxr" path="res://Assets/Dungeon/bed_floor.gltf" id="10_o0gow"]
 [ext_resource type="PackedScene" uid="uid://dya2wjfe4hrxq" path="res://Assets/Dungeon/table_long_tablecloth.gltf" id="12_o0gow"]
+[ext_resource type="PackedScene" uid="uid://c16gy8kghq2ix" path="res://Assets/Dungeon/torch_lit.gltf" id="13_bcexs"]
 [ext_resource type="PackedScene" uid="uid://ct3o6hdy71lli" path="res://Assets/Dungeon/box_stacked.gltf" id="13_jifjd"]
 [ext_resource type="PackedScene" uid="uid://cvj1pftk6161t" path="res://Assets/Dungeon/chair.gltf" id="14_a1nw7"]
 [ext_resource type="PackedScene" uid="uid://dnkax5l2tmrwp" path="res://Assets/Dungeon/coin_stack_small.gltf" id="15_a1nw7"]
@@ -2233,6 +2234,22 @@ shape = SubResource("BoxShape3D_p0vlh")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00111389, 1.47821, -5.01044)
 shape = SubResource("BoxShape3D_bcexs")
+
+[node name="torch_lit2" parent="." instance=ExtResource("13_bcexs")]
+transform = Transform3D(-0.0854965, 0.0291204, -0.995913, 0.322414, 0.946599, 0, 0.94273, -0.321097, -0.0903197, -3, 2, -0.344292)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="torch_lit2"]
+transform = Transform3D(1, 2.98023e-08, 2.98023e-08, 0, 1, -3.72529e-09, -2.98023e-08, 0, 1, -0.0291337, 0.460744, 0.0159731)
+light_color = Color(1, 0.682353, 0.254902, 1)
+omni_range = 20.0
+
+[node name="torch_lit3" parent="." instance=ExtResource("13_bcexs")]
+transform = Transform3D(-0.0854965, 0.0291204, -0.995913, 0.322414, 0.946599, 0, 0.94273, -0.321097, -0.0903197, 3, 2, -0.344)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="torch_lit3"]
+transform = Transform3D(1, 2.98023e-08, 4.47035e-08, 0, 1, -1.86265e-09, -4.47035e-08, 0, 1, -0.0300095, 0.461042, 0.00900888)
+light_color = Color(1, 0.682353, 0.254902, 1)
+omni_range = 20.0
 
 [connection signal="animation_finished" from="shopkeeper/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="WelcomeArea" to="." method="_on_welcome_area_body_entered"]
