@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=4 uid="uid://dcvjg1cxmxftn"]
+[gd_scene load_steps=14 format=4 uid="uid://dcvjg1cxmxftn"]
 
 [ext_resource type="Texture2D" uid="uid://6d6ukr8w8s21" path="res://Assets/Dungeon/dungeon_texture.png" id="1_q8f1e"]
 [ext_resource type="Script" uid="uid://pieuvmhjva5n" path="res://Scripts/Structure/chest.gd" id="1_re7db"]
+[ext_resource type="AudioStream" uid="uid://8qw4pxojtni8" path="res://Assets/Sound/Black Ops Zombies Mystery Box Sound Effects.mp3" id="3_1cib1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orgxe"]
 resource_name = "texture"
@@ -150,3 +151,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.260506, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00985, 0)
 billboard = 1
 text = "LOREM IPSUM"
+
+[node name="Music" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_1cib1")

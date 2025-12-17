@@ -8,18 +8,22 @@ extends StaticBody3D
 	"Melee/axe_1h",
 	"Melee/dagger",
 	"Ranged/crossbow_1h",
+	"Shield/shield_badge",
+	"Shield/shield_round",
+	"Shield/shield_square"
 ]
 @export var opening_delay: float = 0.3
 
 @export_subgroup("Mystery Box Effect")
-@export var mystery_duration: float = 3.5
+@export var mystery_duration: float = 4.5
 @export var initial_switch_speed: float = 0.05
-@export var final_switch_speed: float = 0.6
+@export var final_switch_speed: float = 0.5
 
 @onready var interaction_area = $InteractionArea
 @onready var spawn_point = $SpawnPoint
 @onready var label = $Label3D
 @onready var model = $Model
+@onready var music = $Music
 
 # Variables d'état
 var player_in_range: Node3D = null
@@ -54,6 +58,7 @@ func handle_interaction():
 		take_loot()
 
 func open_chest():
+	music.play()
 	if available_weapons.size() == 0:
 		push_error("Aucune arme dans la liste du coffre !")
 		return
@@ -128,8 +133,13 @@ func update_visual_model(weapon_name: String):
 func take_loot():
 	is_looted = true
 
-	if player_in_range.has_method("equip_weapon"):
-		player_in_range.equip_weapon(generated_weapon_name)
+	if "Shield" in generated_weapon_name:
+		if player_in_range.has_method("equip_shield"):
+			player_in_range.equip_shield(generated_weapon_name)
+	else:
+		# Sinon, on considère que c'est une arme classique
+		if player_in_range.has_method("equip_weapon"):
+			player_in_range.equip_weapon(generated_weapon_name)
 	
 	# On supprime tout le pivot (qui contient l'arme)
 	if loot_pivot:

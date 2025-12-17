@@ -26,7 +26,7 @@ var can_action: bool = true
 var blocking: bool = false
 var is_dead: bool = false
 var current_weapon: Node3D
-var current_shield: Node3D
+var current_shield: Shield
 var ray_offset_distance: float = 0.45
 var base_speed: float
 var base_strength: float
@@ -37,7 +37,6 @@ func _ready() -> void:
 	base_strength = strength
 	player_ui.call("set_health_bar", health)
 	player_ui.call("set_money_counter", money)
-	equip_shield("shield_square")
 	init_player_class()
 
 func _physics_process(delta: float) -> void:
@@ -52,10 +51,13 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var direction
-	var current_speed = speed
-	
+# --- CALCUL DU POIDS ---
+	var weight_penalty = -(strength/100)
 	if current_weapon:
-		current_speed = speed * (1.0 - current_weapon.get("weight"))
+		weight_penalty += current_weapon.get("weight")
+	if current_shield:
+		weight_penalty += current_shield.weight
+	var current_speed = speed * (1.0 - clamp(weight_penalty*3, 0.0, 0.9))
 	
 	if is_on_floor() and can_action:
 		var move_inputs = read_move_input()
@@ -77,6 +79,8 @@ func _physics_process(delta: float) -> void:
 		
 		elif Input.is_action_just_released("block"):
 			blocking = false
+			velocity.x = 0
+			velocity.z = 0
 		
 		elif Input.is_action_just_pressed("jump"):
 			anim_state.travel("Jump") 
@@ -172,9 +176,6 @@ func recalc_stats():
 	
 	if active_boosts.has("Attack"):
 		strength += active_boosts["Attack"]["value"]
-	
-	# Debug print pour vérifier
-	print("Stats Updated: Speed=", speed, " Strength=", strength)
 
 # --- INITIALISATION DE LA CLASSE DU JOUEUR ---
 
@@ -191,7 +192,6 @@ func init_player_class():
 			equip_weapon("Melee/dagger")
 		"Rogue":
 			equip_weapon("Ranged/crossbow_1h")
-
 # --- ANIMATION ---
 
 # Cette fonction détermine le suffixe à utiliser (_1H, _2H, _Bow)
@@ -287,10 +287,33 @@ func _on_weapon_attack_finished():
 
 # --- GESTION MORT ---
 
-func take_damage(damage: float, _get_stand: bool = false):
-	if health > 0 and not blocking:
-		health -= damage
-		player_ui.take_damage(damage)
+func take_damage(damage: float, attacker: Node3D = null, is_ranged: bool = false):
+	if is_dead: return
+
+	var final_damage = damage
+	
+	# --- LOGIQUE DE BLOCAGE ---
+	var successful_block = false
+   
+	if blocking and current_shield:
+	
+		if attacker:
+			var direction_to_attacker = (attacker.global_position - global_position).normalized()
+			var forward_vector = model.global_transform.basis.z 
+			var angle = direction_to_attacker.dot(forward_vector)
+			if angle > 0.0: # Blocage réussi
+				successful_block = true
+		else:
+			successful_block = true 
+
+	# --- APPLICATION ---
+	if successful_block:
+		final_damage = current_shield.process_hit(damage, attacker, is_ranged)
+
+	if final_damage > 0:
+		health -= final_damage
+		player_ui.take_damage(final_damage)
+		
 		if health <= 0:
 			die()
 
@@ -312,7 +335,7 @@ func equip_weapon(weapon_name: String):
 	if not weapon_scene:
 		push_error("Arme introuvable: " + path)
 		return
-
+	
 	if current_weapon:
 		if current_weapon.has_signal("attack_finished"):
 			if current_weapon.attack_finished.is_connected(_on_weapon_attack_finished):
@@ -335,6 +358,9 @@ func equip_weapon(weapon_name: String):
 		
 	current_weapon = new_weapon
 	
+	if "wielder" in current_weapon:
+		current_weapon.wielder = self
+	
 	if current_weapon.has_signal("attack_finished"):
 		current_weapon.attack_finished.connect(_on_weapon_attack_finished)
 	if current_weapon.has_signal("needs_reload"):
@@ -343,18 +369,26 @@ func equip_weapon(weapon_name: String):
 	update_locomotion()
 	
 func equip_shield(shield_name: String):
-	var path = "res://Scenes/Weapons/Shield/%s.tscn" % shield_name
+	var path = "res://Scenes/Weapons/%s.tscn" % shield_name
 	var shield_scene = load(path)
 	
 	if not shield_scene:
 		push_error("Bouclier introuvable: " + path)
 		return
 
+	if current_shield:
+		current_shield.queue_free()
+
 	var new_shield = shield_scene.instantiate()
 	
 	weapon_slot_left.add_child(new_shield)
-		
-	current_shield = new_shield
+	
+	if new_shield is Shield:
+		current_shield = new_shield
+		current_shield.wielder = self
+	
+	else:
+		push_error("La scène chargée n'a pas le script shield.gd")
 
 func read_move_input() -> Vector3:
 	var move_inputs: Vector3 = Vector3.ZERO

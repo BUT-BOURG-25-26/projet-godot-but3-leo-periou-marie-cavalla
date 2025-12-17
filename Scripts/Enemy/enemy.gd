@@ -1,4 +1,4 @@
-extends CharacterBody3D
+class_name Enemy extends CharacterBody3D
 
 # --- SIGNAUX ---
 signal enemy_died(enemy)
@@ -8,6 +8,7 @@ signal enemy_despawned(enemy)
 @onready var player: Node3D = get_tree().get_first_node_in_group("Player")
 @onready var model = $Model
 @onready var collision = $CollisionShape3D
+@onready var separation_ray = $SeparationRay 
 @onready var enemy_ui = $EnemyUi
 @onready var eyes_light = $Model/SpotLight3D
 @onready var death_particle = $DeathParticle
@@ -33,7 +34,7 @@ signal enemy_despawned(enemy)
 @export var speed: float = 2.0 
 @export var strength: float = 5
 @export var max_distance_to_player: float = 50.0
-@export var attack_range: float = 1.5
+@export var attack_range: float = 1.8
 @export_enum("axe","blade","crossbow","staff") var weapon: String
 @export var boost_spawn_rate: int = 5
 @export var reward: int = 0
@@ -42,7 +43,7 @@ signal enemy_despawned(enemy)
 var current_weapon: Node3D
 var can_action: bool = true
 var is_dead: bool = false
-var ray_offset_distance: float = 0.75
+var ray_offset_distance: float = 0.45
 
 func _ready() -> void:
 	enemy_ui.call("set_health_bar", health)
@@ -60,7 +61,7 @@ func _physics_process(delta: float) -> void:
 	# Gestion du Despawn
 	var dist_to_player = global_transform.origin.distance_to(player.global_transform.origin)
 	if dist_to_player > max_distance_to_player:
-		emit_signal("enemy_despawned", self) # On prévient le spawner
+		emit_signal("enemy_despawned", self) 
 		queue_free()
 		return
 	
@@ -72,14 +73,19 @@ func _physics_process(delta: float) -> void:
 	
 	# Rotation vers le joueur
 	var target_rotation = atan2(direction.x, direction.z)
-	model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta*10)
+	model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
+	if separation_ray:
+		# On calcule la position devant l'ennemi basé sur l'angle du modèle
+		var offset_vector = Vector3(0, 0, ray_offset_distance)
+		var rotated_offset = offset_vector.rotated(Vector3.UP, model.rotation.y)
+		separation_ray.position.x = rotated_offset.x
+		separation_ray.position.z = rotated_offset.z
 
 	if is_on_floor() and can_action:
 		# Si on est assez proche pour taper
 		if dist_to_player <= attack_range:
 			velocity.x = 0
 			velocity.z = 0
-			# On vérifie qu'on a une arme avant d'attaquer
 			if current_weapon:
 				trigger_attack()
 		
@@ -89,7 +95,7 @@ func _physics_process(delta: float) -> void:
 			velocity.z = direction.z * speed
 	
 	else:
-		# En l'air ou occupé
+		# En l'air / occupé
 		velocity.y += get_gravity().y * delta
 		if not can_action:
 			velocity.x = 0
@@ -105,7 +111,6 @@ func update_locomotion():
 		return
 
 	var horizontal_velocity = Vector2(velocity.x, velocity.z)
-	# Si on bouge
 	if horizontal_velocity.length() > 0.1:
 		anim_state.travel("Running")
 		return
@@ -122,36 +127,39 @@ func trigger_attack():
 	velocity = Vector3.ZERO
 	
 	var action_name = "Attack"
-	
-	if current_weapon is Ranged: 
+	if current_weapon is Ranged:
 		action_name = "Shoot"
 	
 	anim_state.travel(action_name)
-		
-	current_weapon.start_attack(strength)
 
-func take_damage(damage: float, get_stand: bool = false):
+	if current_weapon.has_method("start_attack"):
+		current_weapon.start_attack(strength)
+
+func take_damage(damage: float, _attacker: Node3D = null, _is_ranged: bool = false):
 	if is_dead: return
 		
 	health -= damage
-	enemy_ui.take_damage(damage)
 	
+	# Mise à jour UI
+	if enemy_ui:
+		enemy_ui.take_damage(damage)
+	
+	# Son
 	if hit_sound.size() > 0:
 		hit_sound[randi() % hit_sound.size()].play()
 		
+	# Animation
 	anim_state.travel("Hit")
 	
+	# Stun
 	can_action = false
-	if get_stand:
-		speed = 0.0
-		
 	hit_cooldown.start()
 	
 	if health <= 0:
 		die()
 
 func die():
-	if is_dead: return # Sécurité pour ne pas mourir 2 fois
+	if is_dead: return 
 	is_dead = true
 	emit_signal("enemy_died", self)
 	
@@ -161,6 +169,7 @@ func die():
 	death_particle.emitting = true
 	eyes_light.queue_free()
 	collision.queue_free()
+	separation_ray.queue_free()
 	
 	anim_state.travel("Death")
 	death_sound.play()
@@ -168,9 +177,9 @@ func die():
 	create_boost()
 	
 func create_boost():
-	if(randi_range(0,10)<boost_spawn_rate):
-		game_manager.create_boost(position)
-		
+	if(randi_range(0,10) < boost_spawn_rate):
+		game_manager.create_boost(global_position)
+
 # --- WEAPON SIGNALS ---
 
 func _on_weapon_attack_finished():
@@ -205,6 +214,7 @@ func equip_weapon(weapon_name: String):
 		return
 
 	if current_weapon:
+		# Nettoyage des signaux avant suppression
 		if current_weapon.has_signal("attack_finished"):
 			if current_weapon.attack_finished.is_connected(_on_weapon_attack_finished):
 				current_weapon.attack_finished.disconnect(_on_weapon_attack_finished)
@@ -215,6 +225,7 @@ func equip_weapon(weapon_name: String):
 
 	var new_weapon = weapon_scene.instantiate()
 	
+	# Gestion de la main
 	var hand = new_weapon.get("hand")
 	if hand == "Right":
 		weapon_slot_right.add_child(new_weapon)
@@ -224,6 +235,10 @@ func equip_weapon(weapon_name: String):
 		weapon_slot_right.add_child(new_weapon)
 		
 	current_weapon = new_weapon
+	
+	# Assignation du propriétaire
+	if "wielder" in current_weapon:
+		current_weapon.wielder = self
 	
 	if current_weapon.has_signal("attack_finished"):
 		current_weapon.attack_finished.connect(_on_weapon_attack_finished)

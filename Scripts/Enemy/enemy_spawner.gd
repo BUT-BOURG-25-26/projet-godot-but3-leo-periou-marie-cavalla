@@ -89,7 +89,7 @@ func spawn_enemy():
 	
 	enemies_active_count += 1
 
-func _on_enemy_killed(enemy_ref):
+func _on_enemy_killed(_enemy_ref):
 	enemies_killed_current += 1
 	enemies_active_count -= 1
 	

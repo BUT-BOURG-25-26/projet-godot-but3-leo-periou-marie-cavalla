@@ -6,11 +6,15 @@ extends Node3D
 	"Melee/sword_1h",
 	"Melee/axe_1h",
 	"Ranged/crossbow_1h",
+	"Shield/shield_badge",
+	"Shield/shield_round",
+	"Shield/shield_square",
 	"Melee/sword_2h",
 	"Melee/axe_2h",
 	"Ranged/crossbow_2h",
 	"Melee/legendary_sword",
-	"Ranged/bow"
+	"Ranged/bow",
+	"Shield/shield_spikes"
 ]
 
 @onready var interaction_area = $InteractionArea
@@ -84,5 +88,5 @@ func _on_welcome_area_body_entered(body: Node3D) -> void:
 		shopkeeper_animationplayer.play("wave")
 
 
-func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+func _on_animation_player_animation_finished(_anim_name: StringName) -> void:
 	shopkeeper_animationplayer.play("idle")

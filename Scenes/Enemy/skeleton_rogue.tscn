@@ -481,6 +481,7 @@ length = 0.5
 
 [node name="SkeletonRogue" type="CharacterBody3D" groups=["Enemy"]]
 script = ExtResource("1_pk5oc")
+strength = 0.0
 attack_range = 10.0
 weapon = "crossbow"
 reward = 3

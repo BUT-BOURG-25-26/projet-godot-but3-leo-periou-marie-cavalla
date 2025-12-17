@@ -446,6 +446,7 @@ length = 0.5
 
 [node name="SkeletonMage" type="CharacterBody3D" groups=["Enemy"]]
 script = ExtResource("1_ev081")
+strength = 0.0
 weapon = "staff"
 reward = 4
 

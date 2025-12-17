@@ -1,8 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8dps25h4s0m7"]
+[gd_scene load_steps=4 format=3 uid="uid://c8dps25h4s0m7"]
 
+[ext_resource type="Script" uid="uid://4hecy2ohbjel" path="res://Scripts/Weapons/shield.gd" id="1_0wjht"]
 [ext_resource type="PackedScene" uid="uid://c0k0a6rslojgy" path="res://Assets/Adventurers/Stuffs/shield_round.gltf" id="1_dwiei"]
 
-[node name="ShieldRound" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_dwiei"]
+size = Vector3(0.899261, 0.887573, 0.297561)
 
-[node name="shield_round2" parent="." instance=ExtResource("1_dwiei")]
+[node name="ShieldRound" type="Node3D" groups=["Shield"]]
+script = ExtResource("1_0wjht")
+melee_resistance = 50.0
+ranged_resistance = 30.0
+weight = 0.05
+cost = 100
+
+[node name="Model" parent="." instance=ExtResource("1_dwiei")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2)
+
+[node name="Hitbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00221252, 0.000305176, 0.248522)
+shape = SubResource("BoxShape3D_dwiei")

@@ -7,6 +7,7 @@
 
 [node name="EnemyCrossbow" type="Node3D"]
 script = ExtResource("1_5ywhg")
+damage = 5.0
 reload_time = 1.1
 projectile_scene = ExtResource("2_8r5tj")
 

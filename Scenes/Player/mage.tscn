@@ -489,7 +489,7 @@ length = 0.5
 [node name="Mage" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_7v433")
 speed = 6.0
-jump_force = 5.0
+strength = 15.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
