@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://dw0d2mlohph0p"]
 
 [ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="1_1ugow"]
+[ext_resource type="PackedScene" uid="uid://b3o1jm2pd7eyh" path="res://Scenes/Structure/shop.tscn" id="3_ad7u8"]
 [ext_resource type="PackedScene" uid="uid://dgjcy8k8wehle" path="res://Scenes/Map/boost.tscn" id="3_f38rr"]
-[ext_resource type="PackedScene" uid="uid://dqi6v1mhurwxd" path="res://Scenes/Enemy/skeleton_minion.tscn" id="4_iqd61"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_phvva"]
 
@@ -151,5 +151,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, 0.350884)
 [node name="Boost5" parent="." instance=ExtResource("3_f38rr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, 4.03789)
 
-[node name="SkeletonMinion" parent="." instance=ExtResource("4_iqd61")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.605704, 4.84035, -8.01094)
+[node name="Shop" parent="." instance=ExtResource("3_ad7u8")]
+transform = Transform3D(-0.999765, 0, 0.0216578, 0, 1, 0, -0.0216578, 0, -0.999765, 1.11165, 0.460855, 4.62218)

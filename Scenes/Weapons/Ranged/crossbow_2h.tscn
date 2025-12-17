@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cy7uq4b3exqhw" path="res://Scripts/Weapons/ranged.gd" id="1_n2aft"]
 [ext_resource type="PackedScene" uid="uid://e7kscl0n5i8g" path="res://Assets/Adventurers/Stuffs/crossbow_2handed.gltf" id="2_jbjja"]
 [ext_resource type="PackedScene" uid="uid://ctyfq87l3ko8p" path="res://Scenes/Weapons/Ranged/crossbow_arrow.tscn" id="2_qslko"]
-[ext_resource type="AudioStream" uid="uid://115jg11p3gsp" path="res://Assets/Sound/Whoosh.mp3" id="3_n2aft"]
+[ext_resource type="AudioStream" uid="uid://dapveegqstyjo" path="res://Assets/Sound/crossbow_2h_sound.wav" id="4_qslko"]
 
 [node name="Crossbow2H" type="Node3D"]
 script = ExtResource("1_n2aft")
@@ -24,4 +24,5 @@ one_shot = true
 one_shot = true
 
 [node name="ShootSound" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_n2aft")
+stream = ExtResource("4_qslko")
+volume_db = -5.0
