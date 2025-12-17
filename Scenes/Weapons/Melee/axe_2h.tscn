@@ -9,7 +9,7 @@ size = Vector3(1.31793, 1.76212, 0.357025)
 
 [node name="Axe2H" type="Node3D"]
 script = ExtResource("1_3tsdv")
-damage = 8.0
+damage = 12.0
 cooldown_time = 0.3
 is_two_handed = true
 weight = 0.3

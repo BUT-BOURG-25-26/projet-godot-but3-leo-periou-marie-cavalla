@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://6rkfwctj0q61"
+path="res://.godot/imported/Brume des Ruines.mp3-62ff8b6c7f556e6015f683072a27ef89.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sound/Brume des Ruines.mp3"
+dest_files=["res://.godot/imported/Brume des Ruines.mp3-62ff8b6c7f556e6015f683072a27ef89.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

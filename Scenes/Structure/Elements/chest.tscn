@@ -154,6 +154,7 @@ text = "LOREM IPSUM"
 
 [node name="Music" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_1cib1")
+volume_db = -5.0
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.130139, 0)

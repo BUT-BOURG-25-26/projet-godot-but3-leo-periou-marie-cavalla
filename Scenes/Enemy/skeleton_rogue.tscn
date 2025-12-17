@@ -779,17 +779,17 @@ one_shot = true
 [node name="HitCooldown" type="Timer" parent="."]
 one_shot = true
 
-[node name="HitSound1" type="AudioStreamPlayer" parent="."]
+[node name="HitSound1" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("12_epdf6")
 volume_db = -10.0
 pitch_scale = 0.9
 
-[node name="HitSound2" type="AudioStreamPlayer" parent="."]
+[node name="HitSound2" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("13_ktkir")
 volume_db = -10.0
 pitch_scale = 0.9
 
-[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+[node name="DeathSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("14_5vw62")
 volume_db = -10.0
 pitch_scale = 0.9

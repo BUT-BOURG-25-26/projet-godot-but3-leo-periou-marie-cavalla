@@ -1,10 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://dw0d2mlohph0p"]
+[gd_scene load_steps=11 format=3 uid="uid://dw0d2mlohph0p"]
 
 [ext_resource type="PackedScene" uid="uid://bab6l552nlgow" path="res://Scenes/Player/barbarian.tscn" id="1_1ugow"]
 [ext_resource type="PackedScene" uid="uid://dgjcy8k8wehle" path="res://Scenes/Map/boost.tscn" id="3_f38rr"]
 [ext_resource type="PackedScene" uid="uid://dqi6v1mhurwxd" path="res://Scenes/Enemy/skeleton_minion.tscn" id="4_iqd61"]
-[ext_resource type="PackedScene" uid="uid://tmi2hicjfix7" path="res://Scenes/Enemy/skeleton_rogue.tscn" id="5_akl4t"]
-[ext_resource type="PackedScene" uid="uid://cximaib1iboy2" path="res://Scenes/Enemy/skeleton_warrior.tscn" id="6_3o10a"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_phvva"]
 
@@ -152,12 +150,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, 0.350884)
 
 [node name="Boost5" parent="." instance=ExtResource("3_f38rr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0957, 0.112802, 4.03789)
-
-[node name="SkeletonWarrior" parent="." instance=ExtResource("6_3o10a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.59644, 4.84035, -1.42418)
-
-[node name="SkeletonRogue" parent="." instance=ExtResource("5_akl4t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.40909, 4.84035, 0.645957)
 
 [node name="SkeletonMinion" parent="." instance=ExtResource("4_iqd61")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.605704, 4.84035, -8.01094)

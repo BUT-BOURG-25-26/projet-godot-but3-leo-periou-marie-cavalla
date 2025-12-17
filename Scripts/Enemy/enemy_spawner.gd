@@ -47,7 +47,7 @@ func start_round():
 	enemies_killed_current = 0
 	
 	# Calcul du nombre d'ennemis pour cette manche
-	enemies_to_kill_total = 1 + (current_round - 1)
+	enemies_to_kill_total = 5 + (current_round - 1)
 	
 	player_ui.call("set_wave_counter", current_round)
 	

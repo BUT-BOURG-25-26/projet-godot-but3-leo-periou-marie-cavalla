@@ -21,16 +21,16 @@ signal enemy_despawned(enemy)
 @onready var destroy_cooldown = $DestroyCooldown
 
 # Audio
-@onready var hit_sound : Array[AudioStreamPlayer] = [$HitSound1, $HitSound2]
+@onready var hit_sound : Array[AudioStreamPlayer3D] = [$HitSound1, $HitSound2]
 @onready var death_sound = $DeathSound
 
 # Animation
 @onready var anim_tree = $Model/AnimationTree
+@onready var animation_player = $Model/AnimationPlayer
 @onready var anim_state = anim_tree.get("parameters/playback")
 
 # --- EXPORT VARIABLES ---
 @export var health: float = 100
-@export var boss_health: float = 150
 @export var speed: float = 2.0 
 @export var strength: float = 5
 @export var max_distance_to_player: float = 50.0
@@ -130,7 +130,10 @@ func trigger_attack():
 	if current_weapon is Ranged:
 		action_name = "Shoot"
 	
-	anim_state.travel(action_name)
+	if anim_state.get_current_node() == action_name:
+		anim_state.start(action_name)
+	else:
+		anim_state.travel(action_name)
 
 	if current_weapon.has_method("start_attack"):
 		current_weapon.start_attack(strength)
@@ -149,7 +152,10 @@ func take_damage(damage: float, _attacker: Node3D = null, _is_ranged: bool = fal
 		hit_sound[randi() % hit_sound.size()].play()
 		
 	# Animation
-	anim_state.travel("Hit")
+	if anim_state.get_current_node() == "Hit":
+		anim_state.start("Hit")
+	else:
+		anim_state.travel("Hit")
 	
 	# Stun
 	can_action = false
