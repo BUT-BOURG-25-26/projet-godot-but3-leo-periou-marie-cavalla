@@ -8,8 +8,7 @@ size = Vector3(0.899261, 0.887573, 0.297561)
 
 [node name="ShieldRound" type="Node3D" groups=["Shield"]]
 script = ExtResource("1_0wjht")
-melee_resistance = 50.0
-ranged_resistance = 30.0
+ranged_resistance = 50.0
 weight = 0.05
 cost = 100
 

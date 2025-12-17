@@ -1,4 +1,4 @@
-[gd_scene load_steps=110 format=4 uid="uid://cmolhoqu4adpx"]
+[gd_scene load_steps=111 format=4 uid="uid://cmolhoqu4adpx"]
 
 [ext_resource type="Texture2D" uid="uid://6d6ukr8w8s21" path="res://Assets/Dungeon/dungeon_texture.png" id="8_tl5x1"]
 [ext_resource type="PackedScene" uid="uid://b6lfngim8efn6" path="res://Assets/Dungeon/barrier.gltf" id="9_ngcgg"]
@@ -857,6 +857,9 @@ size = Vector3(0.508148, 0.680455, 1.67)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ngcgg"]
 size = Vector3(0.508148, 0.680455, 2.3202)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ouqho"]
+size = Vector3(2.021, 0.126587, 0.384155)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yxoo3"]
 resource_name = "texture"
 albedo_texture = ExtResource("8_tl5x1")
@@ -1394,6 +1397,14 @@ shape = SubResource("BoxShape3D_h4g6n")
 [node name="CollisionShape3D6" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(-0.00626562, 0, -0.99998, 0, 1, 0, 0.99998, 0, -0.00626562, -5.48635, 8.35179, -6.68496)
 shape = SubResource("BoxShape3D_ngcgg")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.988732, 3.80718, -0.425046)
+shape = SubResource("BoxShape3D_ouqho")
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.45524, 7.77283, -5.50749)
+shape = SubResource("BoxShape3D_ouqho")
 
 [node name="floor_foundation_allsides7" type="Node3D" parent="."]
 transform = Transform3D(4.985, 0, 0, 0, 4, 0, 0, 0, 5.51, -1.46134, -8, -1.56292)

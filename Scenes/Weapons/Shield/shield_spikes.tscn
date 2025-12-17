@@ -8,7 +8,8 @@ size = Vector3(1.01013, 1.04443, 0.451717)
 
 [node name="ShieldSpikes" type="Node3D" groups=["Shield"]]
 script = ExtResource("1_8a5y2")
-ranged_resistance = 50.0
+melee_resistance = 90.0
+ranged_resistance = 70.0
 cost = 800
 has_spikes = true
 
