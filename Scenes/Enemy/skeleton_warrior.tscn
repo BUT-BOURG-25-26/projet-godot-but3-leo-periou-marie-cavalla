@@ -465,7 +465,6 @@ length = 0.5
 
 [node name="SkeletonWarrior" type="CharacterBody3D" groups=["Enemy"]]
 script = ExtResource("1_intqh")
-strength = 0.0
 weapon = "axe"
 reward = 5
 
