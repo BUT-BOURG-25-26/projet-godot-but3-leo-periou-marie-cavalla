@@ -11,7 +11,7 @@ func _ready():
 	close_button.pressed.connect(close_shop)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-func _input(event):
+func _input(_event):
 	# Fermer
 	if Input.is_action_just_pressed("pause") and visible:
 		visible = !visible

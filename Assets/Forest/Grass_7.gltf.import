@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dxioyslk4gu4f"
-path="res://.godot/imported/Grass_2_D_Color1.gltf-719eacd233f86ddf1bc28c4606656e9a.scn"
+uid="uid://bmgf50u7nmgya"
+path="res://.godot/imported/Grass_7.gltf-e1379b2c258df81f50b51d7f222a2ec3.scn"
 
 [deps]
 
-source_file="res://Assets/Forest/Grass_2_D_Color1.gltf"
-dest_files=["res://.godot/imported/Grass_2_D_Color1.gltf-719eacd233f86ddf1bc28c4606656e9a.scn"]
+source_file="res://Assets/Forest/Grass_7.gltf"
+dest_files=["res://.godot/imported/Grass_7.gltf-e1379b2c258df81f50b51d7f222a2ec3.scn"]
 
 [params]
 

@@ -25,14 +25,14 @@ func set_money_counter(number):
 	money_counter.text = str(number)
 	
 func set_wave_counter(number):
-	wave_counter.text = "Vague : " + str(number)
+	wave_counter.text = "Wave : " + str(number)
 	
 func set_next_wave(number):
 	if (number == 0):
 		next_wave.hide()
 	else:
 		next_wave.show()
-		next_wave.text = "PROCHAINE VAGUE : " + str(number) + "s"
+		next_wave.text = "NEXT WAVE : " + str(number) + "s"
 
 # --- GESTION DES BOOSTS UI ---
 func update_boosts_display(active_boosts: Dictionary):
