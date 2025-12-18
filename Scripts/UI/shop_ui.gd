@@ -11,6 +11,12 @@ func _ready():
 	close_button.pressed.connect(close_shop)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+func _input(event):
+	# Fermer
+	if Input.is_action_just_pressed("pause") and visible:
+		visible = !visible
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
 func open_shop(player: CharacterBody3D, available_weapons_data: Array):
 	player_ref = player
 	update_money_display()
@@ -37,7 +43,6 @@ func open_shop(player: CharacterBody3D, available_weapons_data: Array):
 	
 	show()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	get_tree().paused = true
 
 func _on_buy_item(weapon_data: Dictionary, button_ref: Button):
 	if player_ref.money >= weapon_data["cost"]:
@@ -46,15 +51,13 @@ func _on_buy_item(weapon_data: Dictionary, button_ref: Button):
 		update_money_display()
 		weapon_data["sold"] = true
 		
-		# --- MODIFICATION EQUIPEMENT ---
+		# --- EQUIPEMENT ---
 		if "Shield" in weapon_data["full_path"]:
 			if player_ref.has_method("equip_shield"):
 				player_ref.equip_shield(weapon_data["full_path"])
-				print("Achat bouclier équipé : ", weapon_data["full_path"])
 		else:
 			if player_ref.has_method("equip_weapon"):
 				player_ref.equip_weapon(weapon_data["full_path"])
-				print("Achat arme équipée : ", weapon_data["full_path"])
 		
 		# UI Update
 		button_ref.disabled = true
@@ -84,5 +87,4 @@ func update_money_display():
 
 func close_shop():
 	hide()
-	get_tree().paused = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

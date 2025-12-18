@@ -4,6 +4,7 @@ extends Node3D
 var skeleton_minion: PackedScene = preload("res://Scenes/Enemy/skeleton_minion.tscn")
 var skeleton_rogue: PackedScene = preload("res://Scenes/Enemy/skeleton_rogue.tscn")
 var skeleton_warrior: PackedScene = preload("res://Scenes/Enemy/skeleton_warrior.tscn")
+var skeleton_boss: PackedScene = preload("res://Scenes/Enemy/skeleton_boss.tscn")
 
 var enemy_list = [
 	skeleton_minion,
@@ -14,7 +15,7 @@ var enemy_list = [
 # -- Export variables --
 @export var min_distance_from_player = 10
 @export var max_distance_to_add = 15
-@export var max_enemies_on_map: int = 15
+@export var max_enemies_on_map: int = 10
 @export var round_cooldown_time: int = 20
 
 # -- Variables de gestion de Manche --
@@ -22,6 +23,11 @@ var current_round: int = 1
 var enemies_to_kill_total: int = 0
 var enemies_killed_current: int = 0
 var enemies_active_count: int = 0
+
+# -- Variables Boss --
+var bosses_to_spawn_total: int = 0
+var bosses_spawned_current: int = 0
+
 var player_ui: Sprite3D
 var is_round_in_progress: bool = false
 var player: Node3D
@@ -45,7 +51,21 @@ func _on_player_spawned(spawned_player):
 func start_round():
 	is_round_in_progress = true
 	enemies_killed_current = 0
+	enemies_active_count = 0 # Sécurité
+	
+	# Reset des compteurs Boss
+	bosses_to_spawn_total = 0
+	bosses_spawned_current = 0
+	
+	# Calcul des ennemis de base
 	enemies_to_kill_total = 5 + (current_round - 1)
+	
+	# --- LOGIQUE BOSS (Toutes les 10 manches) ---
+	if current_round % 10 == 0:
+		var nb_boss = int(current_round / 10)
+		bosses_to_spawn_total = nb_boss
+		enemies_to_kill_total += bosses_to_spawn_total
+	
 	player_ui.call("set_wave_counter", current_round)
 	spawn_timer.start()
 
@@ -64,11 +84,19 @@ func _on_spawn_try():
 func spawn_enemy():
 	# Position valide au sol
 	var valid_ground_pos = find_valid_spawn_pos()
-	
 	if valid_ground_pos == Vector3.INF:
 		return
 
-	var enemy_scene = enemy_list.pick_random()
+	var enemy_scene: PackedScene
+	
+	# --- CHOIX DE L'ENNEMI (PRIORITE AU BOSS) ---
+	if bosses_spawned_current < bosses_to_spawn_total:
+		enemy_scene = skeleton_boss
+		bosses_spawned_current += 1
+	else:
+		# Sinon spawn classique
+		enemy_scene = enemy_list.pick_random()
+
 	var enemy = enemy_scene.instantiate()
 	get_parent().add_child(enemy)
 	
@@ -89,16 +117,15 @@ func find_valid_spawn_pos() -> Vector3:
 	var max_attempts = 10
 	
 	for i in range(max_attempts):
-		# Coordonnées X/Z
 		var x = (min_distance_from_player + rng.randf_range(0, max_distance_to_add)) * get_positive_or_negative()
 		var z = (min_distance_from_player + rng.randf_range(0, max_distance_to_add)) * get_positive_or_negative()
 		var target_pos = player.global_position + Vector3(x, 0, z)
 		
-		# Raycast
 		var from_pos = Vector3(target_pos.x, 50.0, target_pos.z)
 		var to_pos = Vector3(target_pos.x, -50.0, target_pos.z)
 		
 		var query = PhysicsRayQueryParameters3D.create(from_pos, to_pos)
+		query.collision_mask = 1
 		
 		var result = space_state.intersect_ray(query)
 		
@@ -107,14 +134,17 @@ func find_valid_spawn_pos() -> Vector3:
 			if collider.is_in_group("Terrain"):
 				return result.position
 	
-	return Vector3.INF # Échec
+	return Vector3.INF
 
 func _on_enemy_killed(_enemy_ref):
 	enemies_killed_current += 1
 	enemies_active_count -= 1
 	
-func _on_enemy_despawned(_enemy_ref):
+func _on_enemy_despawned(enemy_ref):
 	enemies_active_count -= 1
+
+	if enemy_ref.get("is_boss"):
+		bosses_spawned_current -= 1
 	
 func end_round():
 	is_round_in_progress = false

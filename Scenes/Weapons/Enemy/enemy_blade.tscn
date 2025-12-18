@@ -10,7 +10,7 @@ size = Vector3(0.56648, 1.52242, 0.198021)
 [node name="EnemyBlade" type="Node3D"]
 script = ExtResource("1_bmi2l")
 damage = 3.0
-cooldown_time = 1.0
+cooldown_time = 0.5
 weight = 0.2
 target = "Player"
 

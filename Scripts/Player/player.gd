@@ -67,12 +67,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 		
-		# --- GESTION INPUTS ---
+		# --- GESTION ACTIONS ---
 		
-		if Input.is_action_just_pressed("attack") and current_weapon:
-			trigger_attack()
-		
-		elif Input.is_action_pressed("block"):
+		if Input.is_action_pressed("block"):
 			blocking = true
 			velocity = Vector3.ZERO
 			direction = Vector3.ZERO
@@ -227,6 +224,12 @@ func update_locomotion():
 	anim_state.travel("Idle" + get_anim_suffix())
 
 # --- ACTIONS ---
+func _unhandled_input(event: InputEvent) -> void:
+	if is_dead or not can_action:
+		return
+
+	if event.is_action_pressed("attack") and current_weapon and is_on_floor():
+		trigger_attack()
 
 func add_boost(type:String):
 	match type :
@@ -252,6 +255,9 @@ func remove_boost(type:String):
 			speed -= 5
 
 func trigger_attack():
+	if not can_action:
+		return
+
 	can_action = false
 	velocity = Vector3.ZERO
 	
@@ -389,6 +395,17 @@ func equip_shield(shield_name: String):
 	
 	else:
 		push_error("La scène chargée n'a pas le script shield.gd")
+
+func unequip_item(hand: String):
+	if hand == "Right":
+		if current_weapon:
+			current_weapon.queue_free()
+			current_weapon = null
+			
+	elif hand == "Left":
+		if current_shield:
+			current_shield.queue_free()
+			current_shield = null
 
 func read_move_input() -> Vector3:
 	var move_inputs: Vector3 = Vector3.ZERO
