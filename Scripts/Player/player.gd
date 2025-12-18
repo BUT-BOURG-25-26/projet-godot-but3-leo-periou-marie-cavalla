@@ -12,6 +12,8 @@ class_name Player extends CharacterBody3D
 @onready var weapon_slot_left = $Model/Rig_Medium/Skeleton3D/HandSlotLeft
 @onready var collision_shape = $CollisionShape3D
 @onready var separation_ray = $SeparationRay
+@onready var item_sound = $ItemSound
+@onready var block_sound = $BlockSound
 
 # --- EXPORT STATS ---
 @export var speed: float = 5.0
@@ -314,6 +316,7 @@ func take_damage(damage: float, attacker: Node3D = null, is_ranged: bool = false
 
 	# --- APPLICATION ---
 	if successful_block:
+		block_sound.play()
 		final_damage = current_shield.process_hit(damage, attacker, is_ranged)
 
 	if final_damage > 0:
@@ -372,6 +375,7 @@ func equip_weapon(weapon_name: String):
 	if current_weapon.has_signal("needs_reload"):
 		current_weapon.needs_reload.connect(_on_weapon_needs_reload)
 	
+	item_sound.play()
 	update_locomotion()
 	
 func equip_shield(shield_name: String):
@@ -388,6 +392,7 @@ func equip_shield(shield_name: String):
 	var new_shield = shield_scene.instantiate()
 	
 	weapon_slot_left.add_child(new_shield)
+	item_sound.play()
 	
 	if new_shield is Shield:
 		current_shield = new_shield
@@ -399,11 +404,13 @@ func equip_shield(shield_name: String):
 func unequip_item(hand: String):
 	if hand == "Right":
 		if current_weapon:
+			item_sound.play()
 			current_weapon.queue_free()
 			current_weapon = null
 			
 	elif hand == "Left":
 		if current_shield:
+			item_sound.play()
 			current_shield.queue_free()
 			current_shield = null
 

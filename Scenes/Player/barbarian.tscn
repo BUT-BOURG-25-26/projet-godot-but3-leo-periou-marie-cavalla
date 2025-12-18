@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=4 uid="uid://bab6l552nlgow"]
+[gd_scene load_steps=95 format=4 uid="uid://bab6l552nlgow"]
 
 [ext_resource type="Script" uid="uid://dbxgy53bxnoa1" path="res://Scripts/Player/player.gd" id="1_w3qu7"]
 [ext_resource type="Texture2D" uid="uid://dl3v4hxux5n18" path="res://Assets/Adventurers/Characters/Barbarian/Barbarian_barbarian_texture.png" id="2_4ul4d"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://boerdh1qrcjcy" path="res://Scenes/UI/mobile_ui.tscn" id="13_ox7lb"]
 [ext_resource type="PackedScene" uid="uid://cygjqnnlqbe23" path="res://Scenes/UI/pause_ui.tscn" id="14_frwf0"]
 [ext_resource type="PackedScene" uid="uid://djty3husfmngi" path="res://Scenes/UI/inventory_ui.tscn" id="15_7dx2w"]
+[ext_resource type="AudioStream" uid="uid://cnvruu4voiw0g" path="res://Assets/Sound/item-equip.mp3" id="16_w6ij0"]
+[ext_resource type="AudioStream" uid="uid://djdqgnsaena3j" path="res://Assets/Sound/block.wav" id="17_vmtvp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3vyb7"]
 height = 2.2
@@ -726,3 +728,11 @@ player_ref = NodePath("..")
 [node name="SeparationRay" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.45)
 shape = SubResource("SeparationRayShape3D_w3qu7")
+
+[node name="ItemSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("16_w6ij0")
+volume_db = -5.0
+
+[node name="BlockSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("17_vmtvp")
+volume_db = -10.0

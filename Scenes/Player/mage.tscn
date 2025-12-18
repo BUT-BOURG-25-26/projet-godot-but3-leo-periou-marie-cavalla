@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=4 uid="uid://gju534ayg6my"]
+[gd_scene load_steps=96 format=4 uid="uid://gju534ayg6my"]
 
 [ext_resource type="Script" uid="uid://dbxgy53bxnoa1" path="res://Scripts/Player/player.gd" id="1_7v433"]
 [ext_resource type="AnimationLibrary" uid="uid://bqtm2hwfvvdt5" path="res://Animations/CombatMelee.res" id="2_gjwmy"]
@@ -13,7 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://5i5l8nr83koe" path="res://Scenes/UI/player_ui.tscn" id="11_rtmid"]
 [ext_resource type="PackedScene" uid="uid://rdapyw8xtdh0" path="res://Scenes/UI/death_screen.tscn" id="12_ikrqi"]
 [ext_resource type="PackedScene" uid="uid://boerdh1qrcjcy" path="res://Scenes/UI/mobile_ui.tscn" id="13_co4e1"]
+[ext_resource type="PackedScene" uid="uid://djty3husfmngi" path="res://Scenes/UI/inventory_ui.tscn" id="14_aps0p"]
 [ext_resource type="PackedScene" uid="uid://cygjqnnlqbe23" path="res://Scenes/UI/pause_ui.tscn" id="14_k64qu"]
+[ext_resource type="AudioStream" uid="uid://cnvruu4voiw0g" path="res://Assets/Sound/item-equip.mp3" id="15_gjwmy"]
+[ext_resource type="AudioStream" uid="uid://djdqgnsaena3j" path="res://Assets/Sound/block.wav" id="17_pd6ga"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3vyb7"]
 height = 2.2
@@ -738,8 +741,19 @@ spring_arm = NodePath("../SpringArm3D/SpringPosition")
 
 [node name="MobileUi" parent="." instance=ExtResource("13_co4e1")]
 
+[node name="InventoryUi" parent="." node_paths=PackedStringArray("player_ref") instance=ExtResource("14_aps0p")]
+player_ref = NodePath("")
+
 [node name="PauseUi" parent="." instance=ExtResource("14_k64qu")]
 
 [node name="SeparationRay" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.45)
 shape = SubResource("SeparationRayShape3D_7v433")
+
+[node name="ItemSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("15_gjwmy")
+volume_db = -5.0
+
+[node name="BlockSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("17_pd6ga")
+volume_db = -10.0

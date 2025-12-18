@@ -42,13 +42,12 @@ func _ready() -> void:
 	hitbox.body_entered.connect(_on_body_entered)
 		
 func start_attack(strength: float) -> void:
+	if attack_sound:
+		attack_sound.play()
 	wielder_strength = strength
 	delay_timer.start()
 
 func _on_delay_timeout() -> void:
-	if attack_sound:
-		attack_sound.play()
-	
 	is_hitbox_active = true
 	hit_history.clear()
 	hitbox.monitoring = true

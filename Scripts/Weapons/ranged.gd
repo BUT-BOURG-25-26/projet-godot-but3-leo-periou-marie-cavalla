@@ -61,5 +61,5 @@ func spawn_projectile() -> void:
 		var projectile = projectile_scene.instantiate()
 		get_tree().root.add_child(projectile)
 		projectile.global_position = spawn_point.global_position
-		projectile.global_rotation = spawn_point.global_rotation 
+		projectile.global_rotation.y = spawn_point.global_rotation.y
 		projectile.setup(damage + wielder_strength, projectile_speed, wielder)

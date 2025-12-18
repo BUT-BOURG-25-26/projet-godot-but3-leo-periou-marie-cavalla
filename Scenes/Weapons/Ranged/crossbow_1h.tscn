@@ -8,6 +8,7 @@
 [node name="Crossbow1H" type="Node3D"]
 script = ExtResource("1_y56eg")
 reload_time = 1.1
+delay_time = 0.4
 weight = 0.2
 cost = 100
 projectile_scene = ExtResource("2_cs26p")
@@ -26,4 +27,4 @@ one_shot = true
 
 [node name="ShootSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_cs26p")
-volume_db = -5.0
+volume_db = -15.0

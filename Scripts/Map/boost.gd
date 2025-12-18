@@ -4,6 +4,9 @@ extends Node3D
 @onready var health_model = $Health
 @onready var speed_model = $Speed
 
+@onready var boost_free = $BoostTimer
+@onready var boost_sound = $BoostSound
+
 var rng_boost = {
 	"Health": 50,
 	"Attack": 25,
@@ -12,6 +15,7 @@ var rng_boost = {
 
 var type: String = ""
 var duration: float = 20.0
+var taken = false
 
 func _ready():
 	type = get_weighted_random_type()
@@ -46,7 +50,13 @@ func _process(delta: float) -> void:
 	rotation.y += delta * 1.5
 
 func _on_boost_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Player"):
+	if body.is_in_group("Player") and !taken:
 		var player = body as Player
+		taken = true
 		player.apply_boost(type, duration)
-		queue_free()
+		boost_sound.play()
+		hide()
+		boost_free.start()
+
+func _on_boost_timer_timeout() -> void:
+	queue_free()
