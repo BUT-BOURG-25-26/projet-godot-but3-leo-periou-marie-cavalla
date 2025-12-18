@@ -84,9 +84,7 @@ func load_chunks_around_player(center_x: int, center_z: int):
 			if not already_loaded:
 				WorkerThreadPool.add_task(Callable(self, "_thread_generate_chunk_data").bind(chunk_coord))
 
-# ------------------------------------------------------------------------------
-# FONCTION DETERMINISTE
-# ------------------------------------------------------------------------------
+# --- FONCTION DETERMINISTE ---
 func _get_structure_info_for_chunk(chunk_x_idx: int, chunk_z_idx: int) -> Dictionary:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = hash(Vector2i(chunk_x_idx, chunk_z_idx)) + noise.seed
@@ -121,9 +119,7 @@ func _get_structure_info_for_chunk(chunk_x_idx: int, chunk_z_idx: int) -> Dictio
 		"rot": rot_y
 	}
 
-# ------------------------------------------------------------------------------
-# THREAD
-# ------------------------------------------------------------------------------
+# --- THREAD ---
 func _thread_generate_chunk_data(chunk_coord: Vector2):
 	var chunk_world_x = chunk_coord.x * size_width
 	var chunk_world_z = chunk_coord.y * size_depth
@@ -137,7 +133,7 @@ func _thread_generate_chunk_data(chunk_coord: Vector2):
 			var info = _get_structure_info_for_chunk(x, z)
 			if info.has("exists"):
 				nearby_structures.append(info.pos)
-				# Si c'est le chunk actuel, on sauvegarde les infos complètes pour l'instanciation plus tard
+				# Si c'est le chunk actuel
 				if x == chunk_coord.x and z == chunk_coord.y:
 					my_structure_info = info
 
@@ -163,7 +159,7 @@ func _thread_generate_chunk_data(chunk_coord: Vector2):
 			var dist = Vector2(gx, gz).distance_to(Vector2(struct_pos.x, struct_pos.z))
 			
 			if dist < blend_radius:
-				# Si on est dans le rayon d'influence, on applique l'aplatissement
+				# Applique l'aplatissement
 				if dist < flat_radius:
 					# Force le plat
 					final_y = struct_pos.y
@@ -245,27 +241,37 @@ func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_s
 			
 		result_array.append({"type": type, "pos": current_pos, "rot_y": randf() * TAU, "scale": scale_val})
 
-# ------------------------------------------------------------------------------
-# MAIN THREAD
-# ------------------------------------------------------------------------------
+# --- MAIN THREAD ---
 func _finalize_chunk_generation(data: Dictionary):
 	var new_mesh = ArrayMesh.new()
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data.mesh_arrays)
 	
+	# Gestion de la texture
 	var material := StandardMaterial3D.new()
-	if terrain_texture: material.albedo_texture = terrain_texture
+	if terrain_texture: 
+		material.albedo_texture = terrain_texture
+		material.uv1_scale = Vector3(10.0, 10.0, 10.0)
 	new_mesh.surface_set_material(0, material)
 	
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.mesh = new_mesh
 	mesh_instance.position = data.world_pos
 	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	mesh_instance.add_to_group("NavSource")
+	mesh_instance.add_to_group("NavSource") 
 	add_child(mesh_instance)
 	
 	await get_tree().process_frame
+	
+	# Création de la collision physique
 	mesh_instance.create_trimesh_collision()
+	
 	await get_tree().process_frame
+
+	if mesh_instance.get_child_count() > 0:
+		var static_body = mesh_instance.get_child(0)
+		if static_body is StaticBody3D:
+			static_body.add_to_group("Terrain") 
+			static_body.collision_layer = 1 
 	
 	# Instanciation de la structure
 	var s_info = data.structure_info
@@ -302,15 +308,20 @@ func _finalize_chunk_generation(data: Dictionary):
 			if child is MeshInstance3D:
 				child.add_to_group("Structure")
 				child.create_trimesh_collision()
+				
+				await get_tree().process_frame
+				if child.get_child_count() > 0:
+					var tree_body = child.get_child(0)
+					if tree_body is StaticBody3D:
+						tree_body.collision_layer = 1
 		
 		items_spawned += 1
 		if items_spawned >= items_per_frame:
 			items_spawned = 0
 			await get_tree().process_frame
 
-# ------------------------------------------------------------------------------
-# UTILITAIRES
-# ------------------------------------------------------------------------------
+
+# --- UTILITAIRES ---
 func load_assets():
 	terrain_texture = load("res://Assets/Textures/Green.png")
 	

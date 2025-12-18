@@ -33,6 +33,7 @@ Player=""
 Enemy=""
 Terrain=""
 Shield=""
+Spawner=""
 
 [input]
 
