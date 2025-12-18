@@ -9,10 +9,10 @@ size = Vector3(0.482324, 2.40875, 0.208363)
 
 [node name="LegendarySword" type="Node3D"]
 script = ExtResource("1_0lbpq")
-damage = 25.0
+damage = 40.0
 cooldown_time = 0.4
 is_two_handed = true
-weight = 0.3
+weight = 0.4
 cost = 500
 
 [node name="Model" parent="." instance=ExtResource("2_avdvk")]

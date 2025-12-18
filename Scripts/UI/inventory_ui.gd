@@ -17,6 +17,7 @@ func _ready():
 	# Connexion des croix
 	right_btn.pressed.connect(_on_remove_weapon)
 	left_btn.pressed.connect(_on_remove_shield)
+	
 	close_btn.pressed.connect(_close_inventory)
 
 func _input(event):

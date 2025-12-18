@@ -57,7 +57,7 @@ func _physics_process(delta: float) -> void:
 		weight_penalty += current_weapon.get("weight")
 	if current_shield:
 		weight_penalty += current_shield.weight
-	var current_speed = speed * (1.0 - clamp(weight_penalty*3, 0.0, 0.9))
+	var current_speed = speed * (1.0 - clamp(weight_penalty*2.5, 0.0, 0.9))
 	
 	if is_on_floor() and can_action:
 		var move_inputs = read_move_input()

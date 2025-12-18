@@ -9,7 +9,7 @@ size = Vector3(0.323012, 1.23588, 0.198021)
 
 [node name="Dagger" type="Node3D"]
 script = ExtResource("1_xqcf1")
-damage = 3.0
+damage = 5.0
 cooldown_time = 0.2
 weight = 0.1
 cost = 50

@@ -7,7 +7,9 @@
 
 [node name="Crossbow2H" type="Node3D"]
 script = ExtResource("1_n2aft")
+damage = 20.0
 is_two_handed = true
+weight = 0.3
 cost = 200
 projectile_scene = ExtResource("2_qslko")
 

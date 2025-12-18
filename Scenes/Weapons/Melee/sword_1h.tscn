@@ -9,7 +9,7 @@ size = Vector3(0.557082, 1.80247, 0.209295)
 
 [node name="Sword1H" type="Node3D"]
 script = ExtResource("1_ar8ev")
-damage = 5.0
+damage = 8.0
 cooldown_time = 0.3
 weight = 0.2
 cost = 100
