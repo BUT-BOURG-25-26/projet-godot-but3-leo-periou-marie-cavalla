@@ -42,7 +42,7 @@ func update_ui():
 	
 	# --- Main Droite ---
 	if player_ref.current_weapon:
-		var w_name = player_ref.current_weapon.name.replace("enemy_", "").replace("_", " ")
+		var w_name = player_ref.current_weapon.name.replace("_", "")
 		right_label.text = "Right Hand : " + w_name
 		right_btn.disabled = false
 	else:
@@ -51,7 +51,7 @@ func update_ui():
 
 	# --- Main Gauche ---
 	if player_ref.current_shield:
-		var s_name = player_ref.current_shield.name.replace("enemy_", "").replace("_", " ")
+		var s_name = player_ref.current_shield.name.replace("_", " ")
 		left_label.text = "Left Hand : " + s_name
 		left_btn.disabled = false
 	else:

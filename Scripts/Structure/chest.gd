@@ -155,6 +155,7 @@ func take_loot():
 # --- DETECTION JOUEUR ---
 func _on_body_entered(body: Node3D):
 	if body.is_in_group("Player"):
+		body.call("show_interact")
 		player_in_range = body
 		
 		if is_cycling:
@@ -167,5 +168,6 @@ func _on_body_entered(body: Node3D):
 
 func _on_body_exited(body: Node3D):
 	if body == player_in_range:
+		body.call("hide_interact")
 		player_in_range = null
 		if label: label.text = ""

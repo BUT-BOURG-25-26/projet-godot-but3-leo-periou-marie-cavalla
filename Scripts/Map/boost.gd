@@ -46,7 +46,7 @@ func update_visuals():
 		"Attack": attack_model.show()
 		"Speed": speed_model.show()
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	rotation.y += delta * 1.5
 
 func _on_boost_body_entered(body: Node3D) -> void:

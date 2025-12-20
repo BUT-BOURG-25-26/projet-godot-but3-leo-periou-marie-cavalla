@@ -25,6 +25,8 @@ extends Node
 
 @export_group("Performance")
 @export var items_per_frame: int = 5
+@export var max_nature_per_chunk: int = 200
+@export var shared_material: StandardMaterial3D
 
 # --- VARIABLES ---
 var terrain_texture: Texture2D
@@ -43,6 +45,8 @@ var last_player_chunk: Vector2 = Vector2(9999, 9999)
 
 var mutex: Mutex = Mutex.new()
 
+var material_initialized: bool = false
+
 func _ready():
 	randomize()
 	if noise:
@@ -50,6 +54,11 @@ func _ready():
 		noise.frequency = noise_scale
 	
 	load_assets()
+	if not shared_material:
+		shared_material = StandardMaterial3D.new()
+		shared_material.albedo_texture = terrain_texture
+		shared_material.uv1_scale = Vector3(10.0, 10.0, 10.0)
+		material_initialized = true
 
 	var current_scene = get_tree().current_scene
 	if current_scene.has_signal("player_spawned"):
@@ -58,10 +67,11 @@ func _ready():
 func _on_player_spawned(spawned_player):
 	player = spawned_player
 	var ground_y = get_noise_y(0, 0)
-	player.global_position = Vector3(0, ground_y + 2.0, 0)
-	_process(0)
+	player.global_position = Vector3(0, ground_y + 5.0, 0)
+	_physics_process(0)
 
-func _process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if not is_inside_tree(): return 
 	if not player: return
 		
 	var current_chunk_x = floor(player.global_position.x / size_width)
@@ -227,6 +237,12 @@ func _thread_calc_nature(type: String, count: int, cx: float, cz: float, avoid_s
 
 # --- MAIN THREAD ---
 func _finalize_chunk_generation(data: Dictionary):
+	if not is_inside_tree(): 
+		mutex.lock()
+		processing_chunks.erase(data.coord)
+		mutex.unlock()
+		return
+
 	mutex.lock()
 	processing_chunks.erase(data.coord)
 	mutex.unlock()
@@ -237,22 +253,14 @@ func _finalize_chunk_generation(data: Dictionary):
 	
 	active_chunks[data.coord] = chunk_root
 
-	# Mesh Terrain
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.mesh = data.final_mesh
 	mesh_instance.position = data.world_pos
 	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	mesh_instance.add_to_group("NavSource")
-	
-	var material := StandardMaterial3D.new()
-	if terrain_texture: 
-		material.albedo_texture = terrain_texture
-		material.uv1_scale = Vector3(10.0, 10.0, 10.0)
-	mesh_instance.material_override = material
-	
+	mesh_instance.material_override = shared_material
 	chunk_root.add_child(mesh_instance)
 	
-	# Collision Terrain
 	var static_body = StaticBody3D.new()
 	static_body.add_to_group("Terrain")
 	static_body.collision_layer = 1
@@ -262,7 +270,6 @@ func _finalize_chunk_generation(data: Dictionary):
 	collision_shape_node.shape = data.collision_shape
 	static_body.add_child(collision_shape_node)
 
-	# Structure
 	var s_info = data.structure_info
 	if s_info.has("exists") and s_info.exists:
 		var scene = structure_scenes[s_info.idx]
@@ -271,13 +278,14 @@ func _finalize_chunk_generation(data: Dictionary):
 		instance.scale = Vector3(1.2, 1.2, 1.2)
 		instance.rotation.y = s_info.rot
 		chunk_root.add_child(instance)
-		
 		if instance.has_node("Chest") and randf() < 0.5:
 			instance.get_node("Chest").queue_free()
 
-	# Nature
 	var items_spawned = 0
+	var nature_spawned = 0
 	for item in data.nature_data:
+		if nature_spawned >= max_nature_per_chunk:
+			break
 		if not is_instance_valid(chunk_root): return
 
 		var scene_array = small_models if item.type == "small" else medium_models
@@ -287,9 +295,9 @@ func _finalize_chunk_generation(data: Dictionary):
 		instance.position = item.pos
 		instance.rotation.y = item.rot_y
 		instance.scale = item.scale
-		
 		chunk_root.add_child(instance)
 		
+		nature_spawned += 1
 		items_spawned += 1
 		if items_spawned >= items_per_frame:
 			items_spawned = 0
@@ -314,8 +322,10 @@ func load_assets():
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if not dir.current_is_dir() and (file_name.ends_with(".tscn") or file_name.ends_with(".scn")):
-				structure_scenes.push_back(load(dir_path + "/" + file_name))
+			if not dir.current_is_dir():
+				var clean_name = file_name.replace(".remap", "")
+				if clean_name.ends_with(".tscn") or clean_name.ends_with(".scn"):
+					structure_scenes.push_back(load(dir_path + "/" + clean_name))
 			file_name = dir.get_next()
 
 func get_noise_y(global_x: float, global_z: float) -> float:
