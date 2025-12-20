@@ -72,11 +72,13 @@ func open_shop_ui():
 
 func _on_body_entered(body):
 	if body.is_in_group("Player"):
+		body.call("show_interact")
 		player_in_range = body
 		if label: label.text = "Shopkeeper (E)"
 
 func _on_body_exited(body):
 	if body == player_in_range:
+		body.call("hide_interact")
 		player_in_range = null
 		if label: label.text = ""
 		if shop_ui_instance and shop_ui_instance.visible:

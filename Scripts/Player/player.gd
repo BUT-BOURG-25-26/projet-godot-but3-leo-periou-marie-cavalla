@@ -14,6 +14,7 @@ class_name Player extends CharacterBody3D
 @onready var separation_ray = $SeparationRay
 @onready var item_sound = $ItemSound
 @onready var block_sound = $BlockSound
+@onready var interact_button = $MobileUi/ButtonContainer/InteractButton
 
 # --- EXPORT STATS ---
 @export var speed: float = 5.0
@@ -33,8 +34,10 @@ var ray_offset_distance: float = 0.45
 var base_speed: float
 var base_strength: float
 var active_boosts: Dictionary = {}
+var boost_ui_timer: float = 0.0
 
 func _ready() -> void:
+	interact_button.hide()
 	base_speed = speed
 	base_strength = strength
 	player_ui.call("set_health_bar", health)
@@ -142,28 +145,29 @@ func get_boost_value(type: String) -> float:
 
 func update_boosts_timers(delta: float):
 	if active_boosts.is_empty():
+		boost_ui_timer = 0.0
 		return
-		
+
+	boost_ui_timer += delta
 	var has_changed = false
 	var keys_to_remove = []
 	
 	for type in active_boosts:
 		active_boosts[type]["time"] -= delta
-		
 		if active_boosts[type]["time"] <= 0:
 			keys_to_remove.append(type)
 			has_changed = true
 	
-	# Nettoyage des boosts expirés
 	for k in keys_to_remove:
 		active_boosts.erase(k)
 	
-	# Si un boost a expiré, on recalcule les stats
 	if has_changed:
 		recalc_stats()
-		
-	# Mise à jour UI
-	player_ui.update_boosts_display(active_boosts)
+
+	var should_update_ui = has_changed or boost_ui_timer >= 0.25
+	if should_update_ui:
+		player_ui.update_boosts_display(active_boosts)
+		boost_ui_timer = 0.0
 
 func recalc_stats():
 	speed = base_speed
@@ -413,6 +417,12 @@ func unequip_item(hand: String):
 			item_sound.play()
 			current_shield.queue_free()
 			current_shield = null
+
+func show_interact():
+	interact_button.show()
+
+func hide_interact():
+	interact_button.hide()
 
 func read_move_input() -> Vector3:
 	var move_inputs: Vector3 = Vector3.ZERO

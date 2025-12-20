@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cn3e0eis7u02o"]
 
-[ext_resource type="Script" path="res://Scripts/UI/inventory_ui.gd" id="1_p83af"]
+[ext_resource type="Script" uid="uid://bbrema8uuir8e" path="res://Scripts/UI/inventory_ui.gd" id="1_p83af"]
 [ext_resource type="Texture2D" uid="uid://u12g7j1yurkb" path="res://Assets/UI/container_background.png" id="2_dpv37"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_hcmni"]
 [ext_resource type="Texture2D" uid="uid://dj0galbxycae4" path="res://Assets/UI/Sword.png" id="4_2v6ut"]
@@ -33,16 +33,16 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -248.0
-offset_top = -250.0
+offset_top = -172.0
 offset_right = 243.0
-offset_bottom = 214.0
+offset_bottom = 174.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2v6ut")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(350, 50)

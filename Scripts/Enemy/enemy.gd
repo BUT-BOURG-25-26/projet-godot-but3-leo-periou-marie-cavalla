@@ -79,27 +79,29 @@ func _physics_process(delta: float) -> void:
 
 	if not player: return
 
-	# Despawn
-	var dist_to_player = global_position.distance_to(player.global_position)
-	if dist_to_player > max_distance_to_player:
+
+	var dist_sq_to_player = global_position.distance_squared_to(player.global_position)
+	var max_dist_sq = max_distance_to_player * max_distance_to_player
+	if dist_sq_to_player > max_dist_sq:
 		emit_signal("enemy_despawned", self)
 		queue_free()
 		return
 	
-	# Direction
-	var direction = (player.global_position - global_position)
+	var direction := Vector3.ZERO
+	direction = (player.global_position - global_position)
 	direction.y = 0
 	direction = direction.normalized()
-	
+
 	if can_action:
 		_handle_rotation(direction, delta)
-		# On passe 'direction' pour éviter de le recalculer
-		_handle_movement_and_attack(direction, dist_to_player)
-	else:
+		_handle_movement_and_attack(direction, sqrt(dist_sq_to_player))
+	elif not can_action:
 		velocity.x = 0
 		velocity.z = 0
 		velocity.y += get_gravity().y * delta
-	
+	else:
+		velocity.y += get_gravity().y * delta
+
 	move_and_slide()
 	update_locomotion()
 
@@ -150,7 +152,6 @@ func _handle_rotation(direction: Vector3, delta: float):
 
 func _handle_movement_and_attack(direction: Vector3, dist_to_player: float):
 	if is_on_floor():
-		# Calcul d'angle
 		if _should_attack(dist_to_player, direction):
 			velocity.x = 0
 			velocity.z = 0

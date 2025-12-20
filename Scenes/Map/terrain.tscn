@@ -36,6 +36,8 @@ adjustment_saturation = 0.7
 [node name="TerrainGeneration" type="Node3D" parent="."]
 script = ExtResource("1_nkyio")
 noise = SubResource("FastNoiseLite_j4ig8")
+mesh_resolution = 1
+render_distance = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_t01c8")

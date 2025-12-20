@@ -743,8 +743,7 @@ spring_arm = NodePath("../SpringArm3D/SpringPosition")
 
 [node name="MobileUi" parent="." instance=ExtResource("13_im5ka")]
 
-[node name="InventoryUi" parent="." node_paths=PackedStringArray("player_ref") instance=ExtResource("14_wja6s")]
-player_ref = NodePath("")
+[node name="InventoryUi" parent="." instance=ExtResource("14_wja6s")]
 
 [node name="PauseUi" parent="." instance=ExtResource("14_1bv33")]
 
