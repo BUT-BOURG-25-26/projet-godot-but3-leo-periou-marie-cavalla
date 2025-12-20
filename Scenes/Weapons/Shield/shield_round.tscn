@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c8dps25h4s0m7"]
 
-[ext_resource type="Script" uid="uid://4hecy2ohbjel" path="res://Scripts/Weapons/shield.gd" id="1_0wjht"]
+[ext_resource type="Script" path="res://Scripts/Weapons/shield.gd" id="1_0wjht"]
 [ext_resource type="PackedScene" uid="uid://c0k0a6rslojgy" path="res://Assets/Adventurers/Stuffs/shield_round.gltf" id="1_dwiei"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dwiei"]

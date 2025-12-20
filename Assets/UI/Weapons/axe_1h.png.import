@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://badfhwiovthbk"
-path="res://.godot/imported/mage.png-354525ff19a68768ec99c838451b9776.ctex"
+uid="uid://tx2dfrkaf08a"
+path="res://.godot/imported/axe_1h.png-753e2dd49cc5cd4ccb62d366625367e4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Menu/Selection/mage.png"
-dest_files=["res://.godot/imported/mage.png-354525ff19a68768ec99c838451b9776.ctex"]
+source_file="res://Assets/UI/Weapons/axe_1h.png"
+dest_files=["res://.godot/imported/axe_1h.png-753e2dd49cc5cd4ccb62d366625367e4.ctex"]
 
 [params]
 

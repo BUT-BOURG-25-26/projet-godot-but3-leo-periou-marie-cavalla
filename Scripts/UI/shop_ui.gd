@@ -1,7 +1,6 @@
 extends Control
 
 @onready var items_container = $Panel/VBoxContainer/ScrollContainer/ItemsContainer
-@onready var money_label = $Panel/VBoxContainer/MoneyLabel
 @onready var close_button = $Panel/VBoxContainer/CloseButton
 
 var player_ref: CharacterBody3D = null
@@ -19,25 +18,31 @@ func _input(_event):
 
 func open_shop(player: CharacterBody3D, available_weapons_data: Array):
 	player_ref = player
-	update_money_display()
 	
 	for child in items_container.get_children():
 		child.queue_free()
 	
 	for weapon_data in available_weapons_data:
 		var btn = Button.new()
-		var display_name = weapon_data["name"].capitalize().replace("_", " ")
+		btn.theme = null
+		btn.custom_minimum_size.y = 150
+		btn.size_flags_horizontal = SIZE_EXPAND_FILL
+		btn.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+		var texture_rect = TextureRect.new()
+		texture_rect.scale = Vector2(0.5,0.5)
 		
 		# --- VERIFICATION DU STOCK ---
 		if weapon_data["sold"] == true:
-			btn.text = "%s - (Sold out)" % display_name
+			btn.text = "(Sold out)"
 			btn.disabled = true
 		else:
-			btn.text = "%s - %d Gold" % [display_name, weapon_data["cost"]]
+			texture_rect.texture = load("res://Assets/UI/Weapons/"+weapon_data["name"]+".png")
+			btn.add_child(texture_rect)
+			btn.text = "%d Gold" % [weapon_data["cost"]]
 			if player.money < weapon_data["cost"]:
 				btn.disabled = true
 		
-		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		btn.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		btn.pressed.connect(_on_buy_item.bind(weapon_data, btn))
 		items_container.add_child(btn)
 	
@@ -48,7 +53,6 @@ func _on_buy_item(weapon_data: Dictionary, button_ref: Button):
 	if player_ref.money >= weapon_data["cost"]:
 		player_ref.call("set_money", -weapon_data["cost"])
 		
-		update_money_display()
 		weapon_data["sold"] = true
 		
 		# --- EQUIPEMENT ---
@@ -60,6 +64,7 @@ func _on_buy_item(weapon_data: Dictionary, button_ref: Button):
 				player_ref.equip_weapon(weapon_data["full_path"])
 		
 		# UI Update
+		button_ref.remove_child(button_ref.get_child(0))
 		button_ref.disabled = true
 		button_ref.text = weapon_data["name"].capitalize().replace("_", " ") + " - (Bought)"
 		
@@ -70,7 +75,7 @@ func refresh_buttons_state():
 		# On ignore ceux déjà vendus/achetés
 		if btn.disabled and (btn.text.contains("(Sold out)") or btn.text.contains("(Bought)")):
 			continue
-			
+		
 		var text_parts = btn.text.split(" - ")
 		if text_parts.size() > 1:
 			var cost_string = text_parts[1].replace(" Gold", "")
@@ -80,10 +85,6 @@ func refresh_buttons_state():
 				btn.disabled = true
 			else:
 				btn.disabled = false
-
-func update_money_display():
-	if player_ref:
-		money_label.text = "Money : " + str(player_ref.money)
 
 func close_shop():
 	hide()

@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://djty3husfmngi"]
+[gd_scene load_steps=3 format=3 uid="uid://cn3e0eis7u02o"]
 
-[ext_resource type="Script" uid="uid://bbrema8uuir8e" path="res://Scripts/UI/inventory_ui.gd" id="1_p83af"]
+[ext_resource type="Script" path="res://Scripts/UI/inventory_ui.gd" id="1_p83af"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_hcmni"]
 
 [node name="InventoryUi" type="Control"]

@@ -649,6 +649,7 @@ cache/0/25/0/glyphs/134/texture_idx = 0
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_we3k3"]
 content_margin_left = 110.0
 content_margin_top = 60.0
+content_margin_right = 100.0
 texture = ExtResource("4_8n2hl")
 
 [node name="PlayerUi" type="Sprite3D" node_paths=PackedStringArray("health_bar", "money_counter", "wave_counter", "next_wave", "boost_container")]

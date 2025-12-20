@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://boerdh1qrcjcy"]
+[gd_scene load_steps=7 format=3 uid="uid://boerdh1qrcjcy"]
 
 [ext_resource type="Script" uid="uid://d3j2cc3tvc3qv" path="res://Scripts/UI/virtual_joystick.gd" id="1_0rmtg"]
 [ext_resource type="Texture2D" uid="uid://epjay8t6bc0e" path="res://Assets/Menu/Attack_button.png" id="2_k5yl4"]
 [ext_resource type="Texture2D" uid="uid://cw13jiitwfhw8" path="res://Assets/Menu/joystick_base.png" id="2_ll7hi"]
+[ext_resource type="Texture2D" uid="uid://dyermb20mbd4f" path="res://Assets/Menu/joystick_detail.png" id="3_l155l"]
 [ext_resource type="Texture2D" uid="uid://c3g0uhogdudu3" path="res://Assets/Menu/Block_button.png" id="3_ll7hi"]
 [ext_resource type="Texture2D" uid="uid://bsunsvxbllamg" path="res://Assets/Menu/Jump_button.png" id="4_uqj2s"]
 
@@ -37,26 +38,29 @@ texture = ExtResource("2_ll7hi")
 expand_mode = 1
 
 [node name="Stick" type="TextureRect" parent="VirtualJoystick/Base"]
-modulate = Color(0.366595, 0.366595, 0.366595, 1)
+modulate = Color(0.89, 0.89, 0.89, 1)
 layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 96.0
-offset_bottom = 96.0
-texture = ExtResource("2_ll7hi")
+offset_left = 48.0
+offset_top = 52.0
+offset_right = 104.0
+offset_bottom = 108.0
+texture = ExtResource("3_l155l")
 expand_mode = 1
 
 [node name="AttackButton" type="TouchScreenButton" parent="."]
-position = Vector2(960, 360)
+position = Vector2(977, 383)
+scale = Vector2(0.25, 0.25)
 texture_normal = ExtResource("2_k5yl4")
 action = "attack"
 
 [node name="BlockButton" type="TouchScreenButton" parent="."]
-position = Vector2(848, 496)
+position = Vector2(869, 495)
+scale = Vector2(0.25, 0.25)
 texture_normal = ExtResource("3_ll7hi")
 action = "block"
 
 [node name="JumpButton" type="TouchScreenButton" parent="."]
-position = Vector2(984, 488)
+position = Vector2(1008, 516)
+scale = Vector2(0.2, 0.2)
 texture_normal = ExtResource("4_uqj2s")
 action = "jump"
