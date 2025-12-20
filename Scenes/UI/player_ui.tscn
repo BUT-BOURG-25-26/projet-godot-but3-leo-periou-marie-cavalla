@@ -684,12 +684,12 @@ value = 100.0
 [node name="WaveCounter" type="Label" parent="."]
 offset_left = 159.0
 offset_top = 6.0
-offset_right = 527.0
+offset_right = 553.0
 offset_bottom = 139.0
 theme_override_fonts/font = SubResource("FontFile_plo7s")
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxTexture_we3k3")
-text = "Wave : 0"
+text = "Wave : "
 autowrap_mode = 2
 
 [node name="VBoxContainer" type="HBoxContainer" parent="."]
