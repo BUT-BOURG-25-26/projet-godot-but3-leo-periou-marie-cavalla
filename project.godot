@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Moteur3D-Projet-Template"
+config/name="Mini-Souls"
 config/version="1.0.0"
 run/main_scene="uid://cqk34laniqf7f"
 config/features=PackedStringArray("4.4", "GL Compatibility")
