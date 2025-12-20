@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://rdapyw8xtdh0"]
+[gd_scene load_steps=10 format=3 uid="uid://rdapyw8xtdh0"]
 
 [ext_resource type="Script" uid="uid://bukoctdkckx84" path="res://Scripts/UI/death_screen.gd" id="1_uyutr"]
 [ext_resource type="FontFile" uid="uid://codwmwe2hwdcw" path="res://Assets/Fonts/PressStart2P-Regular.ttf" id="2_rwas2"]
@@ -7,6 +7,7 @@
 [ext_resource type="StyleBox" uid="uid://bfl5ticsb5lqg" path="res://Themes/ButtonHover.tres" id="5_am61d"]
 [ext_resource type="StyleBox" uid="uid://cd3g5f6ybtu1m" path="res://Themes/ButtonPressed.tres" id="6_4v5ro"]
 [ext_resource type="StyleBox" uid="uid://dcnuw2s72vp6l" path="res://Themes/ButtonNormal.tres" id="7_rpr6l"]
+[ext_resource type="AudioStream" uid="uid://c5xmkw82nq5ak" path="res://Assets/Sound/Dead_Dark_Souls.mp3" id="8_k5g3b"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_itto5"]
 font = ExtResource("2_rwas2")
@@ -30,14 +31,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -79.0
-offset_top = 2.0
-offset_right = 989.0
-offset_bottom = 434.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_vvkn6")
+expand_mode = 1
 
 [node name="ColorRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -113,6 +110,7 @@ text = " Restart"
 wait_time = 5.0
 
 [node name="DeadSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_k5g3b")
 volume_db = -8.0
 
 [connection signal="pressed" from="ExitBtn" to="." method="_exit_btn_pressed"]

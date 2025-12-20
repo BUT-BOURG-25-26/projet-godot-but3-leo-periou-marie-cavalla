@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://boerdh1qrcjcy"]
+[gd_scene load_steps=10 format=3 uid="uid://boerdh1qrcjcy"]
 
 [ext_resource type="Script" uid="uid://d3j2cc3tvc3qv" path="res://Scripts/UI/virtual_joystick.gd" id="1_0rmtg"]
 [ext_resource type="Texture2D" uid="uid://epjay8t6bc0e" path="res://Assets/Menu/Attack_button.png" id="2_k5yl4"]
 [ext_resource type="Texture2D" uid="uid://cw13jiitwfhw8" path="res://Assets/Menu/joystick_base.png" id="2_ll7hi"]
+[ext_resource type="Texture2D" uid="uid://dyermb20mbd4f" path="res://Assets/Menu/joystick_detail.png" id="3_2h1la"]
 [ext_resource type="Texture2D" uid="uid://c3g0uhogdudu3" path="res://Assets/Menu/Block_button.png" id="3_ll7hi"]
 [ext_resource type="Texture2D" uid="uid://bsunsvxbllamg" path="res://Assets/Menu/Jump_button.png" id="4_uqj2s"]
+[ext_resource type="Texture2D" uid="uid://ck2r70b5ru3mv" path="res://Assets/Menu/Inventory_button.png" id="5_rua21"]
+[ext_resource type="Texture2D" uid="uid://d171hgrjujqx3" path="res://Assets/Menu/Interact_button.png" id="6_a226e"]
+[ext_resource type="Texture2D" uid="uid://bs8flb427fax0" path="res://Assets/Menu/Pause_button.png" id="9_rua21"]
 
 [node name="MobileUi" type="Control"]
 layout_mode = 3
@@ -30,33 +34,71 @@ script = ExtResource("1_0rmtg")
 [node name="Base" type="TextureRect" parent="VirtualJoystick"]
 layout_mode = 0
 offset_left = -16.0
-offset_top = -16.0
-offset_right = 144.0
+offset_top = -49.0
+offset_right = 177.0
 offset_bottom = 144.0
 texture = ExtResource("2_ll7hi")
 expand_mode = 1
 
 [node name="Stick" type="TextureRect" parent="VirtualJoystick/Base"]
-modulate = Color(0.366595, 0.366595, 0.366595, 1)
+modulate = Color(0.89, 0.89, 0.89, 1)
 layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 96.0
-offset_bottom = 96.0
-texture = ExtResource("2_ll7hi")
+offset_left = 61.0
+offset_top = 57.0
+offset_right = 134.0
+offset_bottom = 130.0
+texture = ExtResource("3_2h1la")
 expand_mode = 1
 
-[node name="AttackButton" type="TouchScreenButton" parent="."]
-position = Vector2(960, 360)
+[node name="ButtonContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -334.0
+offset_top = -329.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AttackButton" type="TouchScreenButton" parent="ButtonContainer"]
+position = Vector2(167, -6)
+scale = Vector2(0.3, 0.3)
 texture_normal = ExtResource("2_k5yl4")
 action = "attack"
 
-[node name="BlockButton" type="TouchScreenButton" parent="."]
-position = Vector2(848, 496)
+[node name="InventoryButton" type="TouchScreenButton" parent="ButtonContainer"]
+position = Vector2(196, -295)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("5_rua21")
+action = "toggle_inventory"
+
+[node name="InteractButton" type="TouchScreenButton" parent="ButtonContainer"]
+position = Vector2(23, 10)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("6_a226e")
+action = "interact"
+
+[node name="BlockButton" type="TouchScreenButton" parent="ButtonContainer"]
+position = Vector2(4, 154)
+scale = Vector2(0.3, 0.3)
 texture_normal = ExtResource("3_ll7hi")
 action = "block"
 
-[node name="JumpButton" type="TouchScreenButton" parent="."]
-position = Vector2(984, 488)
+[node name="JumpButton" type="TouchScreenButton" parent="ButtonContainer"]
+position = Vector2(179, 164)
+scale = Vector2(0.25, 0.25)
 texture_normal = ExtResource("4_uqj2s")
 action = "jump"
+
+[node name="PauseContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+offset_right = 224.0
+offset_bottom = 265.0
+
+[node name="PauseButton" type="TouchScreenButton" parent="PauseContainer"]
+position = Vector2(17.225, 20.975)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("9_rua21")
+action = "pause"

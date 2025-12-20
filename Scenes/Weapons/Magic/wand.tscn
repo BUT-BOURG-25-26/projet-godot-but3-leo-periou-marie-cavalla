@@ -5,7 +5,6 @@
 
 [node name="Wand" type="Node3D"]
 script = ExtResource("1_va3n0")
-type = 2
 
 [node name="Model" parent="." instance=ExtResource("2_ngk8s")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

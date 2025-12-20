@@ -9,10 +9,11 @@ size = Vector3(1.31793, 1.76212, 0.357025)
 
 [node name="Axe2H" type="Node3D"]
 script = ExtResource("1_3tsdv")
-damage = 8.0
+damage = 20.0
 cooldown_time = 0.3
 is_two_handed = true
-weight = 0.3
+weight = 0.35
+cost = 200
 
 [node name="Model" parent="." instance=ExtResource("2_3tsdv")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
@@ -31,3 +32,4 @@ one_shot = true
 
 [node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_hrj16")
+pitch_scale = 0.7

@@ -11,6 +11,10 @@ class_name Player extends CharacterBody3D
 @onready var weapon_slot_right = $Model/Rig_Medium/Skeleton3D/HandSlotRight
 @onready var weapon_slot_left = $Model/Rig_Medium/Skeleton3D/HandSlotLeft
 @onready var collision_shape = $CollisionShape3D
+@onready var separation_ray = $SeparationRay
+@onready var item_sound = $ItemSound
+@onready var block_sound = $BlockSound
+@onready var interact_button = $MobileUi/ButtonContainer/InteractButton
 
 # --- EXPORT STATS ---
 @export var speed: float = 5.0
@@ -18,19 +22,32 @@ class_name Player extends CharacterBody3D
 @export var strength: float = 20
 @export var health: float = 100.0
 @export var max_health: float = 100.0
-@export var kill: int = 0
+@export var money: int = 0
 
 # --- VARIABLES ---
 var can_action: bool = true
 var blocking: bool = false
 var is_dead: bool = false
 var current_weapon: Node3D
+var current_shield: Shield
+var ray_offset_distance: float = 0.45
+var base_speed: float
+var base_strength: float
+var active_boosts: Dictionary = {}
+var boost_ui_timer: float = 0.0
 
 func _ready() -> void:
+	interact_button.hide()
+	base_speed = speed
+	base_strength = strength
 	player_ui.call("set_health_bar", health)
-	equip_weapon("Melee/sword_2h")
+	player_ui.call("set_money_counter", money)
+	init_player_class()
 
 func _physics_process(delta: float) -> void:
+	
+	update_boosts_timers(delta)
+
 	if is_dead:
 		velocity.x = 0
 		velocity.z = 0
@@ -39,10 +56,13 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var direction
-	var current_speed = speed
-	
+# --- CALCUL DU POIDS ---
+	var weight_penalty = -(strength/100)
 	if current_weapon:
-		current_speed = speed * (1.0 - current_weapon.get("weight"))
+		weight_penalty += current_weapon.get("weight")
+	if current_shield:
+		weight_penalty += current_shield.weight
+	var current_speed = speed * (1.0 - clamp(weight_penalty*2.5, 0.0, 0.9))
 	
 	if is_on_floor() and can_action:
 		var move_inputs = read_move_input()
@@ -52,17 +72,17 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 		
-		# --- GESTION INPUTS ---
+		# --- GESTION ACTIONS ---
 		
-		if Input.is_action_just_pressed("attack") and current_weapon:
-			trigger_attack()
-		
-		elif Input.is_action_pressed("block"):
+		if Input.is_action_pressed("block"):
 			blocking = true
 			velocity = Vector3.ZERO
+			direction = Vector3.ZERO
 		
 		elif Input.is_action_just_released("block"):
 			blocking = false
+			velocity.x = 0
+			velocity.z = 0
 		
 		elif Input.is_action_just_pressed("jump"):
 			anim_state.travel("Jump") 
@@ -83,9 +103,99 @@ func _physics_process(delta: float) -> void:
 		var target_rotation = atan2(direction.x, direction.z)
 		model.rotation.y = lerp_angle(model.rotation.y, target_rotation, delta * 10.0)
 		
+		var offset_vector = Vector3(0, 0, ray_offset_distance)
+		var rotated_offset = offset_vector.rotated(Vector3.UP, model.rotation.y)
+		if separation_ray:
+			separation_ray.position.x = rotated_offset.x
+			separation_ray.position.z = rotated_offset.z
+		
+		
 	update_locomotion()
 
-# --- OPTIMISATION ANIMATION ---
+# --- SYSTEME DE BOOST OPTIMISE ---
+
+func apply_boost(type: String, duration: float):
+	# Cas spécial pour la vie
+	if type == "Health":
+		if health < max_health:
+			var heal_amount = 30.0
+			health = min(health + heal_amount, max_health)
+			player_ui.heal(heal_amount)
+			player_ui.set_health_bar(health)
+		return
+
+	# Cas pour les boosts temporaires
+	if active_boosts.has(type):
+		# CUMUL
+		active_boosts[type]["time"] += duration
+	else:
+		active_boosts[type] = {
+			"time": duration,
+			"value": get_boost_value(type)
+		}
+	
+	# On recalcule les stats immédiatement
+	recalc_stats()
+
+func get_boost_value(type: String) -> float:
+	match type:
+		"Attack": return 5.0
+		"Speed": return 5.0
+	return 0.0
+
+func update_boosts_timers(delta: float):
+	if active_boosts.is_empty():
+		boost_ui_timer = 0.0
+		return
+
+	boost_ui_timer += delta
+	var has_changed = false
+	var keys_to_remove = []
+	
+	for type in active_boosts:
+		active_boosts[type]["time"] -= delta
+		if active_boosts[type]["time"] <= 0:
+			keys_to_remove.append(type)
+			has_changed = true
+	
+	for k in keys_to_remove:
+		active_boosts.erase(k)
+	
+	if has_changed:
+		recalc_stats()
+
+	var should_update_ui = has_changed or boost_ui_timer >= 0.25
+	if should_update_ui:
+		player_ui.update_boosts_display(active_boosts)
+		boost_ui_timer = 0.0
+
+func recalc_stats():
+	speed = base_speed
+	strength = base_strength
+	
+	# On applique tous les bonus actifs
+	if active_boosts.has("Speed"):
+		speed += active_boosts["Speed"]["value"]
+	
+	if active_boosts.has("Attack"):
+		strength += active_boosts["Attack"]["value"]
+
+# --- INITIALISATION DE LA CLASSE DU JOUEUR ---
+
+func init_player_class():
+	var current_class_name:String = self.name
+	match current_class_name :
+		"Barbarian":
+			equip_weapon("Melee/axe_1h")
+		"Knight":
+			equip_weapon("Melee/sword_1h")
+		"Mage":
+			equip_weapon("Melee/hand")
+		"Ranger":
+			equip_weapon("Melee/dagger")
+		"Rogue":
+			equip_weapon("Ranged/crossbow_1h")
+# --- ANIMATION ---
 
 # Cette fonction détermine le suffixe à utiliser (_1H, _2H, _Bow)
 func get_anim_suffix() -> String:
@@ -120,14 +230,21 @@ func update_locomotion():
 	anim_state.travel("Idle" + get_anim_suffix())
 
 # --- ACTIONS ---
+func _unhandled_input(event: InputEvent) -> void:
+	if is_dead or not can_action:
+		return
+
+	if event.is_action_pressed("attack") and current_weapon and is_on_floor():
+		trigger_attack()
 
 func add_boost(type:String):
 	match type :
 		"Health" :
 			if(health<max_health):
-				if(health+30>max_health):
+				if((health+30)>max_health):
+					var difference:float = max_health-health
 					health = max_health
-					player_ui.heal(max_health-health)
+					player_ui.heal(difference)
 				else:
 					health += 30
 					player_ui.heal(30)
@@ -144,6 +261,9 @@ func remove_boost(type:String):
 			speed -= 5
 
 func trigger_attack():
+	if not can_action:
+		return
+
 	can_action = false
 	velocity = Vector3.ZERO
 	
@@ -179,10 +299,34 @@ func _on_weapon_attack_finished():
 
 # --- GESTION MORT ---
 
-func take_damage(damage: float, get_stand: bool = false):
-	if health > 0 and not blocking:
-		health -= damage
-		player_ui.take_damage(damage)
+func take_damage(damage: float, attacker: Node3D = null, is_ranged: bool = false):
+	if is_dead: return
+
+	var final_damage = damage
+	
+	# --- LOGIQUE DE BLOCAGE ---
+	var successful_block = false
+   
+	if blocking and current_shield:
+	
+		if attacker:
+			var direction_to_attacker = (attacker.global_position - global_position).normalized()
+			var forward_vector = model.global_transform.basis.z 
+			var angle = direction_to_attacker.dot(forward_vector)
+			if angle > 0.0: # Blocage réussi
+				successful_block = true
+		else:
+			successful_block = true 
+
+	# --- APPLICATION ---
+	if successful_block:
+		block_sound.play()
+		final_damage = current_shield.process_hit(damage, attacker, is_ranged)
+
+	if final_damage > 0:
+		health -= final_damage
+		player_ui.take_damage(final_damage)
+		
 		if health <= 0:
 			die()
 
@@ -191,9 +335,9 @@ func die():
 	anim_state.travel("Death")
 	death_screen.call("show_death_screen")
 
-func add_kill():
-	kill += 1
-	player_ui.call("set_kill_counter", kill)
+func set_money(amount: int):
+	money += amount
+	player_ui.call("set_money_counter", money)
 
 # --- INPUT / EQUIP ---
 
@@ -204,7 +348,7 @@ func equip_weapon(weapon_name: String):
 	if not weapon_scene:
 		push_error("Arme introuvable: " + path)
 		return
-
+	
 	if current_weapon:
 		if current_weapon.has_signal("attack_finished"):
 			if current_weapon.attack_finished.is_connected(_on_weapon_attack_finished):
@@ -227,12 +371,58 @@ func equip_weapon(weapon_name: String):
 		
 	current_weapon = new_weapon
 	
+	if "wielder" in current_weapon:
+		current_weapon.wielder = self
+	
 	if current_weapon.has_signal("attack_finished"):
 		current_weapon.attack_finished.connect(_on_weapon_attack_finished)
 	if current_weapon.has_signal("needs_reload"):
 		current_weapon.needs_reload.connect(_on_weapon_needs_reload)
 	
+	item_sound.play()
 	update_locomotion()
+	
+func equip_shield(shield_name: String):
+	var path = "res://Scenes/Weapons/%s.tscn" % shield_name
+	var shield_scene = load(path)
+	
+	if not shield_scene:
+		push_error("Bouclier introuvable: " + path)
+		return
+
+	if current_shield:
+		current_shield.queue_free()
+
+	var new_shield = shield_scene.instantiate()
+	
+	weapon_slot_left.add_child(new_shield)
+	item_sound.play()
+	
+	if new_shield is Shield:
+		current_shield = new_shield
+		current_shield.wielder = self
+	
+	else:
+		push_error("La scène chargée n'a pas le script shield.gd")
+
+func unequip_item(hand: String):
+	if hand == "Right":
+		if current_weapon:
+			item_sound.play()
+			current_weapon.queue_free()
+			current_weapon = null
+			
+	elif hand == "Left":
+		if current_shield:
+			item_sound.play()
+			current_shield.queue_free()
+			current_shield = null
+
+func show_interact():
+	interact_button.show()
+
+func hide_interact():
+	interact_button.hide()
 
 func read_move_input() -> Vector3:
 	var move_inputs: Vector3 = Vector3.ZERO

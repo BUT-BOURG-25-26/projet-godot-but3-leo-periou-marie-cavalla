@@ -2,79 +2,166 @@ extends Node3D
 
 # -- Enemy import  --
 var skeleton_minion: PackedScene = preload("res://Scenes/Enemy/skeleton_minion.tscn")
-# var skeleton_mage: PackedScene = preload("res://Scenes/Enemy/skeleton_mage.tscn")
 var skeleton_rogue: PackedScene = preload("res://Scenes/Enemy/skeleton_rogue.tscn")
 var skeleton_warrior: PackedScene = preload("res://Scenes/Enemy/skeleton_warrior.tscn")
-
-@export var time_before_big_skeleton: int = 60
+var skeleton_boss: PackedScene = preload("res://Scenes/Enemy/skeleton_boss.tscn")
 
 var enemy_list = [
 	skeleton_minion,
-	#skeleton_mage,
 	skeleton_rogue,
 	skeleton_warrior,
 ]
 
 # -- Export variables --
-@export var min_distance_from_player = 5
-@export var max_distance_to_add = 10
+@export var min_distance_from_player = 10
+@export var max_distance_to_add = 15
+@export var max_enemies_on_map: int = 10
+@export var round_cooldown_time: int = 20
 
-# -- Variables --
-@onready var spawn_timer = $SpawnTimer
+# -- Variables de gestion de Manche --
+var current_round: int = 1
+var enemies_to_kill_total: int = 0
+var enemies_killed_current: int = 0
+var enemies_active_count: int = 0
+
+# -- Variables Boss --
+var bosses_to_spawn_total: int = 0
+var bosses_spawned_current: int = 0
+
+var player_ui: Sprite3D
+var is_round_in_progress: bool = false
+var player: Node3D
 var rng = RandomNumberGenerator.new()
-var player:Node3D
-var timer:Timer
-var start_time = 0;
-var difficulty_limit = 5;
+
+@onready var spawn_timer = $SpawnTimer
 
 func _ready() -> void:
-	timer = get_child(0)
-	start_time = Time.get_unix_time_from_system()
 	get_tree().current_scene.connect("player_spawned", Callable(self, "_on_player_spawned"))
+	spawn_timer.wait_time = 1.0
+	spawn_timer.timeout.connect(_on_spawn_try)
+	rng.randomize() 
+	
+	await get_tree().create_timer(1.0).timeout
+	start_round()
 
-# Quand le joueur spawn
 func _on_player_spawned(spawned_player):
 	player = spawned_player
+	player_ui = player.get_node("PlayerUi")
 
-func _process(delta:float):
-	timer.wait_time = get_difficulty_timer_time()
-	set_timer_difficulty()
-	spawn_boss_if_needed(delta)
+func start_round():
+	is_round_in_progress = true
+	enemies_killed_current = 0
+	enemies_active_count = 0 # Sécurité
+	
+	# Reset des compteurs Boss
+	bosses_to_spawn_total = 0
+	bosses_spawned_current = 0
+	
+	# Calcul des ennemis de base
+	enemies_to_kill_total = 5 + (current_round - 1)
+	
+	# --- LOGIQUE BOSS (Toutes les 10 manches) ---
+	if current_round % 10 == 0:
+		var nb_boss = int(current_round / 10)
+		bosses_to_spawn_total = nb_boss
+		enemies_to_kill_total += bosses_to_spawn_total
+	
+	player_ui.call("set_wave_counter", current_round)
+	spawn_timer.start()
 
-func _on_spawn_timer_timeout():
-	var enemy = enemy_list.pick_random().instantiate()
+func _process(_delta: float) -> void:
+	if is_round_in_progress and enemies_killed_current >= enemies_to_kill_total:
+		end_round()
+
+func _on_spawn_try():
+	if not is_round_in_progress or not player: return
+	if enemies_active_count >= max_enemies_on_map: return
+	
+	var enemies_left_to_spawn = enemies_to_kill_total - enemies_killed_current - enemies_active_count
+	if enemies_left_to_spawn > 0:
+		spawn_enemy()
+
+func spawn_enemy():
+	# Position valide au sol
+	var valid_ground_pos = find_valid_spawn_pos()
+	if valid_ground_pos == Vector3.INF:
+		return
+
+	var enemy_scene: PackedScene
+	
+	# --- CHOIX DE L'ENNEMI (PRIORITE AU BOSS) ---
+	if bosses_spawned_current < bosses_to_spawn_total:
+		enemy_scene = skeleton_boss
+		bosses_spawned_current += 1
+	else:
+		# Sinon spawn classique
+		enemy_scene = enemy_list.pick_random()
+
+	var enemy = enemy_scene.instantiate()
 	get_parent().add_child(enemy)
-	var x = (min_distance_from_player + get_random_number(0,max_distance_to_add)) * get_positive_or_negative()
-	var z = (min_distance_from_player + get_random_number(0,max_distance_to_add)) * get_positive_or_negative()
-	enemy.global_position = player.global_position + Vector3(x, 0.0, z)
+	
+	# Positionne l'ennemi sous la carte
+	var spawn_depth = 3.0
+	enemy.global_position = valid_ground_pos - Vector3(0, spawn_depth, 0)
+	
+	if enemy.has_method("init_spawn_sequence"):
+		enemy.init_spawn_sequence(valid_ground_pos.y)
+	
+	enemy.connect("enemy_died", Callable(self, "_on_enemy_killed"))
+	enemy.connect("enemy_despawned", Callable(self, "_on_enemy_despawned"))
+	
+	enemies_active_count += 1
 
-func get_random_number(start:int,end:int) -> int:
+func find_valid_spawn_pos() -> Vector3:
+	var space_state = get_world_3d().direct_space_state
+	var max_attempts = 10
+	
+	for i in range(max_attempts):
+		var x = (min_distance_from_player + rng.randf_range(0, max_distance_to_add)) * get_positive_or_negative()
+		var z = (min_distance_from_player + rng.randf_range(0, max_distance_to_add)) * get_positive_or_negative()
+		var target_pos = player.global_position + Vector3(x, 0, z)
+		
+		var from_pos = Vector3(target_pos.x, 50.0, target_pos.z)
+		var to_pos = Vector3(target_pos.x, -50.0, target_pos.z)
+		
+		var query = PhysicsRayQueryParameters3D.create(from_pos, to_pos)
+		query.collision_mask = 1
+		
+		var result = space_state.intersect_ray(query)
+		
+		if result:
+			var collider = result.collider
+			if collider.is_in_group("Terrain"):
+				return result.position
+	
+	return Vector3.INF
+
+func _on_enemy_killed(_enemy_ref):
+	enemies_killed_current += 1
+	enemies_active_count -= 1
+	
+func _on_enemy_despawned(enemy_ref):
+	enemies_active_count -= 1
+
+	if enemy_ref.get("is_boss"):
+		bosses_spawned_current -= 1
+	
+func end_round():
+	is_round_in_progress = false
+	spawn_timer.stop()
+	var time_left = round_cooldown_time
+	while time_left > 0:
+		if player_ui: player_ui.call("set_next_wave", time_left)
+		await get_tree().create_timer(1.0).timeout
+		time_left -= 1
+	if player_ui: player_ui.call("set_next_wave", 0)
+	current_round += 1
+	start_round()
+
+# -- Utilitaires --
+func get_random_number(start:int, end:int) -> float:
 	return rng.randf_range(start, end)
 
 func get_positive_or_negative() -> int:
-	var array = [-1,1]
-	var weights = PackedFloat32Array([1, 1])
-	return array[rng.rand_weighted(weights)]
-	
-func get_difficulty_timer_time():
-	if(Time.get_unix_time_from_system() - start_time > 90):
-		return 1
-	elif(Time.get_unix_time_from_system() - start_time > 60):
-		return 2
-	elif(Time.get_unix_time_from_system() - start_time > 30):
-		return 3
-	else:
-		return 4
-		
-func spawn_boss_if_needed(delta:float):
-	if(delta>time_before_big_skeleton):
-		var enemy = enemy_list.pick_random().instantiate()
-		enemy.health = enemy.boss_health
-		enemy.scale = Vector3.ONE * 2
-		get_parent().add_child(enemy)
-		var x = (min_distance_from_player + get_random_number(0,max_distance_to_add)) * get_positive_or_negative()
-		var z = (min_distance_from_player + get_random_number(0,max_distance_to_add)) * get_positive_or_negative()
-		enemy.global_position = player.global_position + Vector3(x, 0.0, z)
-
-func set_timer_difficulty():
-	game_manager.update_difficulty(difficulty_limit-get_difficulty_timer_time())
+	var array = [-1, 1]
+	return array.pick_random()

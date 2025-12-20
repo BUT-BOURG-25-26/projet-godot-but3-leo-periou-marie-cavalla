@@ -1,31 +1,62 @@
 extends Node3D
 
-@onready var timer = $BoostTimer
-@onready var boost_mesh:MeshInstance3D = $BoostMesh
-var types_weighted = ["Health","Health","Health","Attack","Speed"]
-var type:String = ""
-var player:Player = null
+@onready var attack_model = $Attack
+@onready var health_model = $Health
+@onready var speed_model = $Speed
+
+@onready var boost_free = $BoostTimer
+@onready var boost_sound = $BoostSound
+
+var rng_boost = {
+	"Health": 50,
+	"Attack": 25,
+	"Speed": 25
+}
+
+var type: String = ""
+var duration: float = 20.0
+var taken = false
 
 func _ready():
-	self.type = types_weighted.pick_random()
-	var color:Color = Color("52a177da")
-	match type :
-		"Health" :
-			color = Color("52a177da")
-		"Attack" : 
-			color = Color("d56865da")
-		"Speed" :
-			color = Color("a98a3fda")
-	boost_mesh.mesh.material.albedo_color = color
+	type = get_weighted_random_type()
+	update_visuals()
+
+func get_weighted_random_type() -> String:
+	var total_weight = 0
+	for key in rng_boost:
+		total_weight += rng_boost[key]
+	
+	var random_val = randi() % total_weight
+	var current_weight = 0
+	
+	for key in rng_boost:
+		current_weight += rng_boost[key]
+		if random_val < current_weight:
+			return key
+	
+	return "Health" # Fallback
+
+func update_visuals():
+	attack_model.hide()
+	health_model.hide()
+	speed_model.hide()
+	
+	match type:
+		"Health": health_model.show()
+		"Attack": attack_model.show()
+		"Speed": speed_model.show()
+
+func _physics_process(delta: float) -> void:
+	rotation.y += delta * 1.5
 
 func _on_boost_body_entered(body: Node3D) -> void:
-	if(body.is_in_group("Player")):
-		player = body as Player
-		player.add_boost(type)
-		timer.start()
+	if body.is_in_group("Player") and !taken:
+		var player = body as Player
+		taken = true
+		player.apply_boost(type, duration)
+		boost_sound.play()
 		hide()
+		boost_free.start()
 
 func _on_boost_timer_timeout() -> void:
-	if(player):
-		player.remove_boost(type)
 	queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://6temmxuso8ix"]
+[gd_scene load_steps=5 format=3 uid="uid://7ypa8jhds1si"]
 
 [ext_resource type="Script" uid="uid://dy0ckjfpxmbjp" path="res://Scripts/Weapons/melee.gd" id="1_kv6a3"]
 [ext_resource type="PackedScene" uid="uid://by1t6w5vviqgq" path="res://Assets/Skeleton/Stuffs/Skeleton_Axe.gltf" id="2_knrg3"]
@@ -10,7 +10,6 @@ size = Vector3(1.01632, 1.25248, 0.317596)
 [node name="EnemyAxe" type="Node3D"]
 script = ExtResource("1_kv6a3")
 damage = 5.0
-cooldown_time = 0.3
 weight = 0.2
 target = "Player"
 
@@ -31,3 +30,4 @@ one_shot = true
 
 [node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_pakpd")
+pitch_scale = 0.9

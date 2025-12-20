@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=4 uid="uid://dqi6v1mhurwxd"]
+[gd_scene load_steps=69 format=4 uid="uid://dqi6v1mhurwxd"]
 
 [ext_resource type="Script" uid="uid://c48k7o5xfy1nd" path="res://Scripts/Enemy/enemy.gd" id="1_mhbw6"]
 [ext_resource type="PackedScene" uid="uid://dqeba56sys60m" path="res://Scenes/UI/enemy_ui.tscn" id="2_i2sii"]
@@ -308,7 +308,8 @@ animation = &"Special/Skeletons_Walking"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vmtvp"]
 animation = &"CombatRanged/Ranged_1H_Shoot"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l6n3p"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8k8vk"]
+animation = &"Special/Skeletons_Spawn_Ground"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_olqyp"]
 xfade_time = 0.2
@@ -373,6 +374,12 @@ xfade_time = 0.2
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aqfb7"]
 xfade_time = 0.2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o33e2"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pbi3l"]
+xfade_time = 0.2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_pbi3l"]
 states/Attack/node = SubResource("AnimationNodeAnimation_7dp3o")
 states/Attack/position = Vector2(57.648, 377.64)
@@ -393,17 +400,13 @@ states/Running/node = SubResource("AnimationNodeAnimation_fs7ks")
 states/Running/position = Vector2(454.096, 261.8)
 states/Shoot/node = SubResource("AnimationNodeAnimation_vmtvp")
 states/Shoot/position = Vector2(-70.4963, 267.2)
-states/Start/position = Vector2(323.797, 446.15)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_l6n3p"), "Idle", "Running", SubResource("AnimationNodeStateMachineTransition_olqyp"), "Running", "Idle", SubResource("AnimationNodeStateMachineTransition_wpjfl"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Idle", "Block", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "Block", "Idle", SubResource("AnimationNodeStateMachineTransition_qqcod"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igrcy"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_fs7ks"), "Running", "Block", SubResource("AnimationNodeStateMachineTransition_0gysh"), "Block", "Running", SubResource("AnimationNodeStateMachineTransition_vfarp"), "Jump", "Running", SubResource("AnimationNodeStateMachineTransition_y6uwr"), "Running", "Jump", SubResource("AnimationNodeStateMachineTransition_83xs0"), "Jump", "Block", SubResource("AnimationNodeStateMachineTransition_yh6i2"), "Block", "Jump", SubResource("AnimationNodeStateMachineTransition_nv4vc"), "Shoot", "Idle", SubResource("AnimationNodeStateMachineTransition_0tmd6"), "Idle", "Shoot", SubResource("AnimationNodeStateMachineTransition_o70jo"), "Reload", "Idle", SubResource("AnimationNodeStateMachineTransition_xedyt"), "Idle", "Reload", SubResource("AnimationNodeStateMachineTransition_grtg8"), "Idle", "Death", SubResource("AnimationNodeStateMachineTransition_mknmb"), "Hit", "Idle", SubResource("AnimationNodeStateMachineTransition_8k8vk"), "Idle", "Hit", SubResource("AnimationNodeStateMachineTransition_aqfb7")]
-graph_offset = Vector2(-299, -63)
+states/Spawn/node = SubResource("AnimationNodeAnimation_8k8vk")
+states/Spawn/position = Vector2(332.2, 414.152)
+states/Start/position = Vector2(461.397, 545.35)
+transitions = ["Idle", "Running", SubResource("AnimationNodeStateMachineTransition_olqyp"), "Running", "Idle", SubResource("AnimationNodeStateMachineTransition_wpjfl"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Idle", "Block", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "Block", "Idle", SubResource("AnimationNodeStateMachineTransition_qqcod"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igrcy"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_fs7ks"), "Running", "Block", SubResource("AnimationNodeStateMachineTransition_0gysh"), "Block", "Running", SubResource("AnimationNodeStateMachineTransition_vfarp"), "Jump", "Running", SubResource("AnimationNodeStateMachineTransition_y6uwr"), "Running", "Jump", SubResource("AnimationNodeStateMachineTransition_83xs0"), "Jump", "Block", SubResource("AnimationNodeStateMachineTransition_yh6i2"), "Block", "Jump", SubResource("AnimationNodeStateMachineTransition_nv4vc"), "Shoot", "Idle", SubResource("AnimationNodeStateMachineTransition_0tmd6"), "Idle", "Shoot", SubResource("AnimationNodeStateMachineTransition_o70jo"), "Reload", "Idle", SubResource("AnimationNodeStateMachineTransition_xedyt"), "Idle", "Reload", SubResource("AnimationNodeStateMachineTransition_grtg8"), "Idle", "Death", SubResource("AnimationNodeStateMachineTransition_mknmb"), "Hit", "Idle", SubResource("AnimationNodeStateMachineTransition_8k8vk"), "Idle", "Hit", SubResource("AnimationNodeStateMachineTransition_aqfb7"), "Spawn", "Idle", SubResource("AnimationNodeStateMachineTransition_o33e2"), "Start", "Spawn", SubResource("AnimationNodeStateMachineTransition_pbi3l")]
+graph_offset = Vector2(-462, -123)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_bxvsj"]
-size = Vector3(10.0087, 7.96558, 10.0088)
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bxvsj"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pbi3l"]
 gravity = Vector3(0, 2, 0)
 linear_accel_min = -1.69
 linear_accel_max = 5.07
@@ -417,22 +420,55 @@ turbulence_influence_max = 0.2
 turbulence_initial_displacement_min = -40.0
 turbulence_initial_displacement_max = 40.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nenq2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8k8vk"]
 transparency = 1
-albedo_color = Color(1, 1, 1, 0.607843)
+albedo_color = Color(0.769908, 0.293255, 0.343422, 0.607843)
 metallic_specular = 0.0
 roughness = 0.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_40eh0"]
-material = SubResource("StandardMaterial3D_nenq2")
-radius = 0.075
-height = 0.3
-rings = 1
+[sub_resource type="SphereMesh" id="SphereMesh_aqfb7"]
+material = SubResource("StandardMaterial3D_8k8vk")
+radius = 0.091
+height = 0.235
+rings = 2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8k8vk"]
+gravity = Vector3(0, -8, 0)
+scale_min = 0.1
+scale_max = 3.0
+hue_variation_min = -0.87
+hue_variation_max = -0.13
+turbulence_enabled = true
+turbulence_noise_strength = 0.27
+turbulence_noise_scale = 0.0
+turbulence_noise_speed = Vector3(0, 1.78, 0)
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.463
+turbulence_initial_displacement_min = -40.0
+turbulence_initial_displacement_max = 61.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqfb7"]
+transparency = 1
+albedo_color = Color(0.211765, 0.117647, 0.0117647, 1)
+metallic_specular = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_o33e2"]
+material = SubResource("StandardMaterial3D_aqfb7")
+radius = 0.093
+height = 0.149
+rings = 2
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rsyu2"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_pbi3l"]
+length = 0.5
 
 [node name="SkeletonMinion" type="CharacterBody3D" groups=["Enemy"]]
-floor_max_angle = 1.5708
-floor_snap_length = 0.5
 script = ExtResource("1_mhbw6")
+health = 50.0
+strength = 2.0
+reward = 2
 weapon = "blade"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -445,7 +481,7 @@ debug_color = Color(0.867778, 0.353403, 1.92523e-07, 0.42)
 [node name="SpotLight3D" type="SpotLight3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, -0.958983, 0.283463, 0, -0.283463, -0.958983, 0, 1.50829, 0.610549)
 light_color = Color(1, 1, 0.498039, 1)
-light_energy = 10.0
+light_energy = 5.0
 spot_range = 8.0
 spot_attenuation = 0.0
 spot_angle = 30.0
@@ -677,6 +713,20 @@ libraries = {
 tree_root = SubResource("AnimationNodeStateMachine_pbi3l")
 anim_player = NodePath("../AnimationPlayer")
 
+[node name="DeathParticle" type="GPUParticles3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.3)
+emitting = false
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_pbi3l")
+draw_pass_1 = SubResource("SphereMesh_aqfb7")
+
+[node name="SpawnParticle" type="GPUParticles3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.497424, 0)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_8k8vk")
+draw_pass_1 = SubResource("SphereMesh_o33e2")
+
 [node name="EnemyUi" parent="." instance=ExtResource("2_i2sii")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 texture = SubResource("ViewportTexture_rsyu2")
@@ -686,39 +736,31 @@ wait_time = 3.0
 one_shot = true
 
 [node name="DestroyCooldown" type="Timer" parent="."]
+wait_time = 5.0
 one_shot = true
 
 [node name="HitCooldown" type="Timer" parent="."]
 one_shot = true
 
-[node name="HitSound1" type="AudioStreamPlayer" parent="."]
+[node name="HitSound1" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_k0dji")
 volume_db = -10.0
 pitch_scale = 0.9
 
-[node name="HitSound2" type="AudioStreamPlayer" parent="."]
+[node name="HitSound2" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("6_5htb1")
 volume_db = -10.0
 pitch_scale = 0.9
 
-[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+[node name="DeathSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("7_1klhm")
 volume_db = -10.0
 pitch_scale = 0.9
 
-[node name="Detector" type="Area3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00820923, 0.00256348, 0.00798035)
-shape = SubResource("BoxShape3D_bxvsj")
-
-[node name="DeathParticle" type="GPUParticles3D" parent="."]
-emitting = false
-amount = 30
-process_material = SubResource("ParticleProcessMaterial_bxvsj")
-draw_pass_1 = SubResource("SphereMesh_40eh0")
+[node name="SeparationRay" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0.8)
+shape = SubResource("SeparationRayShape3D_pbi3l")
 
 [connection signal="timeout" from="DeadCooldown" to="." method="_dead_cooldown"]
 [connection signal="timeout" from="DestroyCooldown" to="." method="_destroy_cooldown"]
 [connection signal="timeout" from="HitCooldown" to="." method="_hit_cooldown"]
-[connection signal="body_entered" from="Detector" to="." method="_detector_body"]

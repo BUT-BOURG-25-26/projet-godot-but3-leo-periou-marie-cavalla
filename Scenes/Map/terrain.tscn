@@ -1,121 +1,55 @@
 [gd_scene load_steps=7 format=3 uid="uid://eycwk1wjydb2"]
 
 [ext_resource type="Script" uid="uid://cj5scyk3gggno" path="res://Scripts/Map/terrain_generation.gd" id="1_nkyio"]
-
-[sub_resource type="Shader" id="Shader_nkyio"]
-code = "
-// NOTE: Shader automatically converted from Godot Engine 4.4.1.stable.mono's ProceduralSkyMaterial.
-
-shader_type sky;
-render_mode use_debanding;
-
-uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
-uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
-uniform float sky_curve : hint_range(0, 1) = 0.15;
-uniform float sky_energy = 1.0; // In Lux.
-uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
-uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
-uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
-uniform float ground_curve : hint_range(0, 1) = 0.02;
-uniform float ground_energy = 1.0;
-uniform float sun_angle_max = 30.0;
-uniform float sun_curve : hint_range(0, 1) = 0.15;
-uniform float exposure : hint_range(0, 128) = 1.0;
-
-void sky() {
-	float v_angle = acos(clamp(EYEDIR.y, -1.0, 1.0));
-	float c = (1.0 - v_angle / (PI * 0.5));
-	vec3 sky = mix(sky_horizon_color.rgb, sky_top_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / sky_curve), 0.0, 1.0));
-	sky *= sky_energy;
-
-	if (LIGHT0_ENABLED) {
-		float sun_angle = acos(dot(LIGHT0_DIRECTION, EYEDIR));
-		if (sun_angle < LIGHT0_SIZE) {
-			sky = LIGHT0_COLOR * LIGHT0_ENERGY;
-		} else if (sun_angle < sun_angle_max) {
-			float c2 = (sun_angle - LIGHT0_SIZE) / (sun_angle_max - LIGHT0_SIZE);
-			sky = mix(LIGHT0_COLOR * LIGHT0_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
-		}
-	}
-
-	if (LIGHT1_ENABLED) {
-		float sun_angle = acos(dot(LIGHT1_DIRECTION, EYEDIR));
-		if (sun_angle < LIGHT1_SIZE) {
-			sky = LIGHT1_COLOR * LIGHT1_ENERGY;
-		} else if (sun_angle < sun_angle_max) {
-			float c2 = (sun_angle - LIGHT1_SIZE) / (sun_angle_max - LIGHT1_SIZE);
-			sky = mix(LIGHT1_COLOR * LIGHT1_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
-		}
-	}
-
-	if (LIGHT2_ENABLED) {
-		float sun_angle = acos(dot(LIGHT2_DIRECTION, EYEDIR));
-		if (sun_angle < LIGHT2_SIZE) {
-			sky = LIGHT2_COLOR * LIGHT2_ENERGY;
-		} else if (sun_angle < sun_angle_max) {
-			float c2 = (sun_angle - LIGHT2_SIZE) / (sun_angle_max - LIGHT2_SIZE);
-			sky = mix(LIGHT2_COLOR * LIGHT2_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
-		}
-	}
-
-	if (LIGHT3_ENABLED) {
-		float sun_angle = acos(dot(LIGHT3_DIRECTION, EYEDIR));
-		if (sun_angle < LIGHT3_SIZE) {
-			sky = LIGHT3_COLOR * LIGHT3_ENERGY;
-		} else if (sun_angle < sun_angle_max) {
-			float c2 = (sun_angle - LIGHT3_SIZE) / (sun_angle_max - LIGHT3_SIZE);
-			sky = mix(LIGHT3_COLOR * LIGHT3_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
-		}
-	}
-
-	vec4 sky_cover_texture = texture(sky_cover, SKY_COORDS);
-	sky += (sky_cover_texture.rgb * sky_cover_modulate.rgb) * sky_cover_texture.a * sky_cover_modulate.a * sky_energy;
-
-	c = (v_angle - (PI * 0.5)) / (PI * 0.5);
-	vec3 ground = mix(ground_horizon_color.rgb, ground_bottom_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / ground_curve), 0.0, 1.0));
-	ground *= ground_energy;
-
-	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_icyg6"]
-shader = SubResource("Shader_nkyio")
-shader_parameter/sky_top_color = Color(0.5074, 0.654317, 0.86, 1)
-shader_parameter/sky_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
-shader_parameter/sky_curve = 0.15
-shader_parameter/sky_energy = 1.0
-shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
-shader_parameter/ground_bottom_color = Color(0.4554, 0.59616, 0.69, 1)
-shader_parameter/ground_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
-shader_parameter/ground_curve = 0.02
-shader_parameter/ground_energy = 1.0
-shader_parameter/sun_angle_max = 0.523599
-shader_parameter/sun_curve = 0.15
-shader_parameter/exposure = 1.0
-
-[sub_resource type="Sky" id="Sky_j7f5b"]
-sky_material = SubResource("ShaderMaterial_icyg6")
-
-[sub_resource type="Environment" id="Environment_icyg6"]
-background_mode = 2
-sky = SubResource("Sky_j7f5b")
-fog_enabled = true
-fog_light_color = Color(0.539, 0.600717, 0.7, 1)
+[ext_resource type="AudioStream" uid="uid://6rkfwctj0q61" path="res://Assets/Sound/Musique.mp3" id="2_j7f5b"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_j4ig8"]
 noise_type = 0
 frequency = 0.001
 
-[node name="Terrain" type="Node3D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nkyio"]
+sky_top_color = Color(0.361588, 0.395081, 0.600136, 1)
+sky_horizon_color = Color(0.340693, 0.339776, 0.490875, 1)
+ground_bottom_color = Color(0.180392, 0.180392, 0.258824, 1)
+ground_horizon_color = Color(0.566535, 0.609116, 0.98257, 1)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_icyg6")
+[sub_resource type="Sky" id="Sky_j7f5b"]
+sky_material = SubResource("ProceduralSkyMaterial_nkyio")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.0301024, 0.999547, 0, -0.999547, 0.0301024, 0, 10.4373, 0)
+[sub_resource type="Environment" id="Environment_t01c8"]
+background_mode = 2
+sky = SubResource("Sky_j7f5b")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 0.5
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.447262, 0.512633, 0.999995, 1)
+fog_light_energy = 0.3
+fog_sky_affect = 0.5
+adjustment_enabled = true
+adjustment_saturation = 0.7
+
+[node name="Terrain" type="Node3D" groups=["Terrain"]]
 
 [node name="TerrainGeneration" type="Node3D" parent="."]
 script = ExtResource("1_nkyio")
 noise = SubResource("FastNoiseLite_j4ig8")
+mesh_resolution = 1
+render_distance = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_t01c8")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
+light_color = Color(0.584864, 0.671747, 0.786772, 1)
+shadow_enabled = true
+shadow_opacity = 0.3
+
+[node name="BrumeDesRuines" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_j7f5b")
+volume_db = -10.0
+autoplay = true
+parameters/looping = true

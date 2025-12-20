@@ -5,7 +5,7 @@ var path_to_textures : String = "res://Assets/UI/"
 var textures_format: String =  ".png"
 
 var descriptions : Dictionary = {
-	"mage" : "Skeletons are waking up from an ancient viking territory, and something tells me one of your spells might have been responsible for this...\nOh, well, it's an opportunity to test some more witchcraft !",
+	"mage" : "Skeletons are waking up from an ancient viking territory, and something tells me one of your spells might have been responsible for this...\nOh, well, it's an opportunity to test some more witchcraft !\n\n[Magic Comming Soon]",
 	"knight" : "You've always been ready for the living dead's invasion.\nIt's now finally time for you to wear your armor and to test your knowledge of swordmanship.",
 	"rogue" : "Looks like corpses are having a little walk. We'll see if they'll be fast enough to catch you !\nAnd, maybe these dead vikings have valuable things to steal ?",
 	"barbarian" : "Enemies, Friends, weird skeletons appearing in your garden...\nAnything's a good thing to battle with ! ",
@@ -19,7 +19,7 @@ func start_game(selected_character: String):
 func show_details():
 	get_node("Details").show()
 	get_node("Selection").hide()
-	var path:String = path_to_textures + selected_character.capitalize() + textures_format
+	var path:String = path_to_textures + selected_character + textures_format
 	get_node("Details/Title").text = selected_character.capitalize()
 	get_node("Details/Character").texture = load(path) as Texture2D
 	get_node("Details/Description").text = descriptions[selected_character]

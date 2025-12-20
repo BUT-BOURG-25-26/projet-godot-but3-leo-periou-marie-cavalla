@@ -9,9 +9,9 @@ size = Vector3(0.772827, 1.26283, 0.234253)
 
 [node name="Axe1H" type="Node3D"]
 script = ExtResource("1_uiw76")
-damage = 5.0
 cooldown_time = 0.3
-weight = 0.2
+weight = 0.25
+cost = 100
 
 [node name="Model" parent="." instance=ExtResource("2_gdvik")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
@@ -30,3 +30,4 @@ one_shot = true
 
 [node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_gdvik")
+pitch_scale = 0.9

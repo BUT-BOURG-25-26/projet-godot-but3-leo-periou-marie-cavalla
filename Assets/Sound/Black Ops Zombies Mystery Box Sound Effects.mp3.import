@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://8qw4pxojtni8"
+path="res://.godot/imported/Black Ops Zombies Mystery Box Sound Effects.mp3-0d86366387cafe1750c46bb29d9ad25a.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sound/Black Ops Zombies Mystery Box Sound Effects.mp3"
+dest_files=["res://.godot/imported/Black Ops Zombies Mystery Box Sound Effects.mp3-0d86366387cafe1750c46bb29d9ad25a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

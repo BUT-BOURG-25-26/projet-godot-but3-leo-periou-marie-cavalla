@@ -9,10 +9,11 @@ size = Vector3(0.482324, 2.40875, 0.208363)
 
 [node name="Sword2H" type="Node3D"]
 script = ExtResource("1_bp415")
-damage = 8.0
+damage = 18.0
 cooldown_time = 0.3
 is_two_handed = true
 weight = 0.3
+cost = 200
 
 [node name="Model" parent="." instance=ExtResource("2_bp415")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
@@ -31,3 +32,4 @@ one_shot = true
 
 [node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_n7b16")
+pitch_scale = 0.7

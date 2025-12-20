@@ -1,18 +1,19 @@
 class_name Ranged extends Node3D
 
 signal attack_finished
-signal needs_reload(duration: float) # Signal pour dire au player de jouer l'anim
+signal needs_reload(duration: float)
 
 @export_group("Ranged Stats")
 @export var damage: float = 10.0
-@export var cooldown_time: float = 0.5 # Temps de "recul" après le tir
-@export var reload_time: float = 1.5   # Temps obligatoire de l'animation de reload
-@export var delay_time: float = 0.5    # Temps avant que la flèche parte
+@export var cooldown_time: float = 0.5
+@export var reload_time: float = 1.5   
+@export var delay_time: float = 0.5    
 @export var projectile_speed: float = 30.0
 @export var is_two_handed: bool = false
 @export var weight: float = 0.1
 @export var is_bow: bool = false
 @export_enum("Left","Right") var hand: String = "Right"
+@export var cost: int = 1
 
 @export_group("Projectile Setup")
 @export var projectile_scene: PackedScene 
@@ -23,6 +24,7 @@ signal needs_reload(duration: float) # Signal pour dire au player de jouer l'ani
 @onready var shoot_sound: AudioStreamPlayer3D = $ShootSound
 
 var wielder_strength: float = 0.0
+var wielder: Node3D = null
 
 func _ready() -> void:
 	if not projectile_scene:
@@ -60,4 +62,4 @@ func spawn_projectile() -> void:
 		get_tree().root.add_child(projectile)
 		projectile.global_position = spawn_point.global_position
 		projectile.global_rotation.y = spawn_point.global_rotation.y
-		projectile.setup(damage + wielder_strength, projectile_speed, is_two_handed)
+		projectile.setup(damage + wielder_strength, projectile_speed, wielder)

@@ -9,8 +9,8 @@ size = Vector3(0.56648, 1.52242, 0.198021)
 
 [node name="EnemyBlade" type="Node3D"]
 script = ExtResource("1_bmi2l")
-damage = 5.0
-cooldown_time = 0.3
+damage = 3.0
+cooldown_time = 0.5
 weight = 0.2
 target = "Player"
 
@@ -31,3 +31,4 @@ one_shot = true
 
 [node name="AttackSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_dn2dk")
+pitch_scale = 1.1
