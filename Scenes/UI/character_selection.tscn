@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://clx6ct8m6b2yx"]
+[gd_scene load_steps=29 format=3 uid="uid://clx6ct8m6b2yx"]
 
 [ext_resource type="Script" uid="uid://jc2oe0uckhkt" path="res://Scripts/UI/character_selection.gd" id="1_aj0io"]
 [ext_resource type="Texture2D" uid="uid://dgm72ibasr4lq" path="res://Assets/UI/Background.png" id="2_rrd2k"]
@@ -9,35 +9,57 @@
 [ext_resource type="Texture2D" uid="uid://0p0pmupikf1r" path="res://Assets/UI/knight.png" id="6_rrd2k"]
 [ext_resource type="Texture2D" uid="uid://cw81umb77bxfl" path="res://Assets/UI/ranger.png" id="7_5t5qi"]
 [ext_resource type="StyleBox" uid="uid://bfl5ticsb5lqg" path="res://Themes/ButtonHover.tres" id="7_pb1v1"]
-[ext_resource type="Texture2D" uid="uid://72hg3614riyh" path="res://Assets/UI/ButtonReversed.png" id="8_iteob"]
 [ext_resource type="StyleBox" uid="uid://cd3g5f6ybtu1m" path="res://Themes/ButtonPressed.tres" id="8_r7boc"]
 [ext_resource type="Texture2D" uid="uid://b7lena4tr0moy" path="res://Assets/UI/barbarian.png" id="10_336cn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rrd2k"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pb1v1"]
+texture = ExtResource("5_pb1v1")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7boc"]
+texture = ExtResource("5_pb1v1")
+modulate_color = Color(0.5, 0.5, 0.5, 1)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5t5qi"]
 texture = ExtResource("5_pb1v1")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_muiun"]
+texture = ExtResource("6_r7boc")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jwtsw"]
+texture = ExtResource("6_r7boc")
+modulate_color = Color(0.501961, 0.501961, 0.501961, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iteob"]
 texture = ExtResource("6_r7boc")
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iibqf"]
+texture = ExtResource("7_5t5qi")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_thm5u"]
+texture = ExtResource("7_5t5qi")
+modulate_color = Color(0.501961, 0.501961, 0.501961, 1)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_336cn"]
 texture = ExtResource("7_5t5qi")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iibqf"]
-texture = ExtResource("8_iteob")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cumtd"]
+texture = ExtResource("6_rrd2k")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_thm5u"]
-texture = ExtResource("8_iteob")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aarev"]
+texture = ExtResource("6_rrd2k")
+modulate_color = Color(0.501961, 0.501961, 0.501961, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_845l7"]
 texture = ExtResource("6_rrd2k")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8cin8"]
-texture = ExtResource("8_iteob")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xv4yp"]
+texture = ExtResource("10_336cn")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jw73i"]
-texture = ExtResource("8_iteob")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8cin8"]
+texture = ExtResource("10_336cn")
+modulate_color = Color(0.501961, 0.501961, 0.501961, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oxayx"]
 texture = ExtResource("10_336cn")
@@ -88,8 +110,8 @@ offset_right = 340.0
 offset_bottom = 360.0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = ExtResource("5_nwqkb")
-theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_pb1v1")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r7boc")
 theme_override_styles/normal = SubResource("StyleBoxTexture_5t5qi")
 
 [node name="ButtonRogue" type="Button" parent="Selection/Characters"]
@@ -104,8 +126,8 @@ offset_bottom = 347.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = ExtResource("5_nwqkb")
-theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_muiun")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_jwtsw")
 theme_override_styles/normal = SubResource("StyleBoxTexture_iteob")
 
 [node name="ButtonRanger" type="Button" parent="Selection/Characters"]
@@ -120,8 +142,8 @@ offset_bottom = 355.0
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = ExtResource("5_nwqkb")
-theme_override_styles/pressed = ExtResource("5_nwqkb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_iibqf")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_thm5u")
 theme_override_styles/normal = SubResource("StyleBoxTexture_336cn")
 
 [node name="ButtonKnight" type="Button" parent="Selection/Characters"]
@@ -140,8 +162,8 @@ grow_vertical = 0
 rotation = -6.28319
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = SubResource("StyleBoxTexture_iibqf")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_thm5u")
+theme_override_styles/hover = SubResource("StyleBoxTexture_cumtd")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_aarev")
 theme_override_styles/normal = SubResource("StyleBoxTexture_845l7")
 
 [node name="ButtonBarbarian" type="Button" parent="Selection/Characters"]
@@ -159,8 +181,8 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_vkfj6")
 theme_override_font_sizes/font_size = 45
-theme_override_styles/hover = SubResource("StyleBoxTexture_8cin8")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_jw73i")
+theme_override_styles/hover = SubResource("StyleBoxTexture_xv4yp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_8cin8")
 theme_override_styles/normal = SubResource("StyleBoxTexture_oxayx")
 
 [node name="Details" type="Panel" parent="."]

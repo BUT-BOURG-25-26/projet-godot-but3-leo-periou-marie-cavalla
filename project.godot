@@ -11,10 +11,11 @@ config_version=5
 [application]
 
 config/name="Moteur3D-Projet-Template"
+config/version="1.0.0"
 run/main_scene="uid://cqk34laniqf7f"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30
-config/icon="res://icon.svg"
+config/icon="uid://bq801ccnguuhx"
 
 [autoload]
 
